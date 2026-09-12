@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "missense-structure",
+      "title": "Missense structural analysis",
+      "queries": [
+        {
+          "id": "five-gene-summary",
+          "source": {
+            "label": "Frozen missense counts and verified structural geometry",
+            "files": [
+              {
+                "label": "five_gene_summary.csv"
+              },
+              {
+                "label": "five_gene_loo_metrics.csv"
+              }
+            ],
+            "metricDefinitions": [
+              {
+                "label": "Density",
+                "definition": "Equal-variant sigmoid-weighted empirical posterior mean, excluding the target identity across all assembly copies."
+              }
+            ],
+            "filters": [
+              "Gene-specific missense prior",
+              "gnomAD carriers assumed unaffected",
+              "Other variants at target residue retained"
+            ],
+            "caveats": [
+              "BRCA2 covers only experimentally resolved domains",
+              "HNF1A has a partial DNA-bound dimer; KCNQ1 is an engineered partial channel tetramer",
+              "LDLR uses a predicted monomer with uncertain interdomain packing",
+              "Polymer-only estimates are distinct from resolved 3D contacts",
+              "Priors fixed in internal variant-only LOO; not independent clinical validation"
+            ]
+          },
+          "columns": [
+            "Gene",
+            "Missense variants",
+            "Supported",
+            "Structured only",
+            "Polymer only",
+            "Mixed",
+            "Median density"
+          ],
+          "rows": [
+            {
+              "Gene": "HNF1A",
+              "Missense variants": 785,
+              "Supported": 726,
+              "Structured only": 183,
+              "Polymer only": 536,
+              "Mixed": 7,
+              "Median density": "6.35%"
+            },
+            {
+              "Gene": "GCK",
+              "Missense variants": 634,
+              "Supported": 614,
+              "Structured only": 614,
+              "Polymer only": 0,
+              "Mixed": 0,
+              "Median density": "37.41%"
+            },
+            {
+              "Gene": "LDLR",
+              "Missense variants": 1376,
+              "Supported": 1206,
+              "Structured only": 1027,
+              "Polymer only": 179,
+              "Mixed": 0,
+              "Median density": "16.25%"
+            },
+            {
+              "Gene": "BRCA2",
+              "Missense variants": 6656,
+              "Supported": 127,
+              "Structured only": 127,
+              "Polymer only": 0,
+              "Mixed": 0,
+              "Median density": "17.78%"
+            },
+            {
+              "Gene": "KCNQ1",
+              "Missense variants": 1061,
+              "Supported": 975,
+              "Structured only": 586,
+              "Polymer only": 389,
+              "Mixed": 0,
+              "Median density": "24.62%"
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "All five genes; GCK reuses the frozen class-specific rerun",
+            "totalRows": 5
+          },
+          "methods": [
+            {
+              "language": "calculation",
+              "code": "posterior = Beta(alpha_missense + affected, beta_missense + literature_unaffected + gnomAD_carriers); kernel(d) = 2 / (1 + exp(log(3) * d / 3)); density_i = weighted mean of posterior_j for j != i"
+            }
+          ]
+        },
+        {
+          "id": "paired-loo-comparison",
+          "source": {
+            "label": "Paired variant-only outer-LOO predictions",
+            "files": [
+              {
+                "label": "five_gene_loo_metrics.csv"
+              },
+              {
+                "label": "run_structure.py"
+              }
+            ],
+            "filters": [
+              "Identical available target variants within each gene",
+              "Gene-specific missense priors held fixed",
+              "Target identity removed globally from every training neighborhood"
+            ],
+            "caveats": [
+              "BRCA2 AM comparison contains only 44 literature-only archive fallbacks",
+              "Shared empirical priors and selected literature counts prevent claims of independent clinical validation"
+            ]
+          },
+          "columns": [
+            "gene",
+            "model",
+            "n_variants",
+            "mae_empirical_posterior",
+            "mse_observed_fraction"
+          ],
+          "rows": [
+            {
+              "gene": "HNF1A",
+              "model": "am_fit",
+              "n_variants": 720,
+              "mae_empirical_posterior": 0.07663734900230065,
+              "mse_observed_fraction": 0.06666215581312863
+            },
+            {
+              "gene": "HNF1A",
+              "model": "am_plus_density",
+              "n_variants": 720,
+              "mae_empirical_posterior": 0.06538288993316314,
+              "mse_observed_fraction": 0.05948368351778476
+            },
+            {
+              "gene": "HNF1A",
+              "model": "am_plus_sequence",
+              "n_variants": 720,
+              "mae_empirical_posterior": 0.06691898220691941,
+              "mse_observed_fraction": 0.05993705884630457
+            },
+            {
+              "gene": "GCK",
+              "model": "am_fit",
+              "n_variants": 610,
+              "mae_empirical_posterior": 0.12463616395541247,
+              "mse_observed_fraction": 0.15846245428750616
+            },
+            {
+              "gene": "GCK",
+              "model": "am_plus_density",
+              "n_variants": 610,
+              "mae_empirical_posterior": 0.12340019896025388,
+              "mse_observed_fraction": 0.15710923984210412
+            },
+            {
+              "gene": "GCK",
+              "model": "am_plus_sequence",
+              "n_variants": 610,
+              "mae_empirical_posterior": 0.12281836717354319,
+              "mse_observed_fraction": 0.15657640718364574
+            },
+            {
+              "gene": "LDLR",
+              "model": "am_fit",
+              "n_variants": 1199,
+              "mae_empirical_posterior": 0.08995180006318974,
+              "mse_observed_fraction": 0.08965967668881196
+            },
+            {
+              "gene": "LDLR",
+              "model": "am_plus_density",
+              "n_variants": 1199,
+              "mae_empirical_posterior": 0.0896581115982454,
+              "mse_observed_fraction": 0.08902125878911157
+            },
+            {
+              "gene": "LDLR",
+              "model": "am_plus_sequence",
+              "n_variants": 1199,
+              "mae_empirical_posterior": 0.08934521248324068,
+              "mse_observed_fraction": 0.08879530443957652
+            },
+            {
+              "gene": "BRCA2",
+              "model": "am_fit",
+              "n_variants": 44,
+              "mae_empirical_posterior": 0.0016035898304406202,
+              "mse_observed_fraction": 0.5253775311262121
+            },
+            {
+              "gene": "BRCA2",
+              "model": "am_plus_density",
+              "n_variants": 44,
+              "mae_empirical_posterior": 0.0016289659091516288,
+              "mse_observed_fraction": 0.5254137177032145
+            },
+            {
+              "gene": "BRCA2",
+              "model": "am_plus_sequence",
+              "n_variants": 44,
+              "mae_empirical_posterior": 0.0016994442514043375,
+              "mse_observed_fraction": 0.5254505749975801
+            },
+            {
+              "gene": "KCNQ1",
+              "model": "am_fit",
+              "n_variants": 969,
+              "mae_empirical_posterior": 0.13695916166373465,
+              "mse_observed_fraction": 0.10980030497659321
+            },
+            {
+              "gene": "KCNQ1",
+              "model": "am_plus_density",
+              "n_variants": 969,
+              "mae_empirical_posterior": 0.13034835172175324,
+              "mse_observed_fraction": 0.10414881073876271
+            },
+            {
+              "gene": "KCNQ1",
+              "model": "am_plus_sequence",
+              "n_variants": 969,
+              "mae_empirical_posterior": 0.1311094039139132,
+              "mse_observed_fraction": 0.10489242080574675
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "Same-target model comparisons; lower error is better",
+            "totalRows": 15
+          },
+          "methods": [
+            {
+              "language": "calculation",
+              "code": "MAE = mean(abs(LOO_prediction - empirical_posterior_mean)); each variant has equal weight."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

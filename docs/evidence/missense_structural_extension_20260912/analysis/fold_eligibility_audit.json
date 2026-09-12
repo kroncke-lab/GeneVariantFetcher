@@ -1,0 +1,387 @@
+{
+  "scope": "Independent audit of frozen outputs; does not refit models or alter outcomes.",
+  "reason": "LDLR A234T/A234V each have only the other as an eligible donor in a one-residue candidate IDR. Outer LOO removes that donor globally; both model comparisons must omit the newly unsupported training target.",
+  "ppa_source_sha256": {
+    "empirical_density.py": "48d3e655bd925d31e68bb7319c100f713e94a3039ba85edf4d7cb85349445589",
+    "empirical_context.py": "99086331d36d276e8fd71d629d5210933228165b3ba9017e9d5f402c7eb7c111"
+  },
+  "runner_sha256": "ae27f5b042f5603b1da77eae08cc884717744056a8cef7eaa81a2ff9e8a56438",
+  "genes": [
+    {
+      "gene": "HNF1A",
+      "loss_column_present": false,
+      "supported_singleton_donor_targets": [],
+      "zero_loss_proof_when_no_singletons": "At least two distinct eligible donors for every supported target: deleting one leaves support. Counts additionally equal cohort size minus one in every saved model row.",
+      "cohorts": [
+        {
+          "cohort": "all_supported",
+          "heldout_variants": 726,
+          "models": [
+            "density_fit",
+            "density_unfitted",
+            "empirical_prior",
+            "intercept_only",
+            "sequence_fit",
+            "sequence_unfitted"
+          ],
+          "same_training_target_count_across_models": true,
+          "folds_losing_training_support": 0,
+          "sequence_min_remaining_normalized_weight_all_folds": 0.5228832955167049,
+          "sequence_direct_sum_at_minimum": 0.5228832955167051,
+          "sequence_minimum_target": "HNF1A|g:12-120993652-G-A",
+          "sequence_minimum_heldout_donor": "HNF1A|g:12-120993652-G-C"
+        },
+        {
+          "cohort": "am_common",
+          "heldout_variants": 720,
+          "models": [
+            "am_fit",
+            "am_plus_density",
+            "am_plus_sequence",
+            "density_fit",
+            "density_unfitted",
+            "empirical_prior",
+            "intercept_only",
+            "sequence_fit",
+            "sequence_unfitted"
+          ],
+          "same_training_target_count_across_models": true,
+          "folds_losing_training_support": 0,
+          "sequence_min_remaining_normalized_weight_all_folds": 0.5228832955167049,
+          "sequence_direct_sum_at_minimum": 0.5228832955167051,
+          "sequence_minimum_target": "HNF1A|g:12-120993652-G-A",
+          "sequence_minimum_heldout_donor": "HNF1A|g:12-120993652-G-C"
+        }
+      ],
+      "affected_folds": []
+    },
+    {
+      "gene": "LDLR",
+      "loss_column_present": true,
+      "supported_singleton_donor_targets": [
+        "LDLR|g:19-11106570-G-A",
+        "LDLR|g:19-11106571-C-T"
+      ],
+      "zero_loss_proof_when_no_singletons": "At least two distinct eligible donors for every supported target: deleting one leaves support. Counts additionally equal cohort size minus one in every saved model row.",
+      "cohorts": [
+        {
+          "cohort": "all_supported",
+          "heldout_variants": 1206,
+          "models": [
+            "density_fit",
+            "density_unfitted",
+            "empirical_prior",
+            "intercept_only",
+            "sequence_fit",
+            "sequence_unfitted"
+          ],
+          "same_training_target_count_across_models": true,
+          "folds_losing_training_support": 2,
+          "sequence_min_remaining_normalized_weight_all_folds": 0.6834399230773869,
+          "sequence_direct_sum_at_minimum": 0.6834399230773871,
+          "sequence_minimum_target": "LDLR|lit:T557S",
+          "sequence_minimum_heldout_donor": "LDLR|g:19-11116176-A-C"
+        },
+        {
+          "cohort": "am_common",
+          "heldout_variants": 1199,
+          "models": [
+            "am_fit",
+            "am_plus_density",
+            "am_plus_sequence",
+            "density_fit",
+            "density_unfitted",
+            "empirical_prior",
+            "intercept_only",
+            "sequence_fit",
+            "sequence_unfitted"
+          ],
+          "same_training_target_count_across_models": true,
+          "folds_losing_training_support": 2,
+          "sequence_min_remaining_normalized_weight_all_folds": 0.6834399230773869,
+          "sequence_direct_sum_at_minimum": 0.6834399230773871,
+          "sequence_minimum_target": "LDLR|lit:T557S",
+          "sequence_minimum_heldout_donor": "LDLR|g:19-11116176-A-C"
+        }
+      ],
+      "affected_folds": [
+        {
+          "cohort": "all_supported",
+          "heldout_id": "LDLR|g:19-11106570-G-A",
+          "heldout_protein_key": "A234T",
+          "lost_training_ids": [
+            "LDLR|g:19-11106571-C-T"
+          ],
+          "lost_training_protein_keys": [
+            "A234V"
+          ],
+          "lost_target_contexts": [
+            {
+              "frame_id": "AF_P01130",
+              "chain": "A",
+              "canonical_pos": 234,
+              "geometry_state": "idr",
+              "idr_segment": "candidate_IDR_234_234",
+              "plddt": 49.66
+            }
+          ],
+          "training_targets": 1204,
+          "training_ids_sha256_sorted_newline": "25ab5acf00d0ca617fe726c2e18c476fbf061b5e964b64f5a8604bbee8331f87",
+          "training_target_selection_shared_before_all_model_fits": true,
+          "context_model_all_training_targets_reconstructed": true,
+          "reference_target_ids": [
+            "LDLR|g:19-11106571-C-T",
+            "LDLR|g:19-11106570-G-A",
+            "LDLR|lit:H583Y",
+            "LDLR|lit:W44G",
+            "LDLR|lit:C95R",
+            "LDLR|lit:T404P",
+            "LDLR|g:19-11105299-C-A",
+            "LDLR|g:19-11106606-G-A",
+            "LDLR|g:19-11110735-G-A",
+            "LDLR|g:19-11113350-C-A",
+            "LDLR|g:19-11113722-G-T",
+            "LDLR|g:19-11116961-A-G",
+            "LDLR|g:19-11120483-G-A",
+            "LDLR|g:19-11128017-A-G",
+            "LDLR|g:19-11131299-G-A"
+          ],
+          "reference_oracle_agrees_including_lost_targets": true,
+          "sequence_min_remaining_weight_training_targets": 0.7710902763279999,
+          "sequence_exclusion_max_error_vs_direct_positive_renormalization": 1.6653345369377348e-16
+        },
+        {
+          "cohort": "all_supported",
+          "heldout_id": "LDLR|g:19-11106571-C-T",
+          "heldout_protein_key": "A234V",
+          "lost_training_ids": [
+            "LDLR|g:19-11106570-G-A"
+          ],
+          "lost_training_protein_keys": [
+            "A234T"
+          ],
+          "lost_target_contexts": [
+            {
+              "frame_id": "AF_P01130",
+              "chain": "A",
+              "canonical_pos": 234,
+              "geometry_state": "idr",
+              "idr_segment": "candidate_IDR_234_234",
+              "plddt": 49.66
+            }
+          ],
+          "training_targets": 1204,
+          "training_ids_sha256_sorted_newline": "25ab5acf00d0ca617fe726c2e18c476fbf061b5e964b64f5a8604bbee8331f87",
+          "training_target_selection_shared_before_all_model_fits": true,
+          "context_model_all_training_targets_reconstructed": true,
+          "reference_target_ids": [
+            "LDLR|g:19-11106570-G-A",
+            "LDLR|g:19-11106571-C-T",
+            "LDLR|lit:H583Y",
+            "LDLR|lit:W44G",
+            "LDLR|lit:C95R",
+            "LDLR|lit:T404P",
+            "LDLR|g:19-11105299-C-A",
+            "LDLR|g:19-11106606-G-A",
+            "LDLR|g:19-11110735-G-A",
+            "LDLR|g:19-11113350-C-A",
+            "LDLR|g:19-11113722-G-T",
+            "LDLR|g:19-11116961-A-G",
+            "LDLR|g:19-11120483-G-A",
+            "LDLR|g:19-11128017-A-G",
+            "LDLR|g:19-11131299-G-A"
+          ],
+          "reference_oracle_agrees_including_lost_targets": true,
+          "sequence_min_remaining_weight_training_targets": 0.7710902763279999,
+          "sequence_exclusion_max_error_vs_direct_positive_renormalization": 1.6653345369377348e-16
+        },
+        {
+          "cohort": "am_common",
+          "heldout_id": "LDLR|g:19-11106570-G-A",
+          "heldout_protein_key": "A234T",
+          "lost_training_ids": [
+            "LDLR|g:19-11106571-C-T"
+          ],
+          "lost_training_protein_keys": [
+            "A234V"
+          ],
+          "lost_target_contexts": [
+            {
+              "frame_id": "AF_P01130",
+              "chain": "A",
+              "canonical_pos": 234,
+              "geometry_state": "idr",
+              "idr_segment": "candidate_IDR_234_234",
+              "plddt": 49.66
+            }
+          ],
+          "training_targets": 1197,
+          "training_ids_sha256_sorted_newline": "ffb864347390203c1c4ebef69ddf026a00d76bc54cff42a43f49879acc12cc1e",
+          "training_target_selection_shared_before_all_model_fits": true,
+          "context_model_all_training_targets_reconstructed": true,
+          "reference_target_ids": [
+            "LDLR|g:19-11106571-C-T",
+            "LDLR|g:19-11106570-G-A",
+            "LDLR|lit:H583Y",
+            "LDLR|lit:W44G",
+            "LDLR|lit:C95R",
+            "LDLR|lit:T404P",
+            "LDLR|g:19-11105299-C-A",
+            "LDLR|g:19-11106606-G-A",
+            "LDLR|g:19-11110735-G-A",
+            "LDLR|g:19-11113350-C-A",
+            "LDLR|g:19-11113722-G-T",
+            "LDLR|g:19-11116961-A-G",
+            "LDLR|g:19-11120483-G-A",
+            "LDLR|g:19-11128017-A-G",
+            "LDLR|g:19-11131299-G-A"
+          ],
+          "reference_oracle_agrees_including_lost_targets": true,
+          "sequence_min_remaining_weight_training_targets": 0.7710902763279999,
+          "sequence_exclusion_max_error_vs_direct_positive_renormalization": 1.6653345369377348e-16
+        },
+        {
+          "cohort": "am_common",
+          "heldout_id": "LDLR|g:19-11106571-C-T",
+          "heldout_protein_key": "A234V",
+          "lost_training_ids": [
+            "LDLR|g:19-11106570-G-A"
+          ],
+          "lost_training_protein_keys": [
+            "A234T"
+          ],
+          "lost_target_contexts": [
+            {
+              "frame_id": "AF_P01130",
+              "chain": "A",
+              "canonical_pos": 234,
+              "geometry_state": "idr",
+              "idr_segment": "candidate_IDR_234_234",
+              "plddt": 49.66
+            }
+          ],
+          "training_targets": 1197,
+          "training_ids_sha256_sorted_newline": "ffb864347390203c1c4ebef69ddf026a00d76bc54cff42a43f49879acc12cc1e",
+          "training_target_selection_shared_before_all_model_fits": true,
+          "context_model_all_training_targets_reconstructed": true,
+          "reference_target_ids": [
+            "LDLR|g:19-11106570-G-A",
+            "LDLR|g:19-11106571-C-T",
+            "LDLR|lit:H583Y",
+            "LDLR|lit:W44G",
+            "LDLR|lit:C95R",
+            "LDLR|lit:T404P",
+            "LDLR|g:19-11105299-C-A",
+            "LDLR|g:19-11106606-G-A",
+            "LDLR|g:19-11110735-G-A",
+            "LDLR|g:19-11113350-C-A",
+            "LDLR|g:19-11113722-G-T",
+            "LDLR|g:19-11116961-A-G",
+            "LDLR|g:19-11120483-G-A",
+            "LDLR|g:19-11128017-A-G",
+            "LDLR|g:19-11131299-G-A"
+          ],
+          "reference_oracle_agrees_including_lost_targets": true,
+          "sequence_min_remaining_weight_training_targets": 0.7710902763279999,
+          "sequence_exclusion_max_error_vs_direct_positive_renormalization": 1.6653345369377348e-16
+        }
+      ]
+    },
+    {
+      "gene": "KCNQ1",
+      "loss_column_present": false,
+      "supported_singleton_donor_targets": [],
+      "zero_loss_proof_when_no_singletons": "At least two distinct eligible donors for every supported target: deleting one leaves support. Counts additionally equal cohort size minus one in every saved model row.",
+      "cohorts": [
+        {
+          "cohort": "all_supported",
+          "heldout_variants": 975,
+          "models": [
+            "density_fit",
+            "density_unfitted",
+            "empirical_prior",
+            "intercept_only",
+            "sequence_fit",
+            "sequence_unfitted"
+          ],
+          "same_training_target_count_across_models": true,
+          "folds_losing_training_support": 0,
+          "sequence_min_remaining_normalized_weight_all_folds": 0.6983224618554296,
+          "sequence_direct_sum_at_minimum": 0.6983224618554297,
+          "sequence_minimum_target": "KCNQ1|lit:S546L",
+          "sequence_minimum_heldout_donor": "KCNQ1|lit:S546W"
+        },
+        {
+          "cohort": "am_common",
+          "heldout_variants": 969,
+          "models": [
+            "am_fit",
+            "am_plus_density",
+            "am_plus_sequence",
+            "density_fit",
+            "density_unfitted",
+            "empirical_prior",
+            "intercept_only",
+            "sequence_fit",
+            "sequence_unfitted"
+          ],
+          "same_training_target_count_across_models": true,
+          "folds_losing_training_support": 0,
+          "sequence_min_remaining_normalized_weight_all_folds": 0.6983224618554296,
+          "sequence_direct_sum_at_minimum": 0.6983224618554297,
+          "sequence_minimum_target": "KCNQ1|lit:S546L",
+          "sequence_minimum_heldout_donor": "KCNQ1|lit:S546W"
+        }
+      ],
+      "affected_folds": []
+    },
+    {
+      "gene": "BRCA2",
+      "loss_column_present": true,
+      "supported_singleton_donor_targets": [],
+      "zero_loss_proof_when_no_singletons": "At least two distinct eligible donors for every supported target: deleting one leaves support. Counts additionally equal cohort size minus one in every saved model row.",
+      "cohorts": [
+        {
+          "cohort": "all_supported",
+          "heldout_variants": 127,
+          "models": [
+            "density_fit",
+            "density_unfitted",
+            "empirical_prior",
+            "intercept_only",
+            "sequence_fit",
+            "sequence_unfitted"
+          ],
+          "same_training_target_count_across_models": true,
+          "folds_losing_training_support": 0,
+          "sequence_min_remaining_normalized_weight_all_folds": 0.7665880466034216,
+          "sequence_direct_sum_at_minimum": 0.7665880466034217,
+          "sequence_minimum_target": "BRCA2|lit:A3297S",
+          "sequence_minimum_heldout_donor": "BRCA2|lit:A3297T"
+        },
+        {
+          "cohort": "am_common",
+          "heldout_variants": 44,
+          "models": [
+            "am_fit",
+            "am_plus_density",
+            "am_plus_sequence",
+            "density_fit",
+            "density_unfitted",
+            "empirical_prior",
+            "intercept_only",
+            "sequence_fit",
+            "sequence_unfitted"
+          ],
+          "same_training_target_count_across_models": true,
+          "folds_losing_training_support": 0,
+          "sequence_min_remaining_normalized_weight_all_folds": 0.7665880466034216,
+          "sequence_direct_sum_at_minimum": 0.7665880466034217,
+          "sequence_minimum_target": "BRCA2|lit:A3297S",
+          "sequence_minimum_heldout_donor": "BRCA2|lit:A3297T"
+        }
+      ],
+      "affected_folds": []
+    }
+  ]
+}

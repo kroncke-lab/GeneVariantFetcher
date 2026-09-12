@@ -1,0 +1,427 @@
+{
+  "gene": "BRCA2",
+  "canonical_accession": "P51587-1",
+  "canonical_length": 3418,
+  "canonical_sequence_sha256": "02fa9247ce635b2ffc79a7b91b6153d47dc1cc75811ca5003d3f3f68537e673d",
+  "status": "two_separate_domain_local_frames;not_full_gene_structural_coverage",
+  "combined_unique_structured_positions": 72,
+  "combined_canonical_coverage_fraction": 0.021064950263311878,
+  "frames": {
+    "7LDG": {
+      "assembly_id": "1",
+      "status": "domain_local_exploratory_only_not_full_gene",
+      "canonical_construct_range": [
+        2271,
+        2335
+      ],
+      "target_chain_ids_in_downloaded_assembly": [
+        "B",
+        "D",
+        "B-2",
+        "D-2"
+      ],
+      "target_sequence_chains_before_assembly_expansion": [
+        "B",
+        "D"
+      ],
+      "structured_unique_canonical_positions": [
+        2276,
+        2277,
+        2278,
+        2279,
+        2280,
+        2281,
+        2282,
+        2286,
+        2287,
+        2288,
+        2289,
+        2290,
+        2291,
+        2292,
+        2293,
+        2294,
+        2295,
+        2296,
+        2297,
+        2298,
+        2299,
+        2300,
+        2301,
+        2302,
+        2303,
+        2304,
+        2305,
+        2306,
+        2307,
+        2308,
+        2309,
+        2310,
+        2311,
+        2312,
+        2313,
+        2314,
+        2315,
+        2316,
+        2317,
+        2318,
+        2319,
+        2320,
+        2321,
+        2323,
+        2324,
+        2325,
+        2326,
+        2327,
+        2328,
+        2329,
+        2330,
+        2331,
+        2332,
+        2333,
+        2334,
+        2335
+      ],
+      "unique_residue_coverage_fraction": 0.016383850204798128,
+      "resolution_angstrom": [
+        2.56
+      ],
+      "assembly_record": {
+        "details": "author_and_software_defined_assembly",
+        "id": "1",
+        "method_details": "PISA",
+        "oligomeric_count": 8,
+        "oligomeric_details": "octameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_and_software_defined_assembly"
+      },
+      "partner_context": [
+        {
+          "entity_id": "1",
+          "description": "Heat shock factor 2-binding protein",
+          "chains": [
+            "A",
+            "C",
+            "A-2",
+            "C-2"
+          ],
+          "variant_donor_target": false
+        },
+        {
+          "entity_id": "2",
+          "description": "Breast cancer type 2 susceptibility protein",
+          "chains": [
+            "B",
+            "D",
+            "B-2",
+            "D-2"
+          ],
+          "variant_donor_target": true
+        },
+        {
+          "entity_id": "3",
+          "description": "water",
+          "chains": [
+            "E",
+            "F",
+            "E-2",
+            "F-2"
+          ],
+          "variant_donor_target": false
+        }
+      ],
+      "source_study_pubmed": 34373645,
+      "observed_WT_mismatches": 0,
+      "SIFTS_sequence_alignment": {
+        "provenance_source": "SIFTS",
+        "reference_database_accession": "P51587",
+        "reference_database_name": "UniProt",
+        "aligned_regions": [
+          {
+            "entity_beg_seq_id": 2,
+            "length": 65,
+            "ref_beg_seq_id": 2271
+          }
+        ]
+      },
+      "copy_context_note": "Deposited assembly has B/D/B-2/D-2 BRCA2 fragments; paper's 4:2 MEILB2:BRCA2 description is not four complete BRCA2 polypeptides. Preserve chain fragments without inventing B-D connections."
+    },
+    "8PBC": {
+      "assembly_id": "1",
+      "status": "domain_local_exploratory_only_not_full_gene",
+      "canonical_construct_range": [
+        3260,
+        3308
+      ],
+      "target_chain_ids_in_downloaded_assembly": [
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U"
+      ],
+      "target_sequence_chains_before_assembly_expansion": [
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U"
+      ],
+      "structured_unique_canonical_positions": [
+        3289,
+        3290,
+        3291,
+        3292,
+        3293,
+        3294,
+        3295,
+        3296,
+        3297,
+        3298,
+        3299,
+        3300,
+        3301,
+        3302,
+        3303,
+        3304
+      ],
+      "unique_residue_coverage_fraction": 0.004681100058513751,
+      "resolution_angstrom": [
+        2.61
+      ],
+      "assembly_record": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 22,
+        "oligomeric_details": "22-meric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "partner_context": [
+        {
+          "entity_id": "1",
+          "description": "DNA repair protein RAD51 homolog 1",
+          "chains": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K"
+          ],
+          "variant_donor_target": false
+        },
+        {
+          "entity_id": "2",
+          "description": "Breast cancer type 2 susceptibility protein",
+          "chains": [
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U"
+          ],
+          "variant_donor_target": true
+        },
+        {
+          "entity_id": "3",
+          "description": "DNA (30-MER)",
+          "chains": [
+            "V"
+          ],
+          "variant_donor_target": false
+        },
+        {
+          "entity_id": "4",
+          "description": "ADENOSINE-5'-TRIPHOSPHATE",
+          "chains": [
+            "W",
+            "AA",
+            "DA",
+            "GA",
+            "JA",
+            "MA",
+            "PA",
+            "SA",
+            "VA",
+            "YA",
+            "BB"
+          ],
+          "variant_donor_target": false
+        },
+        {
+          "entity_id": "5",
+          "description": "CALCIUM ION",
+          "chains": [
+            "X",
+            "Y",
+            "Z",
+            "BA",
+            "CA",
+            "EA",
+            "FA",
+            "HA",
+            "IA",
+            "KA",
+            "LA",
+            "NA",
+            "OA",
+            "QA",
+            "RA",
+            "TA",
+            "UA",
+            "WA",
+            "XA",
+            "ZA",
+            "AB",
+            "CB"
+          ],
+          "variant_donor_target": false
+        }
+      ],
+      "source_study_pubmed": 37919288,
+      "observed_WT_mismatches": 0,
+      "SIFTS_sequence_alignment": {
+        "provenance_source": "SIFTS",
+        "reference_database_accession": "P51587",
+        "reference_database_name": "UniProt",
+        "aligned_regions": [
+          {
+            "entity_beg_seq_id": 1,
+            "length": 49,
+            "ref_beg_seq_id": 3260
+          }
+        ]
+      },
+      "copy_context_note": "Ten BRCA2 peptide copies on a finite eleven-RAD51 filament model; end contexts are not assumed identical."
+    }
+  },
+  "polymer_policy": "none;all_unresolved_or_outside_construct_positions_remain_missing",
+  "frame_policy": "Separate frame_id values are mandatory; no cross-domain Euclidean distances",
+  "modified_residue_policy": "MSE maps to canonicalM only after PDB parentMET verification; native methionine COM withheld; observed CAlpha retained for explicit sensitivity",
+  "sources": [
+    {
+      "name": "7LDG-assembly1.cif.gz",
+      "url": "https://files.rcsb.org/download/7ldg-assembly1.cif.gz",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/7LDG-assembly1.cif.gz",
+      "sha256": "f19a3e4c29ed1382127306b18c3444a9d9904a06f2f8aa131e705da873ea10ea",
+      "bytes": 197211
+    },
+    {
+      "name": "7LDG_assembly.json",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/7LDG/1",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/7LDG_assembly.json",
+      "sha256": "86b17e0712843619bcc8ac955ca39dbc23beecd0f067b8e8ea89c38719357555",
+      "bytes": 5052
+    },
+    {
+      "name": "7LDG_entry.json",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/7LDG",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/7LDG_entry.json",
+      "sha256": "73d3d96f5a93cc1924c218aafad2a7d69a197a299fffbec55e93182f15fa2dc5",
+      "bytes": 11143
+    },
+    {
+      "name": "7LDG_polymer_entity.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/7LDG/2",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/7LDG_polymer_entity.json",
+      "sha256": "6f9c03cb9f438b5840b15ce6d8fad6aed862a4d7badcf33ee4d6067d92cce455",
+      "bytes": 41296
+    },
+    {
+      "name": "7LDG_sifts.json",
+      "url": "https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/7ldg",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/7LDG_sifts.json",
+      "sha256": "6ffe434663be1e09af643f240fab7922fe7b6e32f0f220fcdebe006efc76f2c3",
+      "bytes": 1302
+    },
+    {
+      "name": "8PBC-assembly1.cif.gz",
+      "url": "https://files.rcsb.org/download/8pbc-assembly1.cif.gz",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/8PBC-assembly1.cif.gz",
+      "sha256": "39ae6527ad93ab53083c216ac2535153f939ceea7d8843960fa409268ffa38d1",
+      "bytes": 697703
+    },
+    {
+      "name": "8PBC_assembly.json",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/8PBC/1",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/8PBC_assembly.json",
+      "sha256": "cee3b54f26942d9ca944791f06c96e45e07a7192e5a96cd89fef0354ef28ca28",
+      "bytes": 7292
+    },
+    {
+      "name": "8PBC_entry.json",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/8PBC",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/8PBC_entry.json",
+      "sha256": "57863e0d77aa71a92d2aa8179bcab6afd9524f82ab23d22eb485deca92d700d4",
+      "bytes": 9110
+    },
+    {
+      "name": "8PBC_polymer_entity.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/8PBC/2",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/8PBC_polymer_entity.json",
+      "sha256": "4e1309061b2cf5c6cc599d137356269afbc0f4578df3b947034bd33acea0948b",
+      "bytes": 37158
+    },
+    {
+      "name": "8PBC_sifts.json",
+      "url": "https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/8pbc",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/8PBC_sifts.json",
+      "sha256": "6ccbf742f1a86f89f21c009dae561c0f4bdfed479f2b0caeabbd88e4a293c129",
+      "bytes": 6085
+    },
+    {
+      "name": "MSE_chem_comp.json",
+      "url": "https://data.rcsb.org/rest/v1/core/chemcomp/MSE",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/MSE_chem_comp.json",
+      "sha256": "5a23d4fbf1d65205ba52eb59b7af6184a6e3b04d1bba6868be3ed4457b7394f0",
+      "bytes": 4542
+    },
+    {
+      "name": "P51587.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P51587.json",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/P51587.json",
+      "sha256": "befba0a62b75b4f67c7651d0bb175a4ec3ef6a9751be6575af593c9e94cfd82f",
+      "bytes": 213277
+    },
+    {
+      "name": "best_structures.json",
+      "url": "https://www.ebi.ac.uk/pdbe/api/mappings/best_structures/P51587",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/BRCA2/best_structures.json",
+      "sha256": "b47dc5d03bf1bd94b1cae4f3dc59281d84baa83c3e93e1d37920dd77bff50a52",
+      "bytes": 8615
+    }
+  ],
+  "coordinate_helper": {
+    "file": "docs/evidence/missense_structural_extension_20260912/geometry/KCNQ1/build_geometry.py",
+    "sha256": "098e9fcb88c2ad08adb79554577725cc7d1d95d66219c28cfc0406bdac3c153a"
+  },
+  "checks": {
+    "strict_parent_WT_match": true,
+    "SIFTS_unique_sequence_alignment": true,
+    "no_incomplete_COM_used": true,
+    "full_canonical_missing_rows_materialized": true,
+    "no_polymers_or_AF_splices": true,
+    "separate_frames_retained": true
+  }
+}

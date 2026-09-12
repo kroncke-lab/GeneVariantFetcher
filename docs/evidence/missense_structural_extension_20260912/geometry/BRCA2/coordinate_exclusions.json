@@ -1,0 +1,17 @@
+{
+  "unmapped_observed_residues": [],
+  "incomplete_sidechains": [
+    {
+      "frame_id": "7LDG",
+      "chain": "B",
+      "canonical_pos": 2322,
+      "missing_atoms": "modified_MSE_not_native_MET_COM"
+    },
+    {
+      "frame_id": "7LDG",
+      "chain": "B-2",
+      "canonical_pos": 2322,
+      "missing_atoms": "modified_MSE_not_native_MET_COM"
+    }
+  ]
+}

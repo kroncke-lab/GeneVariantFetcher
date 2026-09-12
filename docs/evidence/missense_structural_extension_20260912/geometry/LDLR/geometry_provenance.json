@@ -1,0 +1,665 @@
+{
+  "accession": "P01130",
+  "candidates": [
+    {
+      "assembly": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 1,
+        "oligomeric_details": "monomeric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "assembly_total_modeled_residues": 639,
+      "pdb": "1N7D",
+      "selected": true,
+      "selection_note": "selected; see geometry report",
+      "target_entities": [
+        {
+          "entity": {
+            "asym_ids": [
+              "A"
+            ],
+            "auth_asym_ids": [
+              "A"
+            ],
+            "chem_comp_monomers": [
+              "ALA",
+              "ARG",
+              "ASN",
+              "ASP",
+              "CYS",
+              "GLN",
+              "GLU",
+              "GLY",
+              "HIS",
+              "ILE",
+              "LEU",
+              "LYS",
+              "MET",
+              "PHE",
+              "PRO",
+              "SER",
+              "THR",
+              "TRP",
+              "TYR",
+              "VAL"
+            ],
+            "entity_id": "1",
+            "entry_id": "1N7D",
+            "rcsb_id": "1N7D_1",
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P01130",
+                "database_name": "UniProt",
+                "entity_sequence_coverage": 1.0,
+                "provenance_source": "SIFTS",
+                "reference_sequence_coverage": 0.8127906976744186
+              }
+            ],
+            "uniprot_ids": [
+              "P01130"
+            ]
+          },
+          "mutation_count": 2,
+          "polymer_sequence_length": 699
+        }
+      ],
+      "title": "Extracellular domain of the LDL receptor"
+    },
+    {
+      "assembly": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 2,
+        "oligomeric_details": "dimeric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "assembly_total_modeled_residues": 726,
+      "pdb": "9BD8",
+      "selected": false,
+      "selection_note": "ApoB complex candidate inventoried; full target sequence deposition is not full observed coverage; target coordinates not acquired in this bounded run",
+      "target_entities": [
+        {
+          "entity": {
+            "asym_ids": [
+              "B"
+            ],
+            "auth_asym_ids": [
+              "B"
+            ],
+            "chem_comp_monomers": [
+              "ALA",
+              "ARG",
+              "ASN",
+              "ASP",
+              "CYS",
+              "GLN",
+              "GLU",
+              "GLY",
+              "HIS",
+              "ILE",
+              "LEU",
+              "LYS",
+              "MET",
+              "PHE",
+              "PRO",
+              "SER",
+              "THR",
+              "TRP",
+              "TYR",
+              "VAL"
+            ],
+            "entity_id": "2",
+            "entry_id": "9BD8",
+            "rcsb_id": "9BD8_2",
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P01130",
+                "database_name": "UniProt",
+                "entity_sequence_coverage": 1.0,
+                "provenance_source": "SIFTS",
+                "reference_sequence_coverage": 1.0
+              }
+            ],
+            "uniprot_ids": [
+              "P01130"
+            ]
+          },
+          "mutation_count": 0,
+          "polymer_sequence_length": 860
+        }
+      ],
+      "title": "ApoB 100 beta barrel bound to LDLR beta propeller"
+    },
+    {
+      "assembly": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 6,
+        "oligomeric_details": "hexameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "assembly_total_modeled_residues": 2340,
+      "pdb": "9BDE",
+      "selected": false,
+      "selection_note": "ApoB complex candidate inventoried; full target sequence deposition is not full observed coverage; target coordinates not acquired in this bounded run",
+      "target_entities": [
+        {
+          "entity": {
+            "asym_ids": [
+              "F"
+            ],
+            "auth_asym_ids": [
+              "R"
+            ],
+            "chem_comp_monomers": [
+              "ALA",
+              "ARG",
+              "ASN",
+              "ASP",
+              "CYS",
+              "GLN",
+              "GLU",
+              "GLY",
+              "HIS",
+              "ILE",
+              "LEU",
+              "LYS",
+              "MET",
+              "PHE",
+              "PRO",
+              "SER",
+              "THR",
+              "TRP",
+              "TYR",
+              "VAL"
+            ],
+            "entity_id": "6",
+            "entry_id": "9BDE",
+            "rcsb_id": "9BDE_6",
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P01130",
+                "database_name": "UniProt",
+                "entity_sequence_coverage": 1.0,
+                "provenance_source": "SIFTS",
+                "reference_sequence_coverage": 1.0
+              }
+            ],
+            "uniprot_ids": [
+              "P01130"
+            ]
+          },
+          "mutation_count": 0,
+          "polymer_sequence_length": 860
+        }
+      ],
+      "title": "Middle Region of Apolipoprotein B 100 bound to Low Density Lipoprotein Receptor"
+    },
+    {
+      "assembly": {
+        "details": "author_and_software_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 6,
+        "oligomeric_details": "hexameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_and_software_defined_assembly"
+      },
+      "assembly_total_modeled_residues": 1028,
+      "pdb": "9COO",
+      "selected": false,
+      "selection_note": "ApoB complex candidate inventoried; full target sequence deposition is not full observed coverage; target coordinates not acquired in this bounded run",
+      "target_entities": [
+        {
+          "entity": {
+            "asym_ids": [
+              "F"
+            ],
+            "auth_asym_ids": [
+              "R"
+            ],
+            "chem_comp_monomers": [
+              "ALA",
+              "ARG",
+              "ASN",
+              "ASP",
+              "CYS",
+              "GLN",
+              "GLU",
+              "GLY",
+              "HIS",
+              "ILE",
+              "LEU",
+              "LYS",
+              "MET",
+              "PHE",
+              "PRO",
+              "SER",
+              "THR",
+              "TRP",
+              "TYR",
+              "VAL"
+            ],
+            "entity_id": "6",
+            "entry_id": "9COO",
+            "rcsb_id": "9COO_6",
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P01130",
+                "database_name": "UniProt",
+                "entity_sequence_coverage": 1.0,
+                "provenance_source": "SIFTS",
+                "reference_sequence_coverage": 0.9244186046511628
+              }
+            ],
+            "uniprot_ids": [
+              "P01130"
+            ]
+          },
+          "mutation_count": 0,
+          "polymer_sequence_length": 795
+        }
+      ],
+      "title": "Nanobody 4 bound to Apolipoprotein B 100"
+    }
+  ],
+  "canonical_length": 860,
+  "canonical_sequence_sha256": "36a68c5510827c435b046def3dd5413c4715085cfdc1fdcb4b05a83e805ef3a2",
+  "canonical_transcript": {
+    "database": "Ensembl",
+    "id": "ENST00000558518.6",
+    "isoformId": "P01130-1",
+    "properties": [
+      {
+        "key": "ProteinId",
+        "value": "ENSP00000454071.1"
+      },
+      {
+        "key": "GeneId",
+        "value": "ENSG00000130164.17"
+      }
+    ]
+  },
+  "date": "2026-09-12",
+  "exact_match_prior_canonical_sequence": true,
+  "frames": {
+    "1N7D": {
+      "assembly_counts": {
+        "assembly_id": "1",
+        "atom_count": 4956,
+        "branched_atom_count": 111,
+        "branched_entity_count": 2,
+        "branched_entity_instance_count": 2,
+        "deuterated_water_count": 0,
+        "entry_id": "1N7D",
+        "formula_weight": 88.31,
+        "hydrogen_atom_count": 0,
+        "modeled_polymer_monomer_count": 639,
+        "na_polymer_entity_types": "Other",
+        "nonpolymer_atom_count": 143,
+        "nonpolymer_entity_count": 2,
+        "nonpolymer_entity_instance_count": 11,
+        "polymer_atom_count": 4702,
+        "polymer_composition": "homomeric protein",
+        "polymer_entity_count": 1,
+        "polymer_entity_count_DNA": 0,
+        "polymer_entity_count_RNA": 0,
+        "polymer_entity_count_nucleic_acid": 0,
+        "polymer_entity_count_nucleic_acid_hybrid": 0,
+        "polymer_entity_count_protein": 1,
+        "polymer_entity_instance_count": 1,
+        "polymer_entity_instance_count_DNA": 0,
+        "polymer_entity_instance_count_RNA": 0,
+        "polymer_entity_instance_count_nucleic_acid": 0,
+        "polymer_entity_instance_count_nucleic_acid_hybrid": 0,
+        "polymer_entity_instance_count_protein": 1,
+        "polymer_monomer_count": 699,
+        "selected_polymer_entity_types": "Protein (only)",
+        "solvent_atom_count": 0,
+        "solvent_entity_count": 0,
+        "solvent_entity_instance_count": 0,
+        "unmodeled_polymer_monomer_count": 60
+      },
+      "assembly_definition": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 1,
+        "oligomeric_details": "monomeric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "assembly_id": "1",
+      "construct_canonical_ranges": [
+        [
+          22,
+          720
+        ]
+      ],
+      "engineered_WT_mismatches_excluded": [
+        {
+          "aa_ref": "N",
+          "canonical_pos": 515,
+          "deposited_aa": "Q",
+          "label_seq_id": 494
+        },
+        {
+          "aa_ref": "N",
+          "canonical_pos": 657,
+          "deposited_aa": "Q",
+          "label_seq_id": 636
+        }
+      ],
+      "full_length_functional_unit": false,
+      "geometry_state_counts": {
+        "ambiguous": 83,
+        "idr": 111,
+        "missing": 86,
+        "structured": 580
+      },
+      "independently_unique_sequence_placement": true,
+      "per_chain": {
+        "A": {
+          "observed": 639,
+          "observed_canonical_ranges": [
+            [
+              65,
+              77
+            ],
+            [
+              80,
+              95
+            ],
+            [
+              97,
+              119
+            ],
+            [
+              124,
+              408
+            ],
+            [
+              410,
+              461
+            ],
+            [
+              463,
+              473
+            ],
+            [
+              476,
+              714
+            ]
+          ],
+          "structured": 580
+        }
+      },
+      "polymer_partners": [],
+      "resolution_angstrom": [
+        3.7
+      ],
+      "sifts_aligned_regions": [
+        {
+          "entity_beg_seq_id": 1,
+          "length": 699,
+          "ref_beg_seq_id": 22
+        }
+      ],
+      "source_type": "partial_experimental_biological_assembly",
+      "target_author_chains": [
+        "A"
+      ],
+      "target_label_chains": [
+        "A"
+      ],
+      "title": "Extracellular domain of the LDL receptor"
+    },
+    "1N7D_CA": {
+      "allowed_metric": "ca",
+      "geometry_state_counts": {
+        "ambiguous": 26,
+        "idr": 111,
+        "missing": 86,
+        "structured": 637
+      },
+      "source_type": "CA_only_sensitivity_partial_mutant_ectodomain"
+    },
+    "AF_P01130": {
+      "biological_policy": "PPA P01130 explicit full-length AF monomer override",
+      "excluded_signal_peptide": [
+        1,
+        21
+      ],
+      "full_length_functional_unit": false,
+      "geometry_state_counts": {
+        "ambiguous": 86,
+        "idr": 122,
+        "missing": 27,
+        "structured": 625
+      },
+      "model_id": "AF-P01130-F1",
+      "model_version": 6,
+      "pae_audit": {
+        "criterion": "structured CA<=20A; sequence separation>20; max(PAE_ij,PAE_ji)",
+        "meaning": "pLDDT gates local residue confidence only; interdomain distances remain uncertain; domain-separated geometry provided as conservative sensitivity",
+        "pae_gt10_pairs": 1975,
+        "pae_gt20_pairs": 1055,
+        "pairs": 16113,
+        "quantiles": {
+          "max": 30.0,
+          "median": 3.0,
+          "min": 1.0,
+          "q25": 3.0,
+          "q75": 5.0
+        }
+      },
+      "sequence_identity": 1.0,
+      "source_type": "predicted_full_canonical_monomer"
+    }
+  },
+  "full_gene_monomer_coordinates_used": true,
+  "gene": "LDLR",
+  "geometry_policy": {
+    "WT": "Exclude every observed nonWT construct residue, without relabeling as canonical WT",
+    "alpha_fold": "pLDDT>=70 for Cartesian coordinates; no AF coordinates added to experimental frame",
+    "copies": "Only target-gene chains are geometry donors; partners retained in assembly provenance",
+    "missingness": "Experimental absence alone is not IDR. AF<50 candidate or UniProt disorder annotation, with explicit signal/TM/known-dimerization exclusions; observed experimental coordinates take precedence.",
+    "polymer": "Only contiguous final-state IDR, same chain; root engine supplies 3.8*sqrt(sequence separation)",
+    "primary_coordinate": "complete sidechain heavy-atom mass-weighted COM; glycine CA fallback"
+  },
+  "sources": [
+    {
+      "bytes": 114169,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/1N7D-assembly1.cif.gz",
+      "sha256": "6f202f221fc585c525a5045ac263710ec579fbebd6e3e25f39f3c450ed1d6ccc",
+      "url": "https://files.rcsb.org/download/1n7d-assembly1.cif.gz"
+    },
+    {
+      "bytes": 2455,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/1N7D_assembly.json",
+      "sha256": "48916b6f90df54c174c349339e2ae3161842d5dee7c9d052420ef70e35a21040",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/1N7D/1"
+    },
+    {
+      "bytes": 23167,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/1N7D_entry.json",
+      "sha256": "57a6b878e20bab5f40f0600ea6bae40614a369104f5331a827acda8ef4d4d3bc",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/1N7D"
+    },
+    {
+      "bytes": 108792,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/1N7D_polymer_entity_1.json",
+      "sha256": "277656b5f056574f1e54b35c5ace0abff9fee660492e64ac0b1a70e7300dbf7b",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/1N7D/1"
+    },
+    {
+      "bytes": 3019,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BD8_assembly.json",
+      "sha256": "a3207a7bd75577e5e8e979e70a0b9f84fe045040820af5c9e97976963c427c27",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/9BD8/1"
+    },
+    {
+      "bytes": 11234,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BD8_entry.json",
+      "sha256": "4bd27dd45b30e506620797210aa432f4eedcb83b054c339340fdbd35d43dddd7",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/9BD8"
+    },
+    {
+      "bytes": 125724,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BD8_polymer_entity_1.json",
+      "sha256": "9406f09c5d85b0df365986bf82e831cf90811c1c452835938172b563a8a475bf",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9BD8/1"
+    },
+    {
+      "bytes": 111848,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BD8_polymer_entity_2.json",
+      "sha256": "b145d6825355b4764e3128acdafa637365299352b1742eb8431b42505215aaaa",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9BD8/2"
+    },
+    {
+      "bytes": 4226,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BDE_assembly.json",
+      "sha256": "3c3fb127b3b2dc48d06f478b4ff07eb84681acd6d68011f7d3f3eadf7320e870",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/9BDE/1"
+    },
+    {
+      "bytes": 11823,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BDE_entry.json",
+      "sha256": "f8a78594477bf6544265afebe79c0d8d92bb9dd2af101e82948b0bc6fa70c71c",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/9BDE"
+    },
+    {
+      "bytes": 14929,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BDE_polymer_entity_1.json",
+      "sha256": "6dbf82a0547446026f9eb1d9221694f5959e4a7273f14f7221a8ebe4f49ac1f7",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9BDE/1"
+    },
+    {
+      "bytes": 125422,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BDE_polymer_entity_2.json",
+      "sha256": "c1bfa15fb6e6e48169449ff78e1a4ef108c36250c0d84cb87cca7efa001c99df",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9BDE/2"
+    },
+    {
+      "bytes": 14553,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BDE_polymer_entity_3.json",
+      "sha256": "db08bc176f15b552bd9f7b47b4efaa84e5e2d823c759964ad9ddb1cb8e756dbb",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9BDE/3"
+    },
+    {
+      "bytes": 54826,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BDE_polymer_entity_4.json",
+      "sha256": "c2d9625c5b90824de62a8e50702cf7efb8489e7e2e25581f3446854e61dac4ae",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9BDE/4"
+    },
+    {
+      "bytes": 11850,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BDE_polymer_entity_5.json",
+      "sha256": "799d0a830459a791eeaf984cd3f1c7d26c58d9c57bf923722b0ce22fbf4e4f86",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9BDE/5"
+    },
+    {
+      "bytes": 111400,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9BDE_polymer_entity_6.json",
+      "sha256": "bb9df9b586f33e53ad22e4feb639e2ee4ed955293a7e0d2a18614c28cac2b778",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9BDE/6"
+    },
+    {
+      "bytes": 4224,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9COO_assembly.json",
+      "sha256": "c0f7097d8e1d77d699c8d1106d994fc7dc3cb95de783e4ff20020c3843d0b917",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/9COO/1"
+    },
+    {
+      "bytes": 11569,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9COO_entry.json",
+      "sha256": "f2751841b91bc9d6234188377aa17bd1b47ee08bbbe093a682183db7743823cb",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/9COO"
+    },
+    {
+      "bytes": 125422,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9COO_polymer_entity_1.json",
+      "sha256": "aa73297d3ac940ddbbc3fa8de8fef41d0aece5d7019e34b6c23e480b3475b9da",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9COO/1"
+    },
+    {
+      "bytes": 54829,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9COO_polymer_entity_2.json",
+      "sha256": "021043a3c67a91d3122cc7449cf703939fd5341b3116d84650fa8ab34ad12cba",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9COO/2"
+    },
+    {
+      "bytes": 14929,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9COO_polymer_entity_3.json",
+      "sha256": "a5bd7f5ef0fb6ddc0cf32db5553166f8602a2cf6d597e1ed46baa9e42ccf441f",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9COO/3"
+    },
+    {
+      "bytes": 14553,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9COO_polymer_entity_4.json",
+      "sha256": "153c0146e30fdf8e0363e254f2d70ac96d0c9877d4b0609c53d10dafd3d703b4",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9COO/4"
+    },
+    {
+      "bytes": 11850,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9COO_polymer_entity_5.json",
+      "sha256": "1275755be7409df68c96b03cbf71240a1ea56b049471d1dc86fa0f8d350bb47a",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9COO/5"
+    },
+    {
+      "bytes": 109118,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/9COO_polymer_entity_6.json",
+      "sha256": "c3d8e002b78faeb386c50fddef43b3d4dc75415f0e732e504e6ca36f25f44f73",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9COO/6"
+    },
+    {
+      "bytes": 777301,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/AF_P01130.cif",
+      "sha256": "3bdaf8e5e8200f63e78caf0d668eb564c1a39f942331101aadd0c4fd16cf921b",
+      "url": "https://alphafold.ebi.ac.uk/files/AF-P01130-F1-model_v6.cif"
+    },
+    {
+      "bytes": 2083052,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/AF_P01130_pae.json",
+      "sha256": "9b7211729f5f93ad9da346fe25786b03d82746778e6767528f812ef660d1afcf",
+      "url": "https://alphafold.ebi.ac.uk/files/AF-P01130-F1-predicted_aligned_error_v6.json"
+    },
+    {
+      "bytes": 258378,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/P01130.json",
+      "sha256": "9d2a3549fe1e6c0b6dff76018d167810f2207b24ac6dd1bd936a099865b4939b",
+      "url": "https://rest.uniprot.org/uniprotkb/P01130.json"
+    },
+    {
+      "bytes": 18408,
+      "path": "results/missense_structural_extension_20260912/raw/LDLR/alphafold_api.json",
+      "sha256": "00c69ee5c01ee7c148ed3e7adbeb9c1b83420a7169de620b3200d2d1744ac669",
+      "url": "https://alphafold.ebi.ac.uk/api/prediction/P01130"
+    }
+  ],
+  "uniprot_disorder_features": [
+    {
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "id": "MobiDB-lite",
+          "source": "SAM"
+        }
+      ],
+      "location": {
+        "end": {
+          "modifier": "EXACT",
+          "value": 755
+        },
+        "start": {
+          "modifier": "EXACT",
+          "value": 734
+        }
+      },
+      "type": "Region"
+    }
+  ]
+}

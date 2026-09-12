@@ -1,0 +1,60 @@
+{
+  "gene": "BRCA2",
+  "prior": {
+    "gene": "BRCA2",
+    "variant_type": "missense",
+    "variants": 6656,
+    "population_only": 2971,
+    "affected": 5056,
+    "unaffected_literature": 1482,
+    "unaffected_gnomad": 1516774,
+    "scope": "canonical_missense",
+    "mean": 0.1485981658574783,
+    "variance": 0.017802274751243,
+    "historical_mse": 0.017802274751243,
+    "normalized_weighted_mse": 0.0571998032912369,
+    "weighted_mae": 0.1904922204082021,
+    "alpha_empirical": 0.9074554792970309,
+    "beta_empirical": 5.199318948641594,
+    "strength": 6.106774427938625,
+    "pooled_carrier_fraction": 0.0033190836808217,
+    "equal_variant_fraction_mean": 0.4172101641756652,
+    "unaffected_singleton_posterior": 0.1276887972874981,
+    "singleton_prior_retention": 0.8592891880641753
+  },
+  "variants": 6656,
+  "population_only": 2971,
+  "primary": "BRCA2_domains_com_h3",
+  "supported": 127,
+  "median_density": 0.17781757148958666,
+  "median_kish_donor_n": 6.870170537220942,
+  "normalized_nonzero_donor_pairs": 11058,
+  "global_exclusion_reference_checks": [
+    "BRCA2|lit:P3292L",
+    "BRCA2|lit:T2310I"
+  ],
+  "am_sources": {
+    "member_version_or_value_conflict": 4210,
+    "archived_clinical_key_fallback": 2391,
+    "missing": 55
+  },
+  "variant_loo": true,
+  "gene_missense_prior_fixed": true,
+  "gnomad_assumed_unaffected": true,
+  "count_multiplier": false,
+  "draws": 8192,
+  "seed": 20260912,
+  "scope": "Explicitly partial domain-local exploratory analysis: separate experimental7LDG/8PBC frames; no full-length model or inter-domain distances",
+  "inputs": {
+    "class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part001.csv.gz": "447803cfabb8a9124ed97a2a9bfad7e534e0658e5cfcc543fe24282f2e980422",
+    "class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part002.csv.gz": "89d0e23f66e6b6097ec4276815a2976b31407546f79d4f7a2103701e9c7f7b5d",
+    "class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+    "population_inclusive_penetrance_20260912/predictors/population_predictors.csv.gz": "79ed3b008b4d1cb0798ba55bf21c63310f41b5debe629f15e2a7499b74946833",
+    "prior_count_predictors_20260912/variant_counts.csv.gz": "c251fa6d8d47b1163aab3d0e9742e1e1d89ba1d8dafc9351cd376af5d24d6731",
+    "missense_structural_extension_20260912/geometry/BRCA2/BRCA2_canonical_geometry.csv.gz": "cae89d06b19e1a6a9a731cd34e99b7aea9acd371818ec6a7dde09e0deaf5c9f6",
+    "missense_structural_extension_20260912/geometry/BRCA2/BRCA2_ca_canonical_geometry.csv.gz": "a402b6a3808ea091e606870ebdbc1a52221075de6acaf0c766d526058d45775f",
+    "missense_structural_extension_20260912/geometry/BRCA2/7LDG_canonical_geometry.csv.gz": "1398b928c473cc33f5b9aa6f8837df2ea22e8d15b5ec27318f8e312e33763ab9",
+    "missense_structural_extension_20260912/geometry/BRCA2/7LDG_ca_canonical_geometry.csv.gz": "04fd8058b95d953d52d1fb5cfa964c620f6ce0796ff4ef00d87eabc7ee9d2a1a",
+    "missense_structural_extension_20260912/geometry/BRCA2/8PBC_canonical_geometry.csv.gz": "e8167d5c3dc4d83ee6638e7b817f3fb03b5381e80f9d20da6799aadba7c6ab36"
+  }
+}

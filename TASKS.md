@@ -112,6 +112,19 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       Independent audit reproduces all 30 primary/sensitivity fits; singleton
       counts and the historical low n=1 fitting weight remain explicit:
       [`priors by type`](docs/evidence/class_matched_penetrance_20260912/README.md).
+- [x] **Extend structure with the new missense priors (2026-09-12).**
+      Completed HNF1A, LDLR, KCNQ1, and explicitly partial BRCA2 domain runs;
+      reused GCK's frozen class-specific replay. Preserve actual assembly
+      copies, canonical WT mapping, positive sigmoid tails, same-segment IDR
+      polymer routing, and variant-only global outer LOO. Priors remain
+      gene-by-missense; all gnomAD carriers add to beta as unaffected.
+      Supported targets: HNF1A 726/785, LDLR 1206/1376, KCNQ1 975/1061,
+      BRCA2 127/6656; these include explicitly labeled polymer-only estimates.
+      HNF1A/KCNQ1 improve over AM alone, but sequence proximity captures most
+      of the improvement. BRCA2 has only 72 canonical COM positions and no
+      whole-gene structural claim. All 218 PPA tests and independent output,
+      geometry, and selected LOO reconstructions pass:
+      [`missense structural extension`](docs/evidence/missense_structural_extension_20260912/README.md).
 - [ ] **Next: curate GCK identity/endpoints and repeat the fixed comparison.**
       Resolve 19 canonical-WT mismatches against source/transcript evidence;
       adjudicate mixed MODY versus activating/hypoglycemia counts and ambiguous
@@ -120,10 +133,11 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       density. The population-inclusive redo remains pooled clinical evidence,
       not MODY-specific validation. Review queues are in the original pilot's
       `eligibility/` folder and the redo's complete clinical join ledger.
-- [ ] **Then extend structural priors.** Repeat empirical baseline, density,
-      AlphaMissense and combination comparisons on identical target variants,
-      preserving variant-only LOO. Test GPN-Star/AVI after GCK source curation;
-      complete the other genes' biological-unit mapping and support checks.
+- [ ] **Follow through on the structural comparisons.** Prioritize HNF1A and
+      KCNQ1 disease-specific endpoint/count curation, then repeat the fixed
+      variant-only LOO comparisons with AM plus sequence as a required control.
+      Test GPN-Star/AVI after source curation; obtain validated full-unit
+      geometry for currently incomplete proteins before whole-gene claims.
       Reuse the now-frozen population-inclusive variant inventory, and resolve
       BRCA2 AlphaMissense version conflicts before its predictor comparison.
       Before outcome validation, freeze gene-specific endpoint, age/sex/time

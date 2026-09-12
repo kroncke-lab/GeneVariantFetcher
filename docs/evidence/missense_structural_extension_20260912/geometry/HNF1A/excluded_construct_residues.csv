@@ -1,0 +1,3 @@
+frame_id,chain,label_seq_id,deposited_aa,observed,reason
+8PI8,C,1,G,False,unmapped_construct_sequence_not_canonical
+8PI8,D,1,G,False,unmapped_construct_sequence_not_canonical

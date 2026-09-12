@@ -1,0 +1,37 @@
+{
+  "all_passed": true,
+  "canonical_WT_checks": "every structured row passed",
+  "engineered_mismatch_geometry_excluded": true,
+  "exact_canonical_positions_per_chain": true,
+  "geometry_files": [
+    {
+      "LF_only": true,
+      "bytes": 232381,
+      "file": "AF_P01130_canonical_geometry.csv",
+      "sha256": "361c2faf567fcbe4d20c0edad33918c7e56913263935e3b0d08f4df2634b66df"
+    },
+    {
+      "LF_only": true,
+      "bytes": 245840,
+      "file": "AF_P01130_domain_separated_geometry.csv",
+      "sha256": "2286983b452d6ac25a50d3a75fd5e082d9109889dec1df1adc6bc3d2e7fef1cc"
+    },
+    {
+      "LF_only": true,
+      "bytes": 226914,
+      "file": "1N7D_canonical_geometry.csv",
+      "sha256": "b1ae7d493a185f8f7a39afb8bada91612bce5753d507b1fcec57d3b52582f9d0"
+    },
+    {
+      "LF_only": true,
+      "bytes": 229779,
+      "file": "1N7D_CA_canonical_geometry.csv",
+      "sha256": "a45a113fcb28e62bb9a40ef966c4fe7d5b0db756838c1d1dac5ac2d87786e036"
+    }
+  ],
+  "no_IDR_coordinates": true,
+  "no_cross_frame_hybrid": true,
+  "no_duplicate_context_positions": true,
+  "no_non_gene_donor_chains": true,
+  "source_count": 28
+}

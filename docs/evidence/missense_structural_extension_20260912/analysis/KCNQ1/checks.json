@@ -1,0 +1,57 @@
+{
+  "gene": "KCNQ1",
+  "prior": {
+    "gene": "KCNQ1",
+    "variant_type": "missense",
+    "variants": 1061,
+    "population_only": 666,
+    "affected": 6511,
+    "unaffected_literature": 1756,
+    "unaffected_gnomad": 22640,
+    "scope": "canonical_missense",
+    "mean": 0.2947603080755296,
+    "variance": 0.0656742661197356,
+    "historical_mse": 0.0656742661197356,
+    "normalized_weighted_mse": 0.147130274616454,
+    "weighted_mae": 0.3416337306332154,
+    "alpha_empirical": 0.6382351340479758,
+    "beta_empirical": 1.5270331078498918,
+    "strength": 2.1652682418978677,
+    "pooled_carrier_fraction": 0.210664250816967,
+    "equal_variant_fraction_mean": 0.2399820377836664,
+    "unaffected_singleton_posterior": 0.2016369815359773,
+    "singleton_prior_retention": 0.68407100960252
+  },
+  "variants": 1061,
+  "population_only": 666,
+  "primary": "9U7F_com_h3",
+  "supported": 975,
+  "median_density": 0.24615163995051856,
+  "median_kish_donor_n": 13.398371733778365,
+  "normalized_nonzero_donor_pairs": 380958,
+  "global_exclusion_reference_checks": [
+    "KCNQ1|lit:A341V",
+    "KCNQ1|g:11-2445356-C-A"
+  ],
+  "am_sources": {
+    "exact_genomic_members": 829,
+    "archived_clinical_key_fallback": 225,
+    "missing": 5,
+    "different_member_scores_or_versions": 2
+  },
+  "variant_loo": true,
+  "gene_missense_prior_fixed": true,
+  "gnomad_assumed_unaffected": true,
+  "count_multiplier": false,
+  "draws": 8192,
+  "seed": 20260912,
+  "scope": "Partial engineered KCNQ1-KCNE1-CaM tetramer; candidate IDR polymer separate from resolved geometry",
+  "inputs": {
+    "class_matched_penetrance_20260912/analysis/empirical_posteriors/KCNQ1.part001.csv.gz": "194e11c5d12b1b92d0954311811615a757c42b89e66a3a1a59d9f839699616e9",
+    "class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+    "population_inclusive_penetrance_20260912/predictors/population_predictors.csv.gz": "79ed3b008b4d1cb0798ba55bf21c63310f41b5debe629f15e2a7499b74946833",
+    "prior_count_predictors_20260912/variant_counts.csv.gz": "c251fa6d8d47b1163aab3d0e9742e1e1d89ba1d8dafc9351cd376af5d24d6731",
+    "missense_structural_extension_20260912/geometry/KCNQ1/9U7F_canonical_geometry.csv": "b49218fcaf0cfe5494f809abece632b38d6bed4156cf22f5b919dd99f54f041f",
+    "missense_structural_extension_20260912/geometry/KCNQ1/9UC8_canonical_geometry.csv": "1b4c3aedf2c7e1f1a8e8509b8164781a2ef26d1b9b94dbe4498ae2a59f6ce4d3"
+  }
+}

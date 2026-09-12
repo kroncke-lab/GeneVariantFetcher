@@ -1,0 +1,440 @@
+[
+  {
+    "all_passed": true,
+    "all_self_weights_zero": true,
+    "context_policy": "Nearest donor copy per target context, normalize separately in each supported context, then equal context average",
+    "density_source_counts": {
+      "mixed": 7,
+      "polymer": 536,
+      "structured": 183,
+      "unavailable": 59
+    },
+    "distinct_protein_substitutions_with_multiple_DNA_units": 7,
+    "full_gene_missense_prior_fixed": true,
+    "gene": "HNF1A",
+    "genomic_members_disjoint": true,
+    "geometry_sha256": "9e74878dc1468a1abb2e5774d9c3f324900231228f6cb9d0513d22d4619f4b10",
+    "identity_unit": "frozen mixed genomic alleles and unresolved clinical protein aggregates; not a leave-one-protein-substitution-out experiment",
+    "independent_outer_LOO_comparisons": [
+      {
+        "absolute_prediction_error": 6.938893903907228e-17,
+        "cohort": "all_supported",
+        "model": "intercept_only",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 2.7755575615628914e-17,
+        "cohort": "all_supported",
+        "model": "density_fit",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 4.163336342344337e-17,
+        "cohort": "all_supported",
+        "model": "sequence_fit",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 1.3877787807814457e-17,
+        "cohort": "am_common",
+        "model": "intercept_only",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 2.7755575615628914e-17,
+        "cohort": "am_common",
+        "model": "density_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 9.71445146547012e-17,
+        "cohort": "am_common",
+        "model": "sequence_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 6.938893903907228e-17,
+        "cohort": "am_common",
+        "model": "am_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 6.938893903907228e-18,
+        "cohort": "am_common",
+        "model": "am_plus_density",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 8.326672684688674e-17,
+        "cohort": "am_common",
+        "model": "am_plus_sequence",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:A98V"
+      },
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "all_supported",
+        "model": "intercept_only",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "all_supported",
+        "model": "density_fit",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 1.3877787807814457e-17,
+        "cohort": "all_supported",
+        "model": "sequence_fit",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 4.163336342344337e-17,
+        "cohort": "am_common",
+        "model": "intercept_only",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "am_common",
+        "model": "density_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 4.163336342344337e-17,
+        "cohort": "am_common",
+        "model": "sequence_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 6.938893903907228e-17,
+        "cohort": "am_common",
+        "model": "am_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 4.163336342344337e-17,
+        "cohort": "am_common",
+        "model": "am_plus_density",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "am_plus_sequence",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:E508K"
+      },
+      {
+        "absolute_prediction_error": 2.7755575615628914e-17,
+        "cohort": "all_supported",
+        "model": "intercept_only",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "all_supported",
+        "model": "density_fit",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "all_supported",
+        "model": "sequence_fit",
+        "training_targets": 725,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "absolute_prediction_error": 2.7755575615628914e-17,
+        "cohort": "am_common",
+        "model": "intercept_only",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "absolute_prediction_error": 1.1102230246251565e-16,
+        "cohort": "am_common",
+        "model": "density_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "am_common",
+        "model": "sequence_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "absolute_prediction_error": 2.7755575615628914e-17,
+        "cohort": "am_common",
+        "model": "am_fit",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "am_plus_density",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "am_plus_sequence",
+        "training_targets": 719,
+        "variant_id": "HNF1A|lit:R200W"
+      }
+    ],
+    "intercept_only_spearman": [
+      {
+        "cohort": "all_supported",
+        "mechanical_loo_spearman": -0.5166183248571384
+      },
+      {
+        "cohort": "am_common",
+        "mechanical_loo_spearman": -0.5167330856927759
+      }
+    ],
+    "maximum_saved_weight_error": 1.6653345369377348e-16,
+    "mixed_variants": [
+      {
+        "canonical_pos": 200,
+        "context_density_max": 0.3229251493212295,
+        "context_density_min": 0.2670856649752108,
+        "context_spread": 0.0558394843460187,
+        "variant_id": "HNF1A|lit:R200W"
+      },
+      {
+        "canonical_pos": 200,
+        "context_density_max": 0.3445362068226476,
+        "context_density_min": 0.2877759525232812,
+        "context_spread": 0.0567602542993663,
+        "variant_id": "HNF1A|lit:R200Q"
+      },
+      {
+        "canonical_pos": 200,
+        "context_density_max": 0.3191729338608464,
+        "context_density_min": 0.2634933180105818,
+        "context_spread": 0.0556796158502646,
+        "variant_id": "HNF1A|lit:R200G"
+      },
+      {
+        "canonical_pos": 181,
+        "context_density_max": 0.118282828910535,
+        "context_density_min": 0.0409045915664674,
+        "context_spread": 0.0773782373440676,
+        "variant_id": "HNF1A|g:12-120993534-G-A"
+      },
+      {
+        "canonical_pos": 181,
+        "context_density_max": 0.118282828910535,
+        "context_density_min": 0.0409045915664674,
+        "context_spread": 0.0773782373440676,
+        "variant_id": "HNF1A|g:12-120993535-G-A"
+      },
+      {
+        "canonical_pos": 181,
+        "context_density_max": 0.1344911122267892,
+        "context_density_min": 0.0717760575753631,
+        "context_spread": 0.0627150546514261,
+        "variant_id": "HNF1A|g:12-120993535-G-C"
+      },
+      {
+        "canonical_pos": 200,
+        "context_density_max": 0.4214827111436285,
+        "context_density_min": 0.361444041191107,
+        "context_spread": 0.0600386699525214,
+        "variant_id": "HNF1A|g:12-120993592-G-T"
+      }
+    ],
+    "positive_normalized_pairs": 105526,
+    "runner_sha256": "ae27f5b042f5603b1da77eae08cc884717744056a8cef7eaa81a2ff9e8a56438",
+    "same_residue_distinct_variant_pairs": 854,
+    "summary_sha256": "0bd89d64a50acb606a3b35384f3bf0923112bb5dee247810954fc5b87d9beefa",
+    "unsupported_preserved_as_NaN": 59,
+    "variants": 785
+  },
+  {
+    "all_passed": true,
+    "all_self_weights_zero": true,
+    "context_policy": "Nearest donor copy per target context, normalize separately in each supported context, then equal context average",
+    "density_source_counts": {
+      "polymer": 389,
+      "structured": 586,
+      "unavailable": 86
+    },
+    "distinct_protein_substitutions_with_multiple_DNA_units": 11,
+    "full_gene_missense_prior_fixed": true,
+    "gene": "KCNQ1",
+    "genomic_members_disjoint": true,
+    "geometry_sha256": "b49218fcaf0cfe5494f809abece632b38d6bed4156cf22f5b919dd99f54f041f",
+    "identity_unit": "frozen mixed genomic alleles and unresolved clinical protein aggregates; not a leave-one-protein-substitution-out experiment",
+    "independent_outer_LOO_comparisons": [
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "all_supported",
+        "model": "intercept_only",
+        "training_targets": 974,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 1.1102230246251565e-16,
+        "cohort": "all_supported",
+        "model": "density_fit",
+        "training_targets": 974,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 1.1102230246251565e-16,
+        "cohort": "all_supported",
+        "model": "sequence_fit",
+        "training_targets": 974,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "intercept_only",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "density_fit",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "sequence_fit",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "am_fit",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 1.1102230246251565e-16,
+        "cohort": "am_common",
+        "model": "am_plus_density",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "am_plus_sequence",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:A341V"
+      },
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "all_supported",
+        "model": "intercept_only",
+        "training_targets": 974,
+        "variant_id": "KCNQ1|lit:G643S"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "all_supported",
+        "model": "density_fit",
+        "training_targets": 974,
+        "variant_id": "KCNQ1|lit:G643S"
+      },
+      {
+        "absolute_prediction_error": 1.1102230246251565e-16,
+        "cohort": "all_supported",
+        "model": "sequence_fit",
+        "training_targets": 974,
+        "variant_id": "KCNQ1|lit:G643S"
+      },
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "am_common",
+        "model": "intercept_only",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:G643S"
+      },
+      {
+        "absolute_prediction_error": 2.7755575615628914e-17,
+        "cohort": "am_common",
+        "model": "density_fit",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:G643S"
+      },
+      {
+        "absolute_prediction_error": 5.551115123125783e-17,
+        "cohort": "am_common",
+        "model": "sequence_fit",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:G643S"
+      },
+      {
+        "absolute_prediction_error": 2.7755575615628914e-17,
+        "cohort": "am_common",
+        "model": "am_fit",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:G643S"
+      },
+      {
+        "absolute_prediction_error": 0.0,
+        "cohort": "am_common",
+        "model": "am_plus_density",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:G643S"
+      },
+      {
+        "absolute_prediction_error": 8.326672684688674e-17,
+        "cohort": "am_common",
+        "model": "am_plus_sequence",
+        "training_targets": 968,
+        "variant_id": "KCNQ1|lit:G643S"
+      }
+    ],
+    "intercept_only_spearman": [
+      {
+        "cohort": "all_supported",
+        "mechanical_loo_spearman": -0.7189002223510327
+      },
+      {
+        "cohort": "am_common",
+        "mechanical_loo_spearman": -0.7140011389898417
+      }
+    ],
+    "maximum_saved_weight_error": 1.6653345369377348e-16,
+    "mixed_variants": [],
+    "positive_normalized_pairs": 380958,
+    "runner_sha256": "ae27f5b042f5603b1da77eae08cc884717744056a8cef7eaa81a2ff9e8a56438",
+    "same_residue_distinct_variant_pairs": 1362,
+    "summary_sha256": "0bd89d64a50acb606a3b35384f3bf0923112bb5dee247810954fc5b87d9beefa",
+    "unsupported_preserved_as_NaN": 86,
+    "variants": 1061
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "LF_only_CSV": true,
+  "all_passed": true,
+  "cached_rebuild_byte_identical": true,
+  "checked_files": [
+    {
+      "IDR_unique_positions": 111,
+      "file": "1N7D_CA_canonical_geometry.csv",
+      "rows": 860,
+      "sha256": "a45a113fcb28e62bb9a40ef966c4fe7d5b0db756838c1d1dac5ac2d87786e036",
+      "structured_unique_positions": 637,
+      "validated_metrics": [
+        "ca"
+      ]
+    },
+    {
+      "IDR_unique_positions": 111,
+      "file": "1N7D_canonical_geometry.csv",
+      "rows": 860,
+      "sha256": "b1ae7d493a185f8f7a39afb8bada91612bce5753d507b1fcec57d3b52582f9d0",
+      "structured_unique_positions": 580,
+      "validated_metrics": [
+        "com",
+        "ca"
+      ]
+    },
+    {
+      "IDR_unique_positions": 122,
+      "file": "AF_P01130_canonical_geometry.csv",
+      "rows": 860,
+      "sha256": "361c2faf567fcbe4d20c0edad33918c7e56913263935e3b0d08f4df2634b66df",
+      "structured_unique_positions": 625,
+      "validated_metrics": [
+        "com",
+        "ca"
+      ]
+    },
+    {
+      "IDR_unique_positions": 122,
+      "file": "AF_P01130_domain_separated_geometry.csv",
+      "rows": 860,
+      "sha256": "2286983b452d6ac25a50d3a75fd5e082d9109889dec1df1adc6bc3d2e7fef1cc",
+      "structured_unique_positions": 625,
+      "validated_metrics": [
+        "com",
+        "ca"
+      ]
+    }
+  ],
+  "checks": [
+    "canonical amino acids",
+    "unique frame/chain/position keys",
+    "finite structured coordinates for selected metric",
+    "structured WT identity",
+    "contiguous IDR segments",
+    "nonempty frame/chain identities"
+  ],
+  "engine": "ProteinProximityAnalysis/src/alphafold_rin/empirical_density.py::_prepare_geometry",
+  "engine_file_sha256": "48d3e655bd925d31e68bb7319c100f713e94a3039ba85edf4d7cb85349445589",
+  "max_artifact_bytes": 245840
+}

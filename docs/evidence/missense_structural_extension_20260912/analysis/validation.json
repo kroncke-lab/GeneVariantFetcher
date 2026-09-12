@@ -1,0 +1,42 @@
+[
+  {
+    "gene": "HNF1A",
+    "variants": 785,
+    "supported": 726,
+    "positive_donor_pairs": 105526,
+    "same_residue_distinct_variant_pairs": 854,
+    "means_and_variances_reconstructed": true,
+    "metrics_independently_recomputed": true,
+    "input_hashes_verified": 6
+  },
+  {
+    "gene": "LDLR",
+    "variants": 1376,
+    "supported": 1206,
+    "positive_donor_pairs": 1067022,
+    "same_residue_distinct_variant_pairs": 1630,
+    "means_and_variances_reconstructed": true,
+    "metrics_independently_recomputed": true,
+    "input_hashes_verified": 8
+  },
+  {
+    "gene": "KCNQ1",
+    "variants": 1061,
+    "supported": 975,
+    "positive_donor_pairs": 380958,
+    "same_residue_distinct_variant_pairs": 1362,
+    "means_and_variances_reconstructed": true,
+    "metrics_independently_recomputed": true,
+    "input_hashes_verified": 6
+  },
+  {
+    "gene": "BRCA2",
+    "variants": 6656,
+    "supported": 127,
+    "positive_donor_pairs": 11058,
+    "same_residue_distinct_variant_pairs": 180,
+    "means_and_variances_reconstructed": true,
+    "metrics_independently_recomputed": true,
+    "input_hashes_verified": 10
+  }
+]

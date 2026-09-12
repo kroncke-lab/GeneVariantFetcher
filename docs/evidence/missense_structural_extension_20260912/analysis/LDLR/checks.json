@@ -1,0 +1,59 @@
+{
+  "gene": "LDLR",
+  "prior": {
+    "gene": "LDLR",
+    "variant_type": "missense",
+    "variants": 1376,
+    "population_only": 1005,
+    "affected": 1400,
+    "unaffected_literature": 114,
+    "unaffected_gnomad": 108024,
+    "scope": "canonical_missense",
+    "mean": 0.1537761078600645,
+    "variance": 0.0358075728042247,
+    "historical_mse": 0.0358075728042247,
+    "normalized_weighted_mse": 0.0834219738650245,
+    "weighted_mae": 0.2140225435148891,
+    "alpha_empirical": 0.4050647213745733,
+    "beta_empirical": 2.2290552795242657,
+    "strength": 2.634120000898839,
+    "pooled_carrier_fraction": 0.0127809527287334,
+    "equal_variant_fraction_mean": 0.1561712049320318,
+    "unaffected_singleton_posterior": 0.1114615701392324,
+    "singleton_prior_retention": 0.7248302203139504
+  },
+  "variants": 1376,
+  "population_only": 1005,
+  "primary": "AF_P01130_com_h3",
+  "supported": 1206,
+  "median_density": 0.16254290353622652,
+  "median_kish_donor_n": 17.233493167984225,
+  "normalized_nonzero_donor_pairs": 1067022,
+  "global_exclusion_reference_checks": [
+    "LDLR|lit:H583Y",
+    "LDLR|g:19-11110735-G-T"
+  ],
+  "am_sources": {
+    "exact_genomic_members": 1220,
+    "archived_clinical_key_fallback": 147,
+    "different_member_scores_or_versions": 5,
+    "missing": 4
+  },
+  "variant_loo": true,
+  "gene_missense_prior_fixed": true,
+  "gnomad_assumed_unaffected": true,
+  "count_multiplier": false,
+  "draws": 8192,
+  "seed": 20260912,
+  "scope": "Predicted full monomer, with interdomain PAE caveat and domain-separated sensitivity; experimental partial ectodomain comparison",
+  "inputs": {
+    "class_matched_penetrance_20260912/analysis/empirical_posteriors/LDLR.part001.csv.gz": "b45c7c023430880c2042104b43700c82b2339b3a9f684bae68a27bdb4e003403",
+    "class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+    "population_inclusive_penetrance_20260912/predictors/population_predictors.csv.gz": "79ed3b008b4d1cb0798ba55bf21c63310f41b5debe629f15e2a7499b74946833",
+    "prior_count_predictors_20260912/variant_counts.csv.gz": "c251fa6d8d47b1163aab3d0e9742e1e1d89ba1d8dafc9351cd376af5d24d6731",
+    "missense_structural_extension_20260912/geometry/LDLR/AF_P01130_canonical_geometry.csv": "361c2faf567fcbe4d20c0edad33918c7e56913263935e3b0d08f4df2634b66df",
+    "missense_structural_extension_20260912/geometry/LDLR/AF_P01130_domain_separated_geometry.csv": "2286983b452d6ac25a50d3a75fd5e082d9109889dec1df1adc6bc3d2e7fef1cc",
+    "missense_structural_extension_20260912/geometry/LDLR/1N7D_canonical_geometry.csv": "b1ae7d493a185f8f7a39afb8bada91612bce5753d507b1fcec57d3b52582f9d0",
+    "missense_structural_extension_20260912/geometry/LDLR/1N7D_CA_canonical_geometry.csv": "a45a113fcb28e62bb9a40ef966c4fe7d5b0db756838c1d1dac5ac2d87786e036"
+  }
+}

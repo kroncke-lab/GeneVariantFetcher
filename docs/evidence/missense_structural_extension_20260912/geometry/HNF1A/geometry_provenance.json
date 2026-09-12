@@ -1,0 +1,760 @@
+{
+  "accession": "P20823",
+  "candidates": [
+    {
+      "assembly": {
+        "details": "author_and_software_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 4,
+        "oligomeric_details": "tetrameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_and_software_defined_assembly"
+      },
+      "assembly_total_modeled_residues": 380,
+      "pdb": "8PI8",
+      "selected": true,
+      "selection_note": "selected; see geometry report",
+      "target_entities": [
+        {
+          "entity": {
+            "asym_ids": [
+              "C",
+              "D"
+            ],
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "chem_comp_monomers": [
+              "ALA",
+              "ARG",
+              "ASN",
+              "ASP",
+              "CYS",
+              "GLN",
+              "GLU",
+              "GLY",
+              "HIS",
+              "ILE",
+              "LEU",
+              "LYS",
+              "MET",
+              "PHE",
+              "PRO",
+              "SER",
+              "THR",
+              "TRP",
+              "TYR",
+              "VAL"
+            ],
+            "entity_id": "3",
+            "entry_id": "8PI8",
+            "rcsb_id": "8PI8_3",
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P20823",
+                "database_name": "UniProt",
+                "entity_sequence_coverage": 0.9949494949494949,
+                "provenance_source": "SIFTS",
+                "reference_sequence_coverage": 0.312202852614897
+              }
+            ],
+            "uniprot_ids": [
+              "P20823"
+            ]
+          },
+          "mutation_count": 0,
+          "polymer_sequence_length": 198
+        }
+      ],
+      "title": "DNA binding domain of HNF-1A bound to P2-HNF4A promoter DNA"
+    },
+    {
+      "assembly": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 4,
+        "oligomeric_details": "tetrameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "assembly_total_modeled_residues": 385,
+      "pdb": "1IC8",
+      "selected": true,
+      "selection_note": "selected; see geometry report",
+      "target_entities": [
+        {
+          "entity": {
+            "asym_ids": [
+              "C",
+              "D"
+            ],
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "chem_comp_monomers": [
+              "ALA",
+              "ARG",
+              "ASN",
+              "ASP",
+              "CYS",
+              "GLN",
+              "GLU",
+              "GLY",
+              "HIS",
+              "ILE",
+              "LEU",
+              "LYS",
+              "MET",
+              "PHE",
+              "PRO",
+              "SER",
+              "THR",
+              "TRP",
+              "TYR",
+              "VAL"
+            ],
+            "entity_id": "3",
+            "entry_id": "1IC8",
+            "rcsb_id": "1IC8_3",
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P20823",
+                "database_name": "UniProt",
+                "entity_sequence_coverage": 1.0,
+                "provenance_source": "SIFTS",
+                "reference_sequence_coverage": 0.3074484944532488
+              }
+            ],
+            "uniprot_ids": [
+              "P20823"
+            ]
+          },
+          "mutation_count": 0,
+          "polymer_sequence_length": 194
+        }
+      ],
+      "title": "HEPATOCYTE NUCLEAR FACTOR 1A BOUND TO DNA : MODY3 GENE PRODUCT"
+    },
+    {
+      "assembly": {
+        "details": "author_and_software_defined_assembly",
+        "id": "1",
+        "method_details": "PISA,PQS",
+        "oligomeric_count": 2,
+        "oligomeric_details": "dimeric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_and_software_defined_assembly"
+      },
+      "assembly_total_modeled_residues": 66,
+      "pdb": "2GYP",
+      "selected": false,
+      "selection_note": "D-Ala20 analog; not WT dimerization geometry",
+      "target_entities": [
+        {
+          "entity": {
+            "asym_ids": [
+              "A",
+              "B"
+            ],
+            "auth_asym_ids": [
+              "A",
+              "B"
+            ],
+            "chem_comp_monomers": [
+              "ALA",
+              "DAL",
+              "GLN",
+              "GLU",
+              "GLY",
+              "ILE",
+              "LEU",
+              "LYS",
+              "NLE",
+              "SER",
+              "THR",
+              "TRP",
+              "VAL"
+            ],
+            "chem_comp_nstd_monomers": [
+              "DAL",
+              "NLE"
+            ],
+            "entity_id": "1",
+            "entry_id": "2GYP",
+            "rcsb_id": "2GYP_1",
+            "reference_sequence_identifiers": [
+              {
+                "database_accession": "P20823",
+                "database_name": "UniProt",
+                "entity_sequence_coverage": 0.9393939393939394,
+                "provenance_source": "SIFTS",
+                "reference_sequence_coverage": 0.0491283676703645
+              }
+            ],
+            "uniprot_ids": [
+              "P20823"
+            ]
+          },
+          "mutation_count": 1,
+          "polymer_sequence_length": 33
+        }
+      ],
+      "title": "Diabetes mellitus due to a frustrated Schellman motif in HNF-1a"
+    }
+  ],
+  "canonical_length": 631,
+  "canonical_sequence_sha256": "32a0474d1152805460477faa814ad05c92392dbe16f6f69d5fbe9b62144f83c0",
+  "canonical_transcript": {
+    "database": "Ensembl",
+    "id": "ENST00000257555.11",
+    "isoformId": "P20823-1",
+    "properties": [
+      {
+        "key": "ProteinId",
+        "value": "ENSP00000257555.5"
+      },
+      {
+        "key": "GeneId",
+        "value": "ENSG00000135100.20"
+      }
+    ]
+  },
+  "date": "2026-09-12",
+  "exact_match_prior_canonical_sequence": true,
+  "frames": {
+    "1IC8": {
+      "assembly_counts": {
+        "assembly_id": "1",
+        "atom_count": 3826,
+        "branched_atom_count": 0,
+        "branched_entity_count": 0,
+        "branched_entity_instance_count": 0,
+        "deuterated_water_count": 0,
+        "entry_id": "1IC8",
+        "formula_weight": 57.86,
+        "hydrogen_atom_count": 0,
+        "modeled_polymer_monomer_count": 385,
+        "na_polymer_entity_types": "Other",
+        "nonpolymer_atom_count": 0,
+        "nonpolymer_entity_count": 0,
+        "nonpolymer_entity_instance_count": 0,
+        "num_heterologous_interface_entities": 5,
+        "num_heteromeric_interface_entities": 5,
+        "num_homomeric_interface_entities": 1,
+        "num_interface_entities": 6,
+        "num_interfaces": 6,
+        "num_isologous_interface_entities": 1,
+        "num_na_interface_entities": 1,
+        "num_prot_na_interface_entities": 4,
+        "num_protein_interface_entities": 1,
+        "polymer_atom_count": 3687,
+        "polymer_composition": "protein/NA",
+        "polymer_entity_count": 3,
+        "polymer_entity_count_DNA": 2,
+        "polymer_entity_count_RNA": 0,
+        "polymer_entity_count_nucleic_acid": 2,
+        "polymer_entity_count_nucleic_acid_hybrid": 0,
+        "polymer_entity_count_protein": 1,
+        "polymer_entity_instance_count": 4,
+        "polymer_entity_instance_count_DNA": 2,
+        "polymer_entity_instance_count_RNA": 0,
+        "polymer_entity_instance_count_nucleic_acid": 2,
+        "polymer_entity_instance_count_nucleic_acid_hybrid": 0,
+        "polymer_entity_instance_count_protein": 2,
+        "polymer_monomer_count": 430,
+        "selected_polymer_entity_types": "Protein/NA",
+        "solvent_atom_count": 139,
+        "solvent_entity_count": 1,
+        "solvent_entity_instance_count": 4,
+        "total_assembly_buried_surface_area": 3760.837293343737,
+        "total_number_interface_residues": 191,
+        "unmodeled_polymer_monomer_count": 45
+      },
+      "assembly_definition": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 4,
+        "oligomeric_details": "tetrameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "assembly_id": "1",
+      "construct_canonical_ranges": [
+        [
+          85,
+          278
+        ]
+      ],
+      "engineered_WT_mismatches_excluded": [],
+      "full_length_functional_unit": false,
+      "geometry_state_counts": {
+        "ambiguous": 21,
+        "idr": 824,
+        "missing": 74,
+        "structured": 343
+      },
+      "independently_unique_sequence_placement": true,
+      "per_chain": {
+        "C": {
+          "observed": 170,
+          "observed_canonical_ranges": [
+            [
+              87,
+              180
+            ],
+            [
+              201,
+              276
+            ]
+          ],
+          "structured": 170
+        },
+        "D": {
+          "observed": 173,
+          "observed_canonical_ranges": [
+            [
+              85,
+              179
+            ],
+            [
+              201,
+              278
+            ]
+          ],
+          "structured": 173
+        }
+      },
+      "polymer_partners": [
+        {
+          "asym_ids": [
+            "A"
+          ],
+          "auth_asym_ids": [
+            "E"
+          ],
+          "chem_comp_monomers": [
+            "DA",
+            "DC",
+            "DG",
+            "DT"
+          ],
+          "description": "5'-D(*CP*TP*TP*GP*GP*TP*TP*AP*AP*TP*AP*AP*TP*TP*CP*AP*CP*CP*AP*GP*A)-3'",
+          "entity_id": "1",
+          "entry_id": "1IC8",
+          "rcsb_id": "1IC8_1",
+          "type": "polydeoxyribonucleotide"
+        },
+        {
+          "asym_ids": [
+            "B"
+          ],
+          "auth_asym_ids": [
+            "F"
+          ],
+          "chem_comp_monomers": [
+            "DA",
+            "DC",
+            "DG",
+            "DT"
+          ],
+          "description": "5'-D(*TP*CP*TP*GP*GP*TP*GP*AP*AP*TP*TP*AP*TP*TP*AP*AP*CP*CP*AP*AP*G)-3'",
+          "entity_id": "2",
+          "entry_id": "1IC8",
+          "rcsb_id": "1IC8_2",
+          "type": "polydeoxyribonucleotide"
+        }
+      ],
+      "resolution_angstrom": [
+        2.6
+      ],
+      "sifts_aligned_regions": [
+        {
+          "entity_beg_seq_id": 1,
+          "length": 194,
+          "ref_beg_seq_id": 85
+        }
+      ],
+      "source_type": "partial_experimental_biological_assembly",
+      "target_author_chains": [
+        "A",
+        "B"
+      ],
+      "target_label_chains": [
+        "C",
+        "D"
+      ],
+      "title": "HEPATOCYTE NUCLEAR FACTOR 1A BOUND TO DNA : MODY3 GENE PRODUCT"
+    },
+    "8PI8": {
+      "assembly_counts": {
+        "assembly_id": "1",
+        "atom_count": 3651,
+        "branched_atom_count": 0,
+        "branched_entity_count": 0,
+        "branched_entity_instance_count": 0,
+        "deuterated_water_count": 0,
+        "entry_id": "8PI8",
+        "formula_weight": 58.82,
+        "hydrogen_atom_count": 0,
+        "modeled_polymer_monomer_count": 380,
+        "na_polymer_entity_types": "Other",
+        "nonpolymer_atom_count": 12,
+        "nonpolymer_entity_count": 1,
+        "nonpolymer_entity_instance_count": 2,
+        "num_heterologous_interface_entities": 5,
+        "num_heteromeric_interface_entities": 5,
+        "num_homomeric_interface_entities": 0,
+        "num_interface_entities": 5,
+        "num_interfaces": 5,
+        "num_isologous_interface_entities": 0,
+        "num_na_interface_entities": 1,
+        "num_prot_na_interface_entities": 4,
+        "num_protein_interface_entities": 0,
+        "polymer_atom_count": 3636,
+        "polymer_composition": "protein/NA",
+        "polymer_entity_count": 3,
+        "polymer_entity_count_DNA": 2,
+        "polymer_entity_count_RNA": 0,
+        "polymer_entity_count_nucleic_acid": 2,
+        "polymer_entity_count_nucleic_acid_hybrid": 0,
+        "polymer_entity_count_protein": 1,
+        "polymer_entity_instance_count": 4,
+        "polymer_entity_instance_count_DNA": 2,
+        "polymer_entity_instance_count_RNA": 0,
+        "polymer_entity_instance_count_nucleic_acid": 2,
+        "polymer_entity_instance_count_nucleic_acid_hybrid": 0,
+        "polymer_entity_instance_count_protein": 2,
+        "polymer_monomer_count": 438,
+        "selected_polymer_entity_types": "Protein/NA",
+        "solvent_atom_count": 3,
+        "solvent_entity_count": 1,
+        "solvent_entity_instance_count": 1,
+        "total_assembly_buried_surface_area": 3708.560930207494,
+        "total_number_interface_residues": 177,
+        "unmodeled_polymer_monomer_count": 58
+      },
+      "assembly_definition": {
+        "details": "author_and_software_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 4,
+        "oligomeric_details": "tetrameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_and_software_defined_assembly"
+      },
+      "assembly_id": "1",
+      "construct_canonical_ranges": [
+        [
+          83,
+          279
+        ]
+      ],
+      "engineered_WT_mismatches_excluded": [],
+      "full_length_functional_unit": false,
+      "geometry_state_counts": {
+        "ambiguous": 26,
+        "idr": 822,
+        "missing": 76,
+        "structured": 338
+      },
+      "independently_unique_sequence_placement": true,
+      "per_chain": {
+        "C": {
+          "observed": 174,
+          "observed_canonical_ranges": [
+            [
+              85,
+              181
+            ],
+            [
+              200,
+              276
+            ]
+          ],
+          "structured": 174
+        },
+        "D": {
+          "observed": 164,
+          "observed_canonical_ranges": [
+            [
+              92,
+              179
+            ],
+            [
+              201,
+              276
+            ]
+          ],
+          "structured": 164
+        }
+      },
+      "polymer_partners": [
+        {
+          "asym_ids": [
+            "A"
+          ],
+          "auth_asym_ids": [
+            "E"
+          ],
+          "chem_comp_monomers": [
+            "DA",
+            "DC",
+            "DG",
+            "DT"
+          ],
+          "description": "Chains: E",
+          "entity_id": "1",
+          "entry_id": "8PI8",
+          "rcsb_id": "8PI8_1",
+          "type": "polydeoxyribonucleotide"
+        },
+        {
+          "asym_ids": [
+            "B"
+          ],
+          "auth_asym_ids": [
+            "F"
+          ],
+          "chem_comp_monomers": [
+            "DA",
+            "DC",
+            "DG",
+            "DT"
+          ],
+          "description": "Chains: F",
+          "entity_id": "2",
+          "entry_id": "8PI8",
+          "rcsb_id": "8PI8_2",
+          "type": "polydeoxyribonucleotide"
+        }
+      ],
+      "resolution_angstrom": [
+        2.3
+      ],
+      "sifts_aligned_regions": [
+        {
+          "entity_beg_seq_id": 2,
+          "length": 197,
+          "ref_beg_seq_id": 83
+        }
+      ],
+      "source_type": "partial_experimental_biological_assembly",
+      "target_author_chains": [
+        "A",
+        "B"
+      ],
+      "target_label_chains": [
+        "C",
+        "D"
+      ],
+      "title": "DNA binding domain of HNF-1A bound to P2-HNF4A promoter DNA"
+    }
+  },
+  "full_gene_monomer_coordinates_used": false,
+  "gene": "HNF1A",
+  "geometry_policy": {
+    "WT": "Exclude every observed nonWT construct residue, without relabeling as canonical WT",
+    "alpha_fold": "pLDDT>=70 for Cartesian coordinates; no AF coordinates added to experimental frame",
+    "copies": "Only target-gene chains are geometry donors; partners retained in assembly provenance",
+    "missingness": "Experimental absence alone is not IDR. AF<50 candidate or UniProt disorder annotation, with explicit signal/TM/known-dimerization exclusions; observed experimental coordinates take precedence.",
+    "polymer": "Only contiguous final-state IDR, same chain; root engine supplies 3.8*sqrt(sequence separation)",
+    "primary_coordinate": "complete sidechain heavy-atom mass-weighted COM; glycine CA fallback"
+  },
+  "sources": [
+    {
+      "bytes": 98285,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/1IC8-assembly1.cif.gz",
+      "sha256": "26225b87847737df9488b4d99d2d3d03429c5e94ed5b5ae8550309becaef3e01",
+      "url": "https://files.rcsb.org/download/1ic8-assembly1.cif.gz"
+    },
+    {
+      "bytes": 3083,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/1IC8_assembly.json",
+      "sha256": "3163bfdf3d5c7303e2b350bcea14093118f422a552abf3a8177db373628600a9",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/1IC8/1"
+    },
+    {
+      "bytes": 11857,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/1IC8_entry.json",
+      "sha256": "e65d6553d6fa97c31b304257cdb77ffec6e7b86fd42ff98c323522798fe63bc6",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/1IC8"
+    },
+    {
+      "bytes": 1335,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/1IC8_polymer_entity_1.json",
+      "sha256": "86c4d2668fe48805e12447288bf8516298c339f50cb7ee035d10e6a3a0df031d",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/1IC8/1"
+    },
+    {
+      "bytes": 1335,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/1IC8_polymer_entity_2.json",
+      "sha256": "a077564c647c57ffcdacb18f6edbc62ce777f3b7dc3e6dba26a05fef72010d4b",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/1IC8/2"
+    },
+    {
+      "bytes": 40495,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/1IC8_polymer_entity_3.json",
+      "sha256": "6f3e9ac54b3faabc37bfc524907391e9b807d4bd73963fcf55aa1d8eec737f59",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/1IC8/3"
+    },
+    {
+      "bytes": 3315,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/2GYP_assembly.json",
+      "sha256": "dd677d6fc9c9951ccd640f31bce62885765454356661430cbd320060568f6101",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/2GYP/1"
+    },
+    {
+      "bytes": 14877,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/2GYP_entry.json",
+      "sha256": "6d52d061bbe6222840caae4c8bce3b3743dd04c01caf8ebc23a3faa4d31419e1",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/2GYP"
+    },
+    {
+      "bytes": 33245,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/2GYP_polymer_entity_1.json",
+      "sha256": "b2f32bd156457a6093f100e9eba920af6691f281b6fbcb389cb0f4ce3ca972e1",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/2GYP/1"
+    },
+    {
+      "bytes": 212263,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/8PI8-assembly1.cif.gz",
+      "sha256": "1333ad35d071379dca73e1542edf9c87f895eeaa4fa47c2f8341aa0f5a054767",
+      "url": "https://files.rcsb.org/download/8pi8-assembly1.cif.gz"
+    },
+    {
+      "bytes": 3226,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/8PI8_assembly.json",
+      "sha256": "92a8bf56f08afc8f84485571d995bbe87f42f2c6606dccaf62059dd07ee5166a",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/8PI8/1"
+    },
+    {
+      "bytes": 10394,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/8PI8_entry.json",
+      "sha256": "41ba75badef626bed4421fb388187c2a7be50df318b2f8034f4193f2a509f331",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/8PI8"
+    },
+    {
+      "bytes": 4725,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/8PI8_polymer_entity_1.json",
+      "sha256": "f5f06624bded3025f3a534b92a8b74d6ca927133a50e76500a0fc15fdaf43fa7",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/8PI8/1"
+    },
+    {
+      "bytes": 4725,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/8PI8_polymer_entity_2.json",
+      "sha256": "32001e72c50afc17f294b3da90fbb21ab2fa225b8cb31fd7d2c52992390924c2",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/8PI8/2"
+    },
+    {
+      "bytes": 41553,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/8PI8_polymer_entity_3.json",
+      "sha256": "ab1ed29a7370892068fe2a974a744cd82fdd2d20e9cc2afc169a89e5fbb6ecd3",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/8PI8/3"
+    },
+    {
+      "bytes": 550786,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/AF_P20823.cif",
+      "sha256": "d1b0b185bc9e93448a11bfed4bae7b82dee3c55546f3233c1ddc849c763c707c",
+      "url": "https://alphafold.ebi.ac.uk/files/AF-P20823-F1-model_v6.cif"
+    },
+    {
+      "bytes": 110765,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/P20823.json",
+      "sha256": "ce102af203520765dd3385d604c421ef71c30866ec2dcd582649441b10ba631b",
+      "url": "https://rest.uniprot.org/uniprotkb/P20823.json"
+    },
+    {
+      "bytes": 18956,
+      "path": "results/missense_structural_extension_20260912/raw/HNF1A/alphafold_api.json",
+      "sha256": "d977d2836a4cfdf4440d031cc914cc9907e62599bf784f5948f55dac13c91371",
+      "url": "https://alphafold.ebi.ac.uk/api/prediction/P20823"
+    }
+  ],
+  "uniprot_disorder_features": [
+    {
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "id": "MobiDB-lite",
+          "source": "SAM"
+        }
+      ],
+      "location": {
+        "end": {
+          "modifier": "EXACT",
+          "value": 81
+        },
+        "start": {
+          "modifier": "EXACT",
+          "value": 40
+        }
+      },
+      "type": "Region"
+    },
+    {
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "id": "MobiDB-lite",
+          "source": "SAM"
+        }
+      ],
+      "location": {
+        "end": {
+          "modifier": "EXACT",
+          "value": 205
+        },
+        "start": {
+          "modifier": "EXACT",
+          "value": 183
+        }
+      },
+      "type": "Region"
+    },
+    {
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "id": "MobiDB-lite",
+          "source": "SAM"
+        }
+      ],
+      "location": {
+        "end": {
+          "modifier": "EXACT",
+          "value": 358
+        },
+        "start": {
+          "modifier": "EXACT",
+          "value": 283
+        }
+      },
+      "type": "Region"
+    },
+    {
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "id": "MobiDB-lite",
+          "source": "SAM"
+        }
+      ],
+      "location": {
+        "end": {
+          "modifier": "EXACT",
+          "value": 567
+        },
+        "start": {
+          "modifier": "EXACT",
+          "value": 545
+        }
+      },
+      "type": "Region"
+    }
+  ]
+}

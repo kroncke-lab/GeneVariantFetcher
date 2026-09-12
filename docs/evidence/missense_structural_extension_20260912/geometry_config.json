@@ -1,0 +1,69 @@
+{
+  "KCNQ1": {
+    "primary": "9U7F_com_h3",
+    "scope": "Partial engineered KCNQ1-KCNE1-CaM tetramer; candidate IDR polymer separate from resolved geometry",
+    "frames": [
+      {
+        "name": "9U7F",
+        "path": "geometry/KCNQ1/9U7F_canonical_geometry.csv"
+      },
+      {
+        "name": "9UC8",
+        "path": "geometry/KCNQ1/9UC8_canonical_geometry.csv"
+      }
+    ]
+  },
+  "HNF1A": {
+    "primary": "8PI8_com_h3",
+    "scope": "Partial HNF1A DNA-bound dimer plus independently annotated candidate IDR polymer",
+    "frames": [
+      {
+        "name": "8PI8",
+        "path": "geometry/HNF1A/8PI8_canonical_geometry.csv"
+      },
+      {
+        "name": "1IC8",
+        "path": "geometry/HNF1A/1IC8_canonical_geometry.csv"
+      }
+    ]
+  },
+  "LDLR": {
+    "primary": "AF_P01130_com_h3",
+    "scope": "Predicted full monomer, with interdomain PAE caveat and domain-separated sensitivity; experimental partial ectodomain comparison",
+    "frames": [
+      {
+        "name": "AF_P01130",
+        "path": "geometry/LDLR/AF_P01130_canonical_geometry.csv"
+      },
+      {
+        "name": "AF_domains",
+        "path": "geometry/LDLR/AF_P01130_domain_separated_geometry.csv"
+      },
+      {
+        "name": "1N7D",
+        "path": "geometry/LDLR/1N7D_canonical_geometry.csv",
+        "ca_path": "geometry/LDLR/1N7D_CA_canonical_geometry.csv"
+      }
+    ]
+  },
+  "BRCA2": {
+    "primary": "BRCA2_domains_com_h3",
+    "scope": "Explicitly partial domain-local exploratory analysis: separate experimental7LDG/8PBC frames; no full-length model or inter-domain distances",
+    "frames": [
+      {
+        "name": "BRCA2_domains",
+        "path": "geometry/BRCA2/BRCA2_canonical_geometry.csv.gz",
+        "ca_path": "geometry/BRCA2/BRCA2_ca_canonical_geometry.csv.gz"
+      },
+      {
+        "name": "7LDG",
+        "path": "geometry/BRCA2/7LDG_canonical_geometry.csv.gz",
+        "ca_path": "geometry/BRCA2/7LDG_ca_canonical_geometry.csv.gz"
+      },
+      {
+        "name": "8PBC",
+        "path": "geometry/BRCA2/8PBC_canonical_geometry.csv.gz"
+      }
+    ]
+  }
+}

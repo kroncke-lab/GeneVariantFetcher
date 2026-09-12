@@ -1,0 +1,577 @@
+{
+  "gene": "KCNQ1",
+  "canonical_accession": "P51787-1",
+  "canonical_length": 676,
+  "canonical_sequence_sha256": "5cec1050068dcd45ac8aa7733dd29eb9b7792e5972d8a6fe5d62a356c323bad4",
+  "primary_frame": "9U7F",
+  "sensitivity_frame": "9UC8",
+  "frames": {
+    "9U7F": {
+      "assembly_id": "1",
+      "source_type": "experimental_biological_assembly",
+      "status": "actual_KCNQ1_tetramer_with_partial_resolved_coverage",
+      "target_accession": "P51787",
+      "target_chains": [
+        "A",
+        "D",
+        "G",
+        "J"
+      ],
+      "assembly_protein_stoichiometry": "KCNQ1_4:KCNE1_4:CaM_4",
+      "state": "apo_condition_closed",
+      "resolution_angstrom": [
+        2.9
+      ],
+      "canonical_rows": 2704,
+      "full_length_reference_sequence_identity": 1.0,
+      "observed_coordinate_WT_mismatches": 0,
+      "entities": [
+        {
+          "entity_id": 1,
+          "uniprot_accession": "P51787",
+          "name": "Potassium voltage-gated channel subfamily KQT member 1",
+          "chains": [
+            "A",
+            "D",
+            "G",
+            "J"
+          ],
+          "deposited_reference_length": 676,
+          "observed_residues_by_chain": {
+            "A": 360,
+            "D": 360,
+            "G": 360,
+            "J": 360
+          },
+          "variant_donor_target": true,
+          "rcsb_sifts_alignment": [
+            {
+              "provenance_source": "SIFTS",
+              "reference_database_accession": "P51787",
+              "reference_database_name": "UniProt",
+              "aligned_regions": [
+                {
+                  "entity_beg_seq_id": 1,
+                  "length": 676,
+                  "ref_beg_seq_id": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "entity_id": 2,
+          "uniprot_accession": "P0DP23",
+          "name": "Calmodulin-1",
+          "chains": [
+            "B",
+            "E",
+            "H",
+            "K"
+          ],
+          "deposited_reference_length": 149,
+          "observed_residues_by_chain": {
+            "B": 144,
+            "E": 144,
+            "H": 144,
+            "K": 144
+          },
+          "variant_donor_target": false,
+          "rcsb_sifts_alignment": [
+            {
+              "provenance_source": "SIFTS",
+              "reference_database_accession": "P0DP23",
+              "reference_database_name": "UniProt",
+              "aligned_regions": [
+                {
+                  "entity_beg_seq_id": 1,
+                  "length": 149,
+                  "ref_beg_seq_id": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "entity_id": 3,
+          "uniprot_accession": "P15382",
+          "name": "Potassium voltage-gated channel subfamily E member 1",
+          "chains": [
+            "C",
+            "F",
+            "I",
+            "L"
+          ],
+          "deposited_reference_length": 129,
+          "observed_residues_by_chain": {
+            "C": 28,
+            "F": 28,
+            "I": 28,
+            "L": 28
+          },
+          "variant_donor_target": false,
+          "rcsb_sifts_alignment": [
+            {
+              "provenance_source": "SIFTS",
+              "reference_database_accession": "P15382",
+              "reference_database_name": "UniProt",
+              "aligned_regions": [
+                {
+                  "entity_beg_seq_id": 1,
+                  "length": 129,
+                  "ref_beg_seq_id": 1
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "assembly_record": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 12,
+        "oligomeric_details": "dodecameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "construct": {
+        "retained_KCNQ1_range": [
+          76,
+          620
+        ],
+        "type": "KCNE1_linker_fusion_to_N_C_truncated_KCNQ1",
+        "source": "https://www.nature.com/articles/s41422-025-01182-9",
+        "note": "PDB full canonical SEQRES does not establish full-length experimental construct"
+      },
+      "per_chain_geometry": [
+        {
+          "frame_id": "9U7F",
+          "chain": "A",
+          "canonical_rows": 676,
+          "observed_CA": 360,
+          "structured": 359,
+          "idr": 256,
+          "ambiguous": 32,
+          "missing": 29
+        },
+        {
+          "frame_id": "9U7F",
+          "chain": "D",
+          "canonical_rows": 676,
+          "observed_CA": 360,
+          "structured": 359,
+          "idr": 256,
+          "ambiguous": 32,
+          "missing": 29
+        },
+        {
+          "frame_id": "9U7F",
+          "chain": "G",
+          "canonical_rows": 676,
+          "observed_CA": 360,
+          "structured": 359,
+          "idr": 256,
+          "ambiguous": 32,
+          "missing": 29
+        },
+        {
+          "frame_id": "9U7F",
+          "chain": "J",
+          "canonical_rows": 676,
+          "observed_CA": 360,
+          "structured": 359,
+          "idr": 256,
+          "ambiguous": 32,
+          "missing": 29
+        }
+      ],
+      "candidate_IDR_segments": [
+        "9U7F_A_AF_lt50_1_6",
+        "9U7F_A_AF_lt50_401_496",
+        "9U7F_A_AF_lt50_572_573",
+        "9U7F_A_AF_lt50_575_583",
+        "9U7F_A_AF_lt50_621_630",
+        "9U7F_A_AF_lt50_632_676",
+        "9U7F_A_AF_lt50_86_94",
+        "9U7F_A_AF_lt50_8_84",
+        "9U7F_A_AF_lt50_96_97",
+        "9U7F_D_AF_lt50_1_6",
+        "9U7F_D_AF_lt50_401_496",
+        "9U7F_D_AF_lt50_572_573",
+        "9U7F_D_AF_lt50_575_583",
+        "9U7F_D_AF_lt50_621_630",
+        "9U7F_D_AF_lt50_632_676",
+        "9U7F_D_AF_lt50_86_94",
+        "9U7F_D_AF_lt50_8_84",
+        "9U7F_D_AF_lt50_96_97",
+        "9U7F_G_AF_lt50_1_6",
+        "9U7F_G_AF_lt50_401_496",
+        "9U7F_G_AF_lt50_572_573",
+        "9U7F_G_AF_lt50_575_583",
+        "9U7F_G_AF_lt50_621_630",
+        "9U7F_G_AF_lt50_632_676",
+        "9U7F_G_AF_lt50_86_94",
+        "9U7F_G_AF_lt50_8_84",
+        "9U7F_G_AF_lt50_96_97",
+        "9U7F_J_AF_lt50_1_6",
+        "9U7F_J_AF_lt50_401_496",
+        "9U7F_J_AF_lt50_572_573",
+        "9U7F_J_AF_lt50_575_583",
+        "9U7F_J_AF_lt50_621_630",
+        "9U7F_J_AF_lt50_632_676",
+        "9U7F_J_AF_lt50_86_94",
+        "9U7F_J_AF_lt50_8_84",
+        "9U7F_J_AF_lt50_96_97"
+      ]
+    },
+    "9UC8": {
+      "assembly_id": "1",
+      "source_type": "experimental_biological_assembly",
+      "status": "actual_KCNQ1_tetramer_with_partial_resolved_coverage",
+      "target_accession": "P51787",
+      "target_chains": [
+        "A",
+        "D",
+        "G",
+        "J"
+      ],
+      "assembly_protein_stoichiometry": "KCNQ1_4:KCNE1_4:CaM_4",
+      "state": "PIP2_added_open",
+      "resolution_angstrom": [
+        3.36
+      ],
+      "canonical_rows": 2704,
+      "full_length_reference_sequence_identity": 1.0,
+      "observed_coordinate_WT_mismatches": 0,
+      "entities": [
+        {
+          "entity_id": 1,
+          "uniprot_accession": "P51787",
+          "name": "Potassium voltage-gated channel subfamily KQT member 1",
+          "chains": [
+            "A",
+            "D",
+            "G",
+            "J"
+          ],
+          "deposited_reference_length": 676,
+          "observed_residues_by_chain": {
+            "A": 339,
+            "D": 339,
+            "G": 339,
+            "J": 339
+          },
+          "variant_donor_target": true,
+          "rcsb_sifts_alignment": [
+            {
+              "provenance_source": "SIFTS",
+              "reference_database_accession": "P51787",
+              "reference_database_name": "UniProt",
+              "aligned_regions": [
+                {
+                  "entity_beg_seq_id": 1,
+                  "length": 676,
+                  "ref_beg_seq_id": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "entity_id": 2,
+          "uniprot_accession": "P0DP23",
+          "name": "Calmodulin-1",
+          "chains": [
+            "B",
+            "E",
+            "H",
+            "K"
+          ],
+          "deposited_reference_length": 149,
+          "observed_residues_by_chain": {
+            "B": 144,
+            "E": 144,
+            "H": 144,
+            "K": 144
+          },
+          "variant_donor_target": false,
+          "rcsb_sifts_alignment": [
+            {
+              "provenance_source": "SIFTS",
+              "reference_database_accession": "P0DP23",
+              "reference_database_name": "UniProt",
+              "aligned_regions": [
+                {
+                  "entity_beg_seq_id": 1,
+                  "length": 149,
+                  "ref_beg_seq_id": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "entity_id": 3,
+          "uniprot_accession": "P15382",
+          "name": "Potassium voltage-gated channel subfamily E member 1",
+          "chains": [
+            "C",
+            "F",
+            "I",
+            "L"
+          ],
+          "deposited_reference_length": 30,
+          "observed_residues_by_chain": {
+            "C": 30,
+            "F": 30,
+            "I": 30,
+            "L": 30
+          },
+          "variant_donor_target": false,
+          "rcsb_sifts_alignment": [
+            {
+              "provenance_source": "SIFTS",
+              "reference_database_accession": "P15382",
+              "reference_database_name": "UniProt",
+              "aligned_regions": [
+                {
+                  "entity_beg_seq_id": 1,
+                  "length": 30,
+                  "ref_beg_seq_id": 39
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "assembly_record": {
+        "details": "author_defined_assembly",
+        "id": "1",
+        "oligomeric_count": 12,
+        "oligomeric_details": "dodecameric",
+        "rcsb_candidate_assembly": "Y",
+        "rcsb_details": "author_defined_assembly"
+      },
+      "construct": {
+        "retained_KCNQ1_range": [
+          76,
+          620
+        ],
+        "type": "KCNE1_linker_fusion_to_N_C_truncated_KCNQ1",
+        "source": "https://www.nature.com/articles/s41422-025-01182-9",
+        "note": "PDB full canonical SEQRES does not establish full-length experimental construct"
+      },
+      "per_chain_geometry": [
+        {
+          "frame_id": "9UC8",
+          "chain": "A",
+          "canonical_rows": 676,
+          "observed_CA": 339,
+          "structured": 339,
+          "idr": 252,
+          "ambiguous": 38,
+          "missing": 47
+        },
+        {
+          "frame_id": "9UC8",
+          "chain": "D",
+          "canonical_rows": 676,
+          "observed_CA": 339,
+          "structured": 339,
+          "idr": 252,
+          "ambiguous": 38,
+          "missing": 47
+        },
+        {
+          "frame_id": "9UC8",
+          "chain": "G",
+          "canonical_rows": 676,
+          "observed_CA": 339,
+          "structured": 339,
+          "idr": 252,
+          "ambiguous": 38,
+          "missing": 47
+        },
+        {
+          "frame_id": "9UC8",
+          "chain": "J",
+          "canonical_rows": 676,
+          "observed_CA": 339,
+          "structured": 339,
+          "idr": 252,
+          "ambiguous": 38,
+          "missing": 47
+        }
+      ],
+      "candidate_IDR_segments": [
+        "9UC8_A_AF_lt50_1_6",
+        "9UC8_A_AF_lt50_401_496",
+        "9UC8_A_AF_lt50_577_583",
+        "9UC8_A_AF_lt50_621_630",
+        "9UC8_A_AF_lt50_632_676",
+        "9UC8_A_AF_lt50_86_94",
+        "9UC8_A_AF_lt50_8_84",
+        "9UC8_A_AF_lt50_96_97",
+        "9UC8_D_AF_lt50_1_6",
+        "9UC8_D_AF_lt50_401_496",
+        "9UC8_D_AF_lt50_577_583",
+        "9UC8_D_AF_lt50_621_630",
+        "9UC8_D_AF_lt50_632_676",
+        "9UC8_D_AF_lt50_86_94",
+        "9UC8_D_AF_lt50_8_84",
+        "9UC8_D_AF_lt50_96_97",
+        "9UC8_G_AF_lt50_1_6",
+        "9UC8_G_AF_lt50_401_496",
+        "9UC8_G_AF_lt50_577_583",
+        "9UC8_G_AF_lt50_621_630",
+        "9UC8_G_AF_lt50_632_676",
+        "9UC8_G_AF_lt50_86_94",
+        "9UC8_G_AF_lt50_8_84",
+        "9UC8_G_AF_lt50_96_97",
+        "9UC8_J_AF_lt50_1_6",
+        "9UC8_J_AF_lt50_401_496",
+        "9UC8_J_AF_lt50_577_583",
+        "9UC8_J_AF_lt50_621_630",
+        "9UC8_J_AF_lt50_632_676",
+        "9UC8_J_AF_lt50_86_94",
+        "9UC8_J_AF_lt50_8_84",
+        "9UC8_J_AF_lt50_96_97"
+      ]
+    }
+  },
+  "metric": "complete_sidechain_heavy_atom_mass_weighted_COM;glycine_CA",
+  "source_scope": "Actual assembly coordinates only; AF supplies confidence without coordinates",
+  "disorder_rule": "Absent experimental position and independently mapped AF pLDDT<50; contiguous per-chain segments only; candidate not experimental proof",
+  "assembly_partner_scope": "Full partner coordinates retained in raw assemblies; canonical geometry rows and density donors restricted to KCNQ1 chains",
+  "primary_study": "https://www.nature.com/articles/s41422-025-01182-9",
+  "sources": [
+    {
+      "name": "9U7F-assembly1.cif.gz",
+      "url": "https://files.rcsb.org/download/9u7f-assembly1.cif.gz",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9U7F-assembly1.cif.gz",
+      "sha256": "b3d2b05021d5acff5c87840de056118c8654bcd99f4b9c4177e50f540bfd9066",
+      "bytes": 397306
+    },
+    {
+      "name": "9U7F_assembly.json",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/9U7F/1",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9U7F_assembly.json",
+      "sha256": "fa447f3e2baea3c259da95961990c109f7fbff1ed4f26dcc92f668f20be97957",
+      "bytes": 3863
+    },
+    {
+      "name": "9U7F_entity1.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9U7F/1",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9U7F_entity1.json",
+      "sha256": "e4ef760e1e473e11c23f718d13d96ef6bf575877027bd5d33e1b961dcb46593f",
+      "bytes": 123521
+    },
+    {
+      "name": "9U7F_entity2.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9U7F/2",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9U7F_entity2.json",
+      "sha256": "8c0de2f85a9e979c00ee7028caae66d1e85200e64a2568ceda72dd6c262e50c5",
+      "bytes": 118811
+    },
+    {
+      "name": "9U7F_entity3.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9U7F/3",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9U7F_entity3.json",
+      "sha256": "fee40e8aa26f4b23faa14d51bac696dc3424bd04f5a720784a7158a6cd80d516",
+      "bytes": 54019
+    },
+    {
+      "name": "9U7F_entry.json",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/9U7F",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9U7F_entry.json",
+      "sha256": "1a629754c626d595ffa230f8f3e2c978ae6e892b14af349c7bce0a160a1f45ce",
+      "bytes": 9597
+    },
+    {
+      "name": "9U7F_sifts.json",
+      "url": "https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/9u7f",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9U7F_sifts.json",
+      "sha256": "762c95d234c9ab71e772f2b85b2592dbcca8609dc951af8b73282c61f40a75c0",
+      "bytes": 3594
+    },
+    {
+      "name": "9UC8-assembly1.cif.gz",
+      "url": "https://files.rcsb.org/download/9uc8-assembly1.cif.gz",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9UC8-assembly1.cif.gz",
+      "sha256": "cd56b49dad70499f6752623c5853ac45f4c4434fd4b1f50b46a45cef2b7aeaa9",
+      "bytes": 356138
+    },
+    {
+      "name": "9UC8_assembly.json",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/9UC8/1",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9UC8_assembly.json",
+      "sha256": "1ba6a3308165238429a4f0cc8ea4b05b6902c7a58dc586779fb5c8df94ffeafb",
+      "bytes": 3820
+    },
+    {
+      "name": "9UC8_entity1.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9UC8/1",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9UC8_entity1.json",
+      "sha256": "6c2bc223bc9182358113b3ccbaa08eb69cf2cf08ea827f1af26d1ba7e98067ea",
+      "bytes": 123521
+    },
+    {
+      "name": "9UC8_entity2.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9UC8/2",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9UC8_entity2.json",
+      "sha256": "22c48b37aa357a3b5c1cb84b6a1d7ff65a2dbf3f60312378f47f2944c5ea6590",
+      "bytes": 118811
+    },
+    {
+      "name": "9UC8_entity3.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/9UC8/3",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9UC8_entity3.json",
+      "sha256": "85c32c910dc3ad1a64c48e9a1ded159989611752f24077a140cf964623721c25",
+      "bytes": 52265
+    },
+    {
+      "name": "9UC8_entry.json",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/9UC8",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9UC8_entry.json",
+      "sha256": "11a50a20be976757b42758bc17d88ae3040470b6ac738b56933228a153fe9a5a",
+      "bytes": 10226
+    },
+    {
+      "name": "9UC8_sifts.json",
+      "url": "https://www.ebi.ac.uk/pdbe/api/mappings/uniprot/9uc8",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/9UC8_sifts.json",
+      "sha256": "2bd943327a05476f7d0c45769378010ece190f4f018397b7f793559ca7414da5",
+      "bytes": 3582
+    },
+    {
+      "name": "AF_P51787.cif",
+      "url": "https://alphafold.ebi.ac.uk/files/AF-P51787-F1-model_v6.cif",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/AF_P51787.cif",
+      "sha256": "80ab3e1e5dfdb6f34209d873d8a02b4202a43177ee7e1673e4f1fcbf2c20d5ab",
+      "bytes": 612459
+    },
+    {
+      "name": "P51787.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P51787.json",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/P51787.json",
+      "sha256": "bf911515222032ba8bd6e683873fa3e5f3f931f8cae83ca9fa5d2a5321310091",
+      "bytes": 266904
+    },
+    {
+      "name": "alphafold_api.json",
+      "url": "https://alphafold.ebi.ac.uk/api/prediction/P51787",
+      "local_raw_file": "results/missense_structural_extension_20260912/raw/KCNQ1/alphafold_api.json",
+      "sha256": "98842c5dcdbcf3355f759b602e1e418756147fdd653ca60e42fed86815ef46d6",
+      "bytes": 5693
+    }
+  ],
+  "checks": {
+    "exact_full_canonical_sequence": true,
+    "independent_RCSB_PDBe_SIFTS_agreement": true,
+    "all_target_copy_WT_checks": true,
+    "partner_identity_and_stoichiometry": true,
+    "full_676_rows_per_target_copy": true,
+    "no_AF_coordinates_spliced_into_assembly": true,
+    "missing_sidechain_COM_withheld": true
+  }
+}

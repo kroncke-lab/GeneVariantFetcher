@@ -1,0 +1,57 @@
+{
+  "gene": "HNF1A",
+  "prior": {
+    "gene": "HNF1A",
+    "variant_type": "missense",
+    "variants": 785,
+    "population_only": 640,
+    "affected": 526,
+    "unaffected_literature": 76,
+    "unaffected_gnomad": 1721270,
+    "scope": "canonical_missense",
+    "mean": 0.1036769909860338,
+    "variance": 0.0285935406250064,
+    "historical_mse": 0.0285935406250064,
+    "normalized_weighted_mse": 0.0665948406025757,
+    "weighted_mae": 0.1684172270811979,
+    "alpha_empirical": 0.2332698413070518,
+    "beta_empirical": 2.016697476306123,
+    "strength": 2.2499673176131747,
+    "pooled_carrier_fraction": 0.0003054814759749,
+    "equal_variant_fraction_mean": 0.1093063141373176,
+    "unaffected_singleton_posterior": 0.0717760575753631,
+    "singleton_prior_retention": 0.6923045980861078
+  },
+  "variants": 785,
+  "population_only": 640,
+  "primary": "8PI8_com_h3",
+  "supported": 726,
+  "median_density": 0.06349451185011148,
+  "median_kish_donor_n": 11.846268434166078,
+  "normalized_nonzero_donor_pairs": 105526,
+  "global_exclusion_reference_checks": [
+    "HNF1A|lit:E508K",
+    "HNF1A|g:12-120994355-A-T"
+  ],
+  "am_sources": {
+    "exact_genomic_members": 716,
+    "archived_clinical_key_fallback": 63,
+    "missing": 5,
+    "different_member_scores_or_versions": 1
+  },
+  "variant_loo": true,
+  "gene_missense_prior_fixed": true,
+  "gnomad_assumed_unaffected": true,
+  "count_multiplier": false,
+  "draws": 8192,
+  "seed": 20260912,
+  "scope": "Partial HNF1A DNA-bound dimer plus independently annotated candidate IDR polymer",
+  "inputs": {
+    "class_matched_penetrance_20260912/analysis/empirical_posteriors/HNF1A.part001.csv.gz": "c0218639136467405437bed0672cabdd85eeea139b0e23af4e57c3290b194818",
+    "class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+    "population_inclusive_penetrance_20260912/predictors/population_predictors.csv.gz": "79ed3b008b4d1cb0798ba55bf21c63310f41b5debe629f15e2a7499b74946833",
+    "prior_count_predictors_20260912/variant_counts.csv.gz": "c251fa6d8d47b1163aab3d0e9742e1e1d89ba1d8dafc9351cd376af5d24d6731",
+    "missense_structural_extension_20260912/geometry/HNF1A/8PI8_canonical_geometry.csv": "9e74878dc1468a1abb2e5774d9c3f324900231228f6cb9d0513d22d4619f4b10",
+    "missense_structural_extension_20260912/geometry/HNF1A/1IC8_canonical_geometry.csv": "24ab44bf7bf1cbba38a2883aee6da6783c90cecd7eb4d10e3a490cc29598452c"
+  }
+}

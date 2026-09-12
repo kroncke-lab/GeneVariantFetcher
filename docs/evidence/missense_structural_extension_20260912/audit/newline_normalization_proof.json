@@ -1,0 +1,166 @@
+{
+  "scope": "KCNQ1 and BRCA2 geometry serialization only; no scientific values changed or outcomes rerun",
+  "before_byte_backup_ignored": "tmp/missense_geometry_newline_20260912",
+  "pinned_raw_source_hashes_verified_before_regeneration": true,
+  "regeneration_method": "Imported each builder and called build() directly after cached source hash checks; KCNQ1 SOURCES registered from pinned prior report; no acquire/network",
+  "comparison": "csv.reader full header, row order, and every cell string exactly equal; decompressed old payload with CRLF replaced by LF byte-equals new payload",
+  "all_parsed_exactly_equal": true,
+  "scientific_outcomes_unchanged": true,
+  "files": [
+    {
+      "file": "geometry/KCNQ1/9U7F_canonical_geometry.csv",
+      "old_sha256": "d3ff0a2a2ccc30337770932525833cfa2f0c35bd0d710f8033a211bf815559ee",
+      "new_sha256": "b49218fcaf0cfe5494f809abece632b38d6bed4156cf22f5b919dd99f54f041f",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 2704,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 2705,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/KCNQ1/9UC8_canonical_geometry.csv",
+      "old_sha256": "9041e46695dfd06c796b4a67fc9ec9d5b63efd37e58e36eaf4c012d959fab485",
+      "new_sha256": "1b4c3aedf2c7e1f1a8e8509b8164781a2ef26d1b9b94dbe4498ae2a59f6ce4d3",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 2704,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 2705,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/KCNQ1/geometry_summary.csv",
+      "old_sha256": "ffa708002fcef3d6a9e1417c67c530648961a509f70d4da40e0f5f1e4a4d2f02",
+      "new_sha256": "82f163c849bcef32c8e748db83474a9d6e9d361847680f174e970bf32ceabb69",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 8,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 9,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/KCNQ1/incomplete_sidechains.csv",
+      "old_sha256": "0f7bb2120188dc918b4e7c279d20d88287edcefe7b6f4258ba4d18131cba8366",
+      "new_sha256": "06c0c228b1312719c0d90770306a9418079ccf5141fc5105a551a9c5bc190e0c",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 4,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 5,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/BRCA2/7LDG_ca_canonical_geometry.csv.gz",
+      "old_sha256": "478a5fef7ff9cb452e61507513c8cbd085f36c618233dbb4f93992425038bba5",
+      "new_sha256": "04fd8058b95d953d52d1fb5cfa964c620f6ce0796ff4ef00d87eabc7ee9d2a1a",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 13672,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 13673,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/BRCA2/7LDG_canonical_geometry.csv.gz",
+      "old_sha256": "03a988259a44528dba6a09cd28fc66e088fbbd5cf5dfc924bb2f6a6087444c20",
+      "new_sha256": "1398b928c473cc33f5b9aa6f8837df2ea22e8d15b5ec27318f8e312e33763ab9",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 13672,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 13673,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/BRCA2/8PBC_ca_canonical_geometry.csv.gz",
+      "old_sha256": "edf13bf0958cba5903e5247fc044cc4e562c8ff15e902bd42955703f78dc82d1",
+      "new_sha256": "e8167d5c3dc4d83ee6638e7b817f3fb03b5381e80f9d20da6799aadba7c6ab36",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 34180,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 34181,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/BRCA2/8PBC_canonical_geometry.csv.gz",
+      "old_sha256": "edf13bf0958cba5903e5247fc044cc4e562c8ff15e902bd42955703f78dc82d1",
+      "new_sha256": "e8167d5c3dc4d83ee6638e7b817f3fb03b5381e80f9d20da6799aadba7c6ab36",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 34180,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 34181,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/BRCA2/BRCA2_ca_canonical_geometry.csv.gz",
+      "old_sha256": "30efad22599f8c01ef5226c571878d1349344aad8f22cf6e3239349486c5648f",
+      "new_sha256": "a402b6a3808ea091e606870ebdbc1a52221075de6acaf0c766d526058d45775f",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 47852,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 47853,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/BRCA2/BRCA2_canonical_geometry.csv.gz",
+      "old_sha256": "dde4f2874bd5c2524eb629f92bdbdf4534cf3adf2bc00765c07ef773e8facda1",
+      "new_sha256": "cae89d06b19e1a6a9a731cd34e99b7aea9acd371818ec6a7dde09e0deaf5c9f6",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 47852,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 47853,
+      "new_CRLF_count": 0
+    },
+    {
+      "file": "geometry/BRCA2/geometry_summary.csv",
+      "old_sha256": "daa53a18f66df25bab6e036d875b7a24c26a02bb593f555aa7f471eb6c90b061",
+      "new_sha256": "0d2c03ab35004ae5286978108c5454640942d32c6487b383f4bbe9d96bfb0387",
+      "parsed_exactly_equal": true,
+      "rows_excluding_header": 14,
+      "payload_is_only_CRLF_to_LF_change": true,
+      "old_CRLF_count": 15,
+      "new_CRLF_count": 0
+    }
+  ],
+  "checks_geometry_input_hash_updates": [
+    {
+      "checks_file": "analysis/KCNQ1/checks.json",
+      "input": "missense_structural_extension_20260912/geometry/KCNQ1/9U7F_canonical_geometry.csv",
+      "old_sha256": "d3ff0a2a2ccc30337770932525833cfa2f0c35bd0d710f8033a211bf815559ee",
+      "new_sha256": "b49218fcaf0cfe5494f809abece632b38d6bed4156cf22f5b919dd99f54f041f"
+    },
+    {
+      "checks_file": "analysis/KCNQ1/checks.json",
+      "input": "missense_structural_extension_20260912/geometry/KCNQ1/9UC8_canonical_geometry.csv",
+      "old_sha256": "9041e46695dfd06c796b4a67fc9ec9d5b63efd37e58e36eaf4c012d959fab485",
+      "new_sha256": "1b4c3aedf2c7e1f1a8e8509b8164781a2ef26d1b9b94dbe4498ae2a59f6ce4d3"
+    },
+    {
+      "checks_file": "analysis/BRCA2/checks.json",
+      "input": "missense_structural_extension_20260912/geometry/BRCA2/BRCA2_canonical_geometry.csv.gz",
+      "old_sha256": "dde4f2874bd5c2524eb629f92bdbdf4534cf3adf2bc00765c07ef773e8facda1",
+      "new_sha256": "cae89d06b19e1a6a9a731cd34e99b7aea9acd371818ec6a7dde09e0deaf5c9f6"
+    },
+    {
+      "checks_file": "analysis/BRCA2/checks.json",
+      "input": "missense_structural_extension_20260912/geometry/BRCA2/BRCA2_ca_canonical_geometry.csv.gz",
+      "old_sha256": "30efad22599f8c01ef5226c571878d1349344aad8f22cf6e3239349486c5648f",
+      "new_sha256": "a402b6a3808ea091e606870ebdbc1a52221075de6acaf0c766d526058d45775f"
+    },
+    {
+      "checks_file": "analysis/BRCA2/checks.json",
+      "input": "missense_structural_extension_20260912/geometry/BRCA2/7LDG_canonical_geometry.csv.gz",
+      "old_sha256": "03a988259a44528dba6a09cd28fc66e088fbbd5cf5dfc924bb2f6a6087444c20",
+      "new_sha256": "1398b928c473cc33f5b9aa6f8837df2ea22e8d15b5ec27318f8e312e33763ab9"
+    },
+    {
+      "checks_file": "analysis/BRCA2/checks.json",
+      "input": "missense_structural_extension_20260912/geometry/BRCA2/7LDG_ca_canonical_geometry.csv.gz",
+      "old_sha256": "478a5fef7ff9cb452e61507513c8cbd085f36c618233dbb4f93992425038bba5",
+      "new_sha256": "04fd8058b95d953d52d1fb5cfa964c620f6ce0796ff4ef00d87eabc7ee9d2a1a"
+    },
+    {
+      "checks_file": "analysis/BRCA2/checks.json",
+      "input": "missense_structural_extension_20260912/geometry/BRCA2/8PBC_canonical_geometry.csv.gz",
+      "old_sha256": "edf13bf0958cba5903e5247fc044cc4e562c8ff15e902bd42955703f78dc82d1",
+      "new_sha256": "e8167d5c3dc4d83ee6638e7b817f3fb03b5381e80f9d20da6799aadba7c6ab36"
+    }
+  ],
+  "identity_report_changes": "KCNQ1 identical; BRCA2 only helper source SHA changed to reflect explicit LF writer"
+}
