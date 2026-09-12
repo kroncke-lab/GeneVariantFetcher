@@ -22,6 +22,11 @@ def main():
     parser.add_argument("--reproduction", type=Path)
     args = parser.parse_args()
     out = HERE / "analysis"
+    manifest_path = HERE / "artifact_manifest.json"
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text())
+        for name, record in manifest["files"].items():
+            assert digest(HERE / name) == record["sha256"], name
     full = pd.read_csv(out / "GCK_empirical_posteriors_and_eligibility.csv")
     primary = pd.read_csv(out / "GCK_primary_variant_density.csv")
     scenarios = pd.read_csv(out / "GCK_density_scenarios.csv.gz")
@@ -121,7 +126,9 @@ def main():
         "ppa_source_and_input_and_geometry_hashes_match": True,
         "byte_identical_reproduction": replay,
     }
-    (HERE / "validation.json").write_text(json.dumps(result, indent=2) + "\n")
+    # A routine verification is read-only and preserves the recorded replay.
+    if args.reproduction:
+        (HERE / "validation.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))
 
 
