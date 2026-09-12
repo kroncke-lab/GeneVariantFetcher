@@ -1,0 +1,5 @@
+vf_id,key,vclass,wt_match,geometry_eligible_pre_structure
+1571784,A209V,missense,False,False
+1571784,T209M,missense,True,True
+1572503,W289C,missense,False,False
+1572503,Y289C,missense,True,True

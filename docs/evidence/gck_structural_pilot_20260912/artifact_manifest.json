@@ -1,0 +1,180 @@
+{
+  "date": "2026-09-12",
+  "purpose": "GCK exploratory empirical-posterior structural pilot",
+  "ppa_commit": "96c7ec0e04f16f4cd629552660278c2daa47d4bd",
+  "ppa_branch": "main",
+  "ppa_tests_passed": 174,
+  "pilot_statistics_tests_passed": 4,
+  "external_dependencies": {
+    "docs/evidence/structural_density_plan_20260912/full_universe_source_counts.csv.gz": "670f557ab4c3e930133f84544411b5f862453f9a55b8fadab1dcf3ec7114c2c8",
+    "docs/evidence/structural_density_plan_20260912/full_universe_empirical_posteriors.csv.gz": "6034faf94e5975a04848c67ed5993de1f68325b16a35fad978df9d447d909a77",
+    "docs/evidence/structural_density_plan_20260912/full_empirical_universe.py": "5e61947ce7db271a73922c438bccf029ac382fa745be858f834be82e42db467d",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/empirical_density.py": "5efae2d672262b3ee5717a258bbfff4e75c72d8efb876d5ad1a0e474e9b1b7db"
+  },
+  "files": {
+    "README.md": {
+      "sha256": "a3bed9a8f16b217893ec0c6b65f437e726bfbb003a291727c0e1f0260017e301",
+      "bytes": 12820
+    },
+    "analysis/GCK_INTERNAL_COMPARISON.png": {
+      "sha256": "9323f89be7a9c3f2f1c64c1976db651328c452807d13c584503638d58b4dd383",
+      "bytes": 80683
+    },
+    "analysis/GCK_SPATIAL_DENSITY.png": {
+      "sha256": "0fc7d25abdacc539f62790c95f89a6459cf5056e376cb856376c084f9e5d70bf",
+      "bytes": 290440
+    },
+    "analysis/GCK_STRUCTURAL_PILOT.png": {
+      "sha256": "468ce87cf16057af3362354ecb046ac0296998bf07c86f8391b4be3a8bccbb23",
+      "bytes": 264030
+    },
+    "analysis/GCK_density_scenarios.csv.gz": {
+      "sha256": "ca0b5b5b0bad29af0082468107a51fc9c381222dff90eb2c14418f38f2bec0d7",
+      "bytes": 433074
+    },
+    "analysis/GCK_empirical_posteriors_and_eligibility.csv": {
+      "sha256": "795eac419bc1cd07c531ca4ec5d03fccb9e28f263f82d611f220c4d06caf4a43",
+      "bytes": 159663
+    },
+    "analysis/GCK_internal_calibration.csv": {
+      "sha256": "a13254a099e86e6996b2090006714c9d1fdea7c64185fd225ade0bf446a2ee38",
+      "bytes": 1638
+    },
+    "analysis/GCK_primary_donor_contexts_01.csv.gz": {
+      "sha256": "af655aa5e19d18b43e363bbc29847ca488d1c08b6dfa71caa9f2a2dd8f209d08",
+      "bytes": 779559
+    },
+    "analysis/GCK_primary_donor_contexts_02.csv.gz": {
+      "sha256": "6636d6794eb15a7e0a85bcb9f3230b16875538d350919d9e05b5a00536c5ca63",
+      "bytes": 773102
+    },
+    "analysis/GCK_primary_donor_contexts_03.csv.gz": {
+      "sha256": "e993e815b9e05a96e0bb9ddcb946f1eaadc5f7fcf020db234a557d76de8f30e0",
+      "bytes": 753807
+    },
+    "analysis/GCK_primary_donor_contexts_04.csv.gz": {
+      "sha256": "49b68774070fc6f4f1cd40a206a2e3ef6f7cfe1740b807fdf0144bd8b1228961",
+      "bytes": 88087
+    },
+    "analysis/GCK_primary_normalized_donor_weights.csv.gz": {
+      "sha256": "d48b66cb672e7c2b1e2aa964d346f66ff136df12f504dabc8882f32d5e49c143",
+      "bytes": 454224
+    },
+    "analysis/GCK_primary_variant_density.csv": {
+      "sha256": "1e646b659c541ead9edc1d341058c6cdc125992becd8431942711a8f6270913f",
+      "bytes": 98840
+    },
+    "analysis/GCK_sensitivity_summary.csv": {
+      "sha256": "237af05ea74f8fc4b77ebb10d6c723b78f010cdf6086a058483a4500bef1fdce",
+      "bytes": 1732
+    },
+    "analysis/GCK_variant_loo_metrics.csv": {
+      "sha256": "97d465f4f7ee60e3ba5739ab38798543723d0e8445ed04e09ad2b95245c762ef",
+      "bytes": 5105
+    },
+    "analysis/GCK_variant_loo_predictions.csv": {
+      "sha256": "d4e66b21c518065e35b0acd701b6252684c89fa7dac4e262472fd8816b016280",
+      "bytes": 270818
+    },
+    "analysis/run_checks.json": {
+      "sha256": "853ca42b4a4d3f9cd823f767fcac2b1cfa662e1a4b26b8e0f20de6d3cfda8880",
+      "bytes": 2083
+    },
+    "eligibility/README.md": {
+      "sha256": "40d7a8861da5cad0c5dc4c5d43091a93d7b6abe416296c317efeba793d96c294",
+      "bytes": 9282
+    },
+    "eligibility/archived_alphamissense.csv": {
+      "sha256": "f0f2e072aeda809e80bd0028978fcca3ee8b475cee33c8b40f72d2ff35586e68",
+      "bytes": 68669
+    },
+    "eligibility/identity_alias_audit.csv": {
+      "sha256": "ba6f0da9625e41a5029e03a8627a4781c177f94c8ac58ede875cc516bc1ee6a7",
+      "bytes": 20716
+    },
+    "eligibility/phenotype_keyword_review.csv": {
+      "sha256": "2c327aa00ba4b38e4a48bb21f4249ef5ad19471218bed0ccadde7d080d2d0c84",
+      "bytes": 12218
+    },
+    "eligibility/same_residue_alternatives.csv": {
+      "sha256": "5c68868766eff6577577c06b3ce697fd0d8072b83a0705887e9fa34421a806e9",
+      "bytes": 1324
+    },
+    "eligibility/shared_allele_ids.csv": {
+      "sha256": "ac002d13c529b482ef0ecafb3031bcfee999f24a50ceea7e174cc4a18ebf8e00",
+      "bytes": 194
+    },
+    "eligibility/source_provenance.csv": {
+      "sha256": "c55bf9701c6606dd95bf0a43f9844c43b6164bb72994cdcca25ab2dbb1936320",
+      "bytes": 1930
+    },
+    "eligibility/variant_eligibility.csv": {
+      "sha256": "41b660776a39181a7bac458c975ee27cbc4c62ac8e8aca44dbc1ab5e1a2541c7",
+      "bytes": 85423
+    },
+    "eligibility/wt_mismatches.csv": {
+      "sha256": "c3e1d0d229998bd3edb9a94b71d136d532bbb6119177a334c9a040a747b78c7d",
+      "bytes": 908
+    },
+    "geometry/1V4S_canonical_geometry.csv": {
+      "sha256": "b71732a340ae65597bb8015c1d4e9775561d960300683fff0836c7630aa169ca",
+      "bytes": 137171
+    },
+    "geometry/1V4T_canonical_geometry.csv": {
+      "sha256": "59c5bf606cb214020ee7439bf6b2ffb3d36e230d96811be95172d168e284aa18",
+      "bytes": 136245
+    },
+    "geometry/1V4T_missing_loop_control.csv": {
+      "sha256": "85035d8653522f7a3c80ab702936626c68fe7d7053c1991c7c29a210fd1510c6",
+      "bytes": 143871
+    },
+    "geometry/AF_P35557_canonical_geometry.csv": {
+      "sha256": "893acc9b7d8d249938cbdb195bd7b0c9f3fa1da43f94776153ddf864861cb4cf",
+      "bytes": 133969
+    },
+    "geometry/P35557-1.fasta": {
+      "sha256": "4c5dec7349184d7d7437065146449757b2261065eedddc6a52a15b0dae6cc9e7",
+      "bytes": 518
+    },
+    "geometry/README.md": {
+      "sha256": "7d5730f2490bdfc651b0bb9f24dabf933936cc211a013ccfd6e539166094074d",
+      "bytes": 4417
+    },
+    "geometry/build_geometry.py": {
+      "sha256": "e677ffcb7e92e8c7c62178cf291c58f07691091bdee32065ceaddad3886fdcf9",
+      "bytes": 21951
+    },
+    "geometry/excluded_noncanonical_coordinates.csv": {
+      "sha256": "600f19ae6514838b46dd3f1e2a77a944cc227fee4d551490863ebc1e9a7a0c67",
+      "bytes": 312
+    },
+    "geometry/geometry_checks.json": {
+      "sha256": "3fb9213c9aad4d7f90ac17cb730bf691ef3a545e5fb2553b880f7df182ad3e19",
+      "bytes": 1513
+    },
+    "geometry/geometry_identity_report.json": {
+      "sha256": "da778171858424d467bcd78a30bf8762f082d6e507cac93d3ce8a3b1d396868e",
+      "bytes": 9442
+    },
+    "pilot_statistics.py": {
+      "sha256": "7549282115f176c32ec6a19cb0e74e4d425045e57327b8e6bf5efb180f097953",
+      "bytes": 7817
+    },
+    "run_pilot.py": {
+      "sha256": "a3d4fc5b9f01ae1aaee49f5e857299494542f2ac761a60a4438f392b77901065",
+      "bytes": 21779
+    },
+    "test_pilot_statistics.py": {
+      "sha256": "b493a32c8029e733c40f6fcc4a03e2b5890d8d29db5b97d6b771e007440a9a82",
+      "bytes": 2709
+    },
+    "validation.json": {
+      "sha256": "f33f68615000fce5bd70a375b5c46eda74dae3362d2214436f7843d03e31a22b",
+      "bytes": 1306
+    },
+    "verify_artifacts.py": {
+      "sha256": "a0b0b0582441b396e31e2c490dc8dd98ee1c1d53ef3090d457dd16573b8fd4ae",
+      "bytes": 5341
+    }
+  }
+}

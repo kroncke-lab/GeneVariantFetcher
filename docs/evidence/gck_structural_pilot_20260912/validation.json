@@ -1,0 +1,32 @@
+{
+  "full_variant_count": 398,
+  "eligible_variant_count": 249,
+  "primary_supported": 245,
+  "primary_target_donor_pairs": 59780,
+  "all_primary_geometric_donors_retained": true,
+  "far_donors_have_positive_kernel_and_normalized_weight": true,
+  "donor_chunks_reconstruct_normalized_matrix": true,
+  "zero_self_weight": true,
+  "other_same_residue_variants_retained": true,
+  "missing_density_has_missing_interval_and_variance": true,
+  "same_242_comparison_variants_all_nine_models": true,
+  "ppa_source_and_input_and_geometry_hashes_match": true,
+  "byte_identical_reproduction": {
+    "GCK_INTERNAL_COMPARISON.png": true,
+    "GCK_primary_normalized_donor_weights.csv.gz": true,
+    "GCK_primary_donor_contexts_02.csv.gz": true,
+    "GCK_variant_loo_metrics.csv": true,
+    "GCK_internal_calibration.csv": true,
+    "GCK_SPATIAL_DENSITY.png": true,
+    "GCK_empirical_posteriors_and_eligibility.csv": true,
+    "GCK_sensitivity_summary.csv": true,
+    "GCK_primary_donor_contexts_04.csv.gz": true,
+    "GCK_STRUCTURAL_PILOT.png": true,
+    "GCK_primary_donor_contexts_01.csv.gz": true,
+    "GCK_density_scenarios.csv.gz": true,
+    "run_checks.json": true,
+    "GCK_primary_donor_contexts_03.csv.gz": true,
+    "GCK_primary_variant_density.csv": true,
+    "GCK_variant_loo_predictions.csv": true
+  }
+}

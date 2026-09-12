@@ -1,0 +1,4 @@
+frame_id,chain,label_seq_id,author_pos,structure_aa,reason
+1V4S,A,4,14,T,outside_canonical_SIFTS_region;isoform_specific_or_construct_residue
+1V4S,A,5,15,L,outside_canonical_SIFTS_region;isoform_specific_or_construct_residue
+1V4T,A,1,15,M,outside_canonical_SIFTS_region;isoform_specific_or_construct_residue

@@ -1,0 +1,255 @@
+{
+  "canonical_accession": "P35557-1",
+  "canonical_length": 465,
+  "canonical_sequence_sha256": "48ae6d5533dd7faf386b768e3da89f009ee6678a330e57c47be85385d5aca664",
+  "isoform_2_length": 466,
+  "isoform_2_alternative_feature": {
+    "type": "Alternative sequence",
+    "location": {
+      "start": {
+        "value": 1,
+        "modifier": "EXACT"
+      },
+      "end": {
+        "value": 15,
+        "modifier": "EXACT"
+      }
+    },
+    "description": "in isoform 2",
+    "evidences": [
+      {
+        "evidenceCode": "ECO:0000303",
+        "source": "PubMed",
+        "id": "14702039"
+      }
+    ],
+    "featureId": "VSP_002074",
+    "alternativeSequence": {
+      "originalSequence": "MLDDRARMEAAKKEK",
+      "alternativeSequences": [
+        "MAMDVTRSQAQTALTL"
+      ]
+    }
+  },
+  "uniprot_subunit_annotation": [
+    {
+      "texts": [
+        {
+          "evidences": [
+            {
+              "evidenceCode": "ECO:0000269",
+              "source": "PubMed",
+              "id": "10456334"
+            },
+            {
+              "evidenceCode": "ECO:0000269",
+              "source": "PubMed",
+              "id": "15016359"
+            },
+            {
+              "evidenceCode": "ECO:0000269",
+              "source": "PubMed",
+              "id": "19362831"
+            },
+            {
+              "evidenceCode": "ECO:0000269",
+              "source": "PubMed",
+              "id": "23957911"
+            },
+            {
+              "evidenceCode": "ECO:0000269",
+              "source": "PubMed",
+              "id": "24187134"
+            }
+          ],
+          "value": "Monomer (PubMed:15016359, PubMed:19362831, PubMed:23957911). Interacts with MIDN; the interaction occurs preferentially at low glucose levels and results in inhibition of hexokinase activity (PubMed:24187134). Interacts with GCKR; leading to sequestration in the nucleus (PubMed:10456334)"
+        }
+      ],
+      "commentType": "SUBUNIT"
+    }
+  ],
+  "coordinate_metric": "mass-weighted complete sidechain heavy-atom COM; glycine CA fallback",
+  "sensitivity_coordinate_metric": "CA",
+  "coordinate_completeness_policy": "fail if any mapped sidechain lacks expected heavy atoms",
+  "experimental_B_factors_are_not_plddt": true,
+  "plddt_policy": "AF>=70 structured; AF<50 candidate IDR; 50<=AF<70 ambiguous; experimental present coordinates trusted; source-confirmed state-specific experimental disorder overrides AF",
+  "polymer_eligibility_policy": "both endpoints same contiguous candidate-IDR segment and same chain; no coordinate hybrid",
+  "af_coordinate_hybrid_used": false,
+  "structures": {
+    "AF_P35557": {
+      "source_type": "predicted_full_monomer",
+      "model_id": "AF-P35557-F1",
+      "model_version": 6,
+      "residue_count": 465,
+      "geometry_state_counts": {
+        "ambiguous": 9,
+        "structured": 455,
+        "idr": 1
+      },
+      "candidate_idr_segments": [
+        "AF_lt50_465_465"
+      ],
+      "biological_unit": "monomer; consistent with UniProt SUBUNIT",
+      "full_coordinate_sequence_identity": 1.0
+    },
+    "1V4S": {
+      "source_type": "experimental_biological_assembly",
+      "assembly_id": "1",
+      "biological_unit": "monomeric",
+      "assembly_assignment": "author_defined_assembly",
+      "protein_chain_count": 1,
+      "deposited_polymer_residues": 455,
+      "observed_polymer_residues": 448,
+      "mapped_sequence_residues": 450,
+      "canonical_rows": 465,
+      "geometry_state_counts": {
+        "ambiguous": 3,
+        "missing": 15,
+        "structured": 446,
+        "idr": 1
+      },
+      "unmapped_observed_residues_excluded": 2,
+      "sifts_segments": [
+        {
+          "entity_beg_seq_id": 6,
+          "length": 450,
+          "ref_beg_seq_id": 16
+        }
+      ],
+      "mapped_WT_identity": 1.0,
+      "resolution_angstrom": [
+        2.3
+      ],
+      "ligand_state": "glucose_and_activator_bound",
+      "conformation_interpretation": "active_closed",
+      "state_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3531626/"
+    },
+    "1V4T": {
+      "source_type": "experimental_biological_assembly",
+      "assembly_id": "1",
+      "biological_unit": "monomeric",
+      "assembly_assignment": "author_defined_assembly",
+      "protein_chain_count": 1,
+      "deposited_polymer_residues": 451,
+      "observed_polymer_residues": 424,
+      "mapped_sequence_residues": 450,
+      "canonical_rows": 465,
+      "geometry_state_counts": {
+        "ambiguous": 3,
+        "missing": 15,
+        "structured": 423,
+        "idr": 24
+      },
+      "unmapped_observed_residues_excluded": 1,
+      "sifts_segments": [
+        {
+          "entity_beg_seq_id": 2,
+          "length": 450,
+          "ref_beg_seq_id": 16
+        }
+      ],
+      "mapped_WT_identity": 1.0,
+      "resolution_angstrom": [
+        3.4
+      ],
+      "ligand_state": "glucose_free",
+      "conformation_interpretation": "inactive_super_open",
+      "state_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3531626/",
+      "experimental_disorder_segment": {
+        "canonical_start": 157,
+        "canonical_end": 179,
+        "endpoint_identity": "E157-N179",
+        "residues": 23,
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3531626/",
+        "source_sections": [
+          "In silico dynamic and conformational effects of ATP binding",
+          "Modelling of the hGK apoenzyme in the super-open conformation"
+        ],
+        "numbering_validation": "Each missing label maps through SIFTS to the identically numbered mmCIF pdb_seq_num and exact canonical AA; no isoform offset assumed",
+        "geometry": "3.8*sqrt(canonical sequence separation) within this same-chain segment only",
+        "AF_confidence_does_not_override_experimental_state_disorder": true,
+        "control_file": "1V4T_missing_loop_control.csv"
+      }
+    }
+  },
+  "sources": [
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/1V4S-assembly1.cif.gz",
+      "url": "https://files.rcsb.org/download/1v4s-assembly1.cif.gz",
+      "sha256": "85a963ddfa8fc9a20d92a843f5fbbc5affd2143862cb443020370575f4d54d6f",
+      "bytes": 97830
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/1V4S_assembly.json",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/1V4S/1",
+      "sha256": "641406a5751e460dfb68131baf3a3299ffc5f60fd67ece848cd5d5bf082c6ee3",
+      "bytes": 2416
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/1V4S_entry.json",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/1V4S",
+      "sha256": "1ec181fa033587ad1b42225d103880e1caedab1510d7ac84be87f69a7d97b54c",
+      "bytes": 17781
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/1V4S_polymer_entity.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/1V4S/1",
+      "sha256": "d09a855f6bcb95f46d2e956f7205181207e721993e914ce9a534881e199b08b2",
+      "bytes": 80042
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/1V4T-assembly1.cif.gz",
+      "url": "https://files.rcsb.org/download/1v4t-assembly1.cif.gz",
+      "sha256": "542a645844c070cf456d95c9f4f47a01769190d325284b4bd318be5a14f2a90b",
+      "bytes": 89097
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/1V4T_assembly.json",
+      "url": "https://data.rcsb.org/rest/v1/core/assembly/1V4T/1",
+      "sha256": "03ba4adb018864949387a76bf6c6a4bdeba5f424befefc0a011da80d6b203a41",
+      "bytes": 2415
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/1V4T_entry.json",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/1V4T",
+      "sha256": "7580be279f2e9151a72784cb953c9d77da215d125c5501ccf63a7a41e9da03c6",
+      "bytes": 12858
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/1V4T_polymer_entity.json",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/1V4T/1",
+      "sha256": "bcffd6a4d48dfecb4279382004320905df570f8dea4ab2282aff1f688c457b9f",
+      "bytes": 79979
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/AF_P35557.cif",
+      "url": "https://alphafold.ebi.ac.uk/files/AF-P35557-F1-model_v6.cif",
+      "sha256": "b5be912e8e267b1686b60f9a49fe07e5cd8d2b56b57378d41c3b5fee8a4dec06",
+      "bytes": 429771
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/AF_P35557.pae.json",
+      "url": "https://alphafold.ebi.ac.uk/files/AF-P35557-F1-predicted_aligned_error_v6.json",
+      "sha256": "f4ef6b27a8b68318d5ff42739f30da0ec57618a5395f70dda2faf9cfa6f8056c",
+      "bytes": 455330
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/P35557-2.fasta",
+      "url": "https://rest.uniprot.org/uniprotkb/P35557-2.fasta",
+      "sha256": "57809aefb8bc5aa938b012da859f11dab83e0901fd6b35629616c857a49f3d33",
+      "bytes": 555
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/P35557.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P35557.json",
+      "sha256": "9eed125663276d9402c27e1e6062dbef4dcd6e356ef69aecf70f23d942b6ad13",
+      "bytes": 160061
+    },
+    {
+      "local_raw_file": "results/gck_structural_pilot_20260912/raw/alphafold_api.json",
+      "url": "https://alphafold.ebi.ac.uk/api/prediction/P35557",
+      "sha256": "e9c3d7c05037a588230f02d759f6fd41489c281e22bc92b780fa1c9d1c462cc3",
+      "bytes": 7394
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "prior": {
+    "mean": 0.8073449217263232,
+    "variance": 0.031917171361336504,
+    "normalized_mae": 0.23923366415421282,
+    "alpha_empirical": 3.127016941290781,
+    "beta_empirical": 0.7461936990937124,
+    "strength": 3.8732106403844933,
+    "posterior_median": 0.8468784228389443,
+    "posterior_lt_01_pct": 0.7537688442211055,
+    "mean_weight": 0.36171583639547344,
+    "MAE_as_variance_valid": false
+  },
+  "full_count_variants": 398,
+  "eligible_missense": 249,
+  "primary_supported": 245,
+  "same_comparison_variants": 242,
+  "scenario_count": 20,
+  "draws": 8192,
+  "seed": 20260912,
+  "full_prior_reproduces_frozen_preflight": true,
+  "zero_self_weight_all_scenarios": true,
+  "outer_exclusion_matches_engine_targets": [
+    "GCK:V455E",
+    "GCK:T206R",
+    "GCK:Y214D"
+  ],
+  "gnomad_assumed_unaffected": true,
+  "full_dataset_hyperparameters_fixed": true,
+  "endpoint": "pooled_GCK_clinical_evidence_not_disease_specific",
+  "identity_grain": "archived_protein_key_aggregate",
+  "interval_scope": "independent donor Beta draws conditional on fixed counts, hyperparameters and geometry",
+  "ppa_module_sha256": "5efae2d672262b3ee5717a258bbfff4e75c72d8efb876d5ad1a0e474e9b1b7db",
+  "input_hashes": {
+    "structural_density_plan_20260912/full_universe_source_counts.csv.gz": "670f557ab4c3e930133f84544411b5f862453f9a55b8fadab1dcf3ec7114c2c8",
+    "gck_structural_pilot_20260912/eligibility/variant_eligibility.csv": "41b660776a39181a7bac458c975ee27cbc4c62ac8e8aca44dbc1ab5e1a2541c7",
+    "gck_structural_pilot_20260912/eligibility/archived_alphamissense.csv": "f0f2e072aeda809e80bd0028978fcca3ee8b475cee33c8b40f72d2ff35586e68",
+    "gck_structural_pilot_20260912/geometry/1V4S_canonical_geometry.csv": "b71732a340ae65597bb8015c1d4e9775561d960300683fff0836c7630aa169ca",
+    "gck_structural_pilot_20260912/geometry/1V4T_canonical_geometry.csv": "59c5bf606cb214020ee7439bf6b2ffb3d36e230d96811be95172d168e284aa18",
+    "gck_structural_pilot_20260912/geometry/AF_P35557_canonical_geometry.csv": "893acc9b7d8d249938cbdb195bd7b0c9f3fa1da43f94776153ddf864861cb4cf"
+  }
+}

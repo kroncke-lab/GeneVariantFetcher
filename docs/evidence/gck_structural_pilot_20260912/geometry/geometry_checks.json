@@ -1,0 +1,30 @@
+{
+  "1V4S_canonical_geometry.csv": {
+    "465_unique_ordered_canonical_rows": true,
+    "all_WT_letters_match_canonical": true,
+    "only_structured_rows_expose_coordinates": true
+  },
+  "1V4T_canonical_geometry.csv": {
+    "465_unique_ordered_canonical_rows": true,
+    "all_WT_letters_match_canonical": true,
+    "only_structured_rows_expose_coordinates": true
+  },
+  "AF_P35557_canonical_geometry.csv": {
+    "465_unique_ordered_canonical_rows": true,
+    "all_WT_letters_match_canonical": true,
+    "only_structured_rows_expose_coordinates": true
+  },
+  "cached_rebuild_byte_identical": true,
+  "all_download_hashes_verified": true,
+  "source_confirmed_open_loop_157_179_is_polymer_only": true,
+  "closed_loop_157_179_retains_measured_coordinates": true,
+  "outputs_sha256": {
+    "1V4S_canonical_geometry.csv": "b71732a340ae65597bb8015c1d4e9775561d960300683fff0836c7630aa169ca",
+    "1V4T_canonical_geometry.csv": "59c5bf606cb214020ee7439bf6b2ffb3d36e230d96811be95172d168e284aa18",
+    "1V4T_missing_loop_control.csv": "85035d8653522f7a3c80ab702936626c68fe7d7053c1991c7c29a210fd1510c6",
+    "AF_P35557_canonical_geometry.csv": "893acc9b7d8d249938cbdb195bd7b0c9f3fa1da43f94776153ddf864861cb4cf",
+    "P35557-1.fasta": "4c5dec7349184d7d7437065146449757b2261065eedddc6a52a15b0dae6cc9e7",
+    "excluded_noncanonical_coordinates.csv": "600f19ae6514838b46dd3f1e2a77a944cc227fee4d551490863ebc1e9a7a0c67",
+    "geometry_identity_report.json": "da778171858424d467bcd78a30bf8762f082d6e507cac93d3ce8a3b1d396868e"
+  }
+}

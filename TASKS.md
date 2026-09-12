@@ -61,7 +61,7 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       including synonymous variants omitted from prior histograms. Detailed
       choices, empirical parameters, source recovery and reviews:
       [`structural density plan`](docs/evidence/structural_density_plan_20260912/PLAN.md).
-- [ ] **Next: execute the GCK empirical-posterior density pilot.** Fit the
+- [x] **Execute the GCK empirical-posterior density pilot (2026-09-12).** Fit the
       historical saturating-weight mean/MSE Beta moments on the full eligible
       gene dataset, then update each variant with affected and unaffected
       counts (gnomAD assumed unaffected). Use equal-variant posterior donors;
@@ -75,9 +75,21 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       retain support/missingness, and test the planned kernel sensitivities.
       Full-dataset hyperparameters stay fixed in this primary LOO calculation;
       do not substitute raw-count donors or leave-whole-residue-out validation.
-- [ ] **Then compare and extend structural priors.** Compare empirical baseline,
-      density, AlphaMissense and their combination on identical target variants,
-      preserving variant-only LOO. Test GPN-Star/AVI after the density pilot;
+      Completed 20 geometry/kernel scenarios: 245 supported experimental
+      targets, 249 AlphaFold targets, and 16 open-state polymer targets.
+      The 242-target internal comparison found essentially no incremental gain
+      from density beyond AlphaMissense. Code, plots, checks and source audits:
+      [`GCK structural pilot`](docs/evidence/gck_structural_pilot_20260912/README.md).
+- [ ] **Next: curate GCK identity/endpoints and repeat the fixed comparison.**
+      Resolve 19 canonical-WT mismatches against source/transcript evidence;
+      adjudicate mixed MODY versus activating/hypoglycemia counts and ambiguous
+      protein-key/genomic-allele identities. Preserve existing frozen evidence,
+      then recompute the full-dataset empirical prior and variant-only LOO
+      density. The current pilot is pooled clinical evidence, not MODY-specific
+      validation. Review queues are in the pilot's `eligibility/` folder.
+- [ ] **Then extend structural priors.** Repeat empirical baseline, density,
+      AlphaMissense and combination comparisons on identical target variants,
+      preserving variant-only LOO. Test GPN-Star/AVI after GCK source curation;
       complete the other genes' biological-unit mapping and support checks.
       Inventory population-only variants absent from the literature row set.
       Before outcome validation, freeze gene-specific endpoint, age/sex/time
