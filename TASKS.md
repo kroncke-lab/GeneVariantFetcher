@@ -97,6 +97,21 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       Source snapshots, count/identity checks, predictor comparisons, Grok
       review, plots and reproducible scripts:
       [`population-inclusive redo`](docs/evidence/population_inclusive_penetrance_20260912/README.md).
+- [x] **Keep empirical priors separate by gene and type (2026-09-12).**
+      Missense and nonsense now have distinct empirical priors in every gene,
+      including observed population variants of the matching type. Neither
+      prior includes synonymous, frameshift, splice or noncoding variants.
+      Nonsense means nonsense/stop_gained only. Fit 10,512 canonical missense
+      and 788 canonical nonsense units, preserving counts and the historical
+      mean/MSE formula. GCK missense mean is 37.04% (alpha 1.08116,
+      beta 1.83760); nonsense mean is 70.59% (alpha 3.63675, beta 1.51516).
+      An unaffected singleton gives 27.59% and 59.12%, respectively.
+      The GCK structural rerun uses its missense prior and the unchanged
+      634 missense donors only; no nonsense donors enter that density.
+      This supersedes applying the full-gene prior to either requested type.
+      Independent audit reproduces all 30 primary/sensitivity fits; singleton
+      counts and the historical low n=1 fitting weight remain explicit:
+      [`priors by type`](docs/evidence/class_matched_penetrance_20260912/README.md).
 - [ ] **Next: curate GCK identity/endpoints and repeat the fixed comparison.**
       Resolve 19 canonical-WT mismatches against source/transcript evidence;
       adjudicate mixed MODY versus activating/hypoglycemia counts and ambiguous

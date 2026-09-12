@@ -1,0 +1,23 @@
+{
+  "byte_identical_tables": 17,
+  "all_match": true,
+  "matches": {
+    "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/KCNQ1.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/GCK.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/LDLR.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part002.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/HNF1A.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/same_variant_comparison/KCNQ1.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/same_variant_comparison/BRCA2.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/same_variant_comparison/GCK.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/same_variant_comparison/LDLR.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/same_variant_comparison/BRCA2.part002.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/same_variant_comparison/HNF1A.part001.csv.gz": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/type_count_summary.csv": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/singleton_update_examples.csv": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/fit_checks.json": true,
+    "docs/evidence/class_matched_penetrance_20260912/analysis/source_type_inventory.csv": true
+  }
+}

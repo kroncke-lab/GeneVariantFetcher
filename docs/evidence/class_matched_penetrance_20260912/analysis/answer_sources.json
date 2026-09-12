@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "type-specific-priors",
+      "title": "Empirical priors fitted separately for missense and nonsense",
+      "assumptions": [
+        "All included gnomAD carriers are treated as unaffected."
+      ],
+      "queries": [
+        {
+          "id": "gene-type-fits",
+          "source": {
+            "label": "Frozen observed-variant count analysis",
+            "files": [
+              {
+                "label": "empirical_prior_comparison.csv"
+              },
+              {
+                "label": "type_count_summary.csv"
+              },
+              {
+                "label": "fit_class_priors.py"
+              }
+            ],
+            "metricDefinitions": [
+              {
+                "label": "Empirical prior mean",
+                "definition": "The prior mean is fitted separately within each gene and variant type using the existing historical count-weighted moment method."
+              },
+              {
+                "label": "Unaffected singleton posterior",
+                "definition": "One unaffected carrier updates Beta(alpha, beta) to Beta(alpha, beta + 1)."
+              }
+            ],
+            "filters": [
+              "Genes: HNF1A, GCK, LDLR, BRCA2, KCNQ1",
+              "Types: canonical missense and nonsense, fitted separately",
+              "Nonsense labels: nonsense or stop_gained",
+              "Canonical reference amino acid: validated match",
+              "Observed carrier count: positive",
+              "Population variants: frozen gnomAD 4.1.1 QC-passing observations"
+            ],
+            "caveats": [
+              "Synonymous, frameshift, splice and noncoding variants do not enter either prior.",
+              "The historical n=1 fitting weight is 0.009901; singleton counts still update their own posterior in full.",
+              "These are empirical estimates from the observed count collection, not independently calibrated outcome risks."
+            ],
+            "evidenceFlow": [
+              {
+                "kind": "validation",
+                "title": "Class isolation",
+                "detail": "Six tests passed, including invariance to adding other variant classes, nonsense-to-missense isolation, stop-label equivalence and unaffected-singleton beta-only updates."
+              }
+            ]
+          },
+          "columns": [
+            "gene",
+            "variant_type",
+            "variants",
+            "mean",
+            "alpha_empirical",
+            "beta_empirical",
+            "strength",
+            "unaffected_singleton_posterior"
+          ],
+          "rows": [
+            {
+              "gene": "HNF1A",
+              "variant_type": "missense",
+              "variants": 785,
+              "mean": 0.1036769909860338,
+              "alpha_empirical": 0.2332698413070518,
+              "beta_empirical": 2.016697476306123,
+              "strength": 2.2499673176131747,
+              "unaffected_singleton_posterior": 0.0717760575753631
+            },
+            {
+              "gene": "HNF1A",
+              "variant_type": "nonsense",
+              "variants": 28,
+              "mean": 0.4664532153231939,
+              "alpha_empirical": 2.9836866984963404,
+              "beta_empirical": 3.412853405593236,
+              "strength": 6.396540104089577,
+              "unaffected_singleton_posterior": 0.4033895113806857
+            },
+            {
+              "gene": "GCK",
+              "variant_type": "missense",
+              "variants": 634,
+              "mean": 0.3704179222682078,
+              "alpha_empirical": 1.0811593278735518,
+              "beta_empirical": 1.837596118010945,
+              "strength": 2.918755445884497,
+              "unaffected_singleton_posterior": 0.2758935439589609
+            },
+            {
+              "gene": "GCK",
+              "variant_type": "nonsense",
+              "variants": 33,
+              "mean": 0.7059030877040944,
+              "alpha_empirical": 3.636752360786633,
+              "beta_empirical": 1.5151621500493269,
+              "strength": 5.15191451083596,
+              "unaffected_singleton_posterior": 0.5911578183313293
+            },
+            {
+              "gene": "LDLR",
+              "variant_type": "missense",
+              "variants": 1376,
+              "mean": 0.1537761078600645,
+              "alpha_empirical": 0.4050647213745733,
+              "beta_empirical": 2.2290552795242657,
+              "strength": 2.634120000898839,
+              "unaffected_singleton_posterior": 0.1114615701392324
+            },
+            {
+              "gene": "LDLR",
+              "variant_type": "nonsense",
+              "variants": 95,
+              "mean": 0.5665540134584413,
+              "alpha_empirical": 2.0708633694640164,
+              "beta_empirical": 1.58432805142585,
+              "strength": 3.6551914208898664,
+              "unaffected_singleton_posterior": 0.444850314891704
+            },
+            {
+              "gene": "BRCA2",
+              "variant_type": "missense",
+              "variants": 6656,
+              "mean": 0.1485981658574783,
+              "alpha_empirical": 0.9074554792970309,
+              "beta_empirical": 5.199318948641594,
+              "strength": 6.106774427938625,
+              "unaffected_singleton_posterior": 0.1276887972874981
+            },
+            {
+              "gene": "BRCA2",
+              "variant_type": "nonsense",
+              "variants": 577,
+              "mean": 0.6579740789425415,
+              "alpha_empirical": 3.564886225446681,
+              "beta_empirical": 1.853087429649221,
+              "strength": 5.417973655095902,
+              "unaffected_singleton_posterior": 0.5554535460917862
+            },
+            {
+              "gene": "KCNQ1",
+              "variant_type": "missense",
+              "variants": 1061,
+              "mean": 0.2947603080755296,
+              "alpha_empirical": 0.6382351340479758,
+              "beta_empirical": 1.5270331078498918,
+              "strength": 2.1652682418978677,
+              "unaffected_singleton_posterior": 0.2016369815359773
+            },
+            {
+              "gene": "KCNQ1",
+              "variant_type": "nonsense",
+              "variants": 55,
+              "mean": 0.529865444414281,
+              "alpha_empirical": 2.545303105756282,
+              "beta_empirical": 2.258375134801352,
+              "strength": 4.803678240557634,
+              "unaffected_singleton_posterior": 0.4385672327540546
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "All ten primary gene-by-type fits.",
+            "totalRows": 10
+          },
+          "methods": [
+            {
+              "language": "python",
+              "code": "def fit_empirical(units, variance_mode=\"historical\"):\n    y = units.affected.to_numpy() / units.n.to_numpy()\n    weights = 1 - 1 / (units.n.to_numpy() + 0.01)\n    mean = float(np.average(y, weights=weights))\n    mse = float(np.mean(weights * (y - mean) ** 2))\n    normalized_mse = float(np.average((y - mean) ** 2, weights=weights))\n    variance = mse if variance_mode == \"historical\" else normalized_mse\n    if not 0 < mean < 1 or not 0 < variance < mean * (1 - mean):\n        raise ValueError(f\"Invalid empirical Beta moments: {mean=}, {variance=}\")\n    strength = mean * (1 - mean) / variance - 1\n    alpha, beta = mean * strength, (1 - mean) * strength\n    return {\n        \"mean\": mean,\n        \"variance\": variance,\n        \"historical_mse\": mse,\n        \"normalized_weighted_mse\": normalized_mse,\n        \"weighted_mae\": float(np.average(abs(y - mean), weights=weights)),\n        \"alpha_empirical\": alpha,\n        \"beta_empirical\": beta,\n        \"strength\": strength,\n        \"pooled_carrier_fraction\": float(units.affected.sum() / units.n.sum()),\n        \"equal_variant_fraction_mean\": float(y.mean()),\n    }"
+            },
+            {
+              "language": "calculation",
+              "code": "kappa = alpha + beta\nprior_mean = alpha / kappa\nA=0, U=1: posterior_mean = alpha / (kappa + 1)\nGCK missense: 1.081159 / (2.918755 + 1) = 0.275894\nGCK nonsense: 3.636752 / (5.151915 + 1) = 0.591158"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

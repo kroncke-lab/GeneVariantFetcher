@@ -1,0 +1,21 @@
+{
+  "input_and_output_hashes_match": true,
+  "all_supported_targets_reconstructed": 614,
+  "donor_pair_rows": 376382,
+  "positive_pairs_beyond_20": 278640,
+  "no_self_donor_records": true,
+  "normalized_donor_weights_sum_to_one": true,
+  "posterior_alpha_affected_beta_unaffected_orientation": true,
+  "maximum_density_reconstruction_error": 6.772360450213455e-15,
+  "maximum_conditional_variance_reconstruction_error": 9.974659986866641e-17,
+  "maximum_monte_carlo_mean_error_in_standard_errors": 2.98985036697046,
+  "all_artifacts_at_most_1200000_bytes": true,
+  "two_generated_figures_visually_inspected": true,
+  "validator_sha256": "cc6e297b329dd7010f25cb2255464615d34c0724bdda588c8d1bb644f4451db2",
+  "prior_scope": "canonical_missense",
+  "same_normalized_weights_as_previous_run_exactly": true,
+  "no_nonsense_donors": true,
+  "scope_comparison_input_sha256": "0af3962872854522f18d312e62992f3aa7e5b755f563c942b974bdecd63bd75a",
+  "scope_comparison_output_sha256": "10523c3799e6aac2a1468f3e89996adb8fcdf7341712273c9236587adf51a4e2",
+  "validation_adapter_sha256": "6812f099799dc8a004fac94616daecbba9928d96a44aeb493f45d8ef66c79256"
+}

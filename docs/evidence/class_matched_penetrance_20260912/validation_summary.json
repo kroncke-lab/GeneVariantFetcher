@@ -1,0 +1,11 @@
+{
+  "class_isolation_tests_passed": 6,
+  "existing_structural_LOO_tests_passed": 5,
+  "class_fit_tables_reproduced_byte_identically": 17,
+  "independent_fits_matched": 30,
+  "structural_supported_targets_reconstructed": 614,
+  "structural_donor_rows_reconstructed": 376382,
+  "identical_previous_structural_weights": true,
+  "figures_visually_checked": 4,
+  "no_frozen_previous_evidence_overwritten": true
+}
