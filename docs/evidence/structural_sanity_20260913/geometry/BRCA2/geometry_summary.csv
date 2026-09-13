@@ -1,0 +1,4 @@
+policy,rows,structured_positions,polymer_positions,usable_COM_positions,unavailable_COM_positions,frames
+primary,92286,984,2264,3248,170,15
+experimental_idr,51270,72,2264,2336,1082,3
+all_unresolved_polymer,92286,984,2433,3417,1,15

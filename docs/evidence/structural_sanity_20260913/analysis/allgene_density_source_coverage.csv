@@ -1,0 +1,16 @@
+gene,primary_source,density_source,variants
+HNF1A,frozen_missense_extension,polymer,536
+HNF1A,frozen_missense_extension,structured,183
+HNF1A,frozen_missense_extension,unavailable,59
+HNF1A,frozen_missense_extension,mixed,7
+GCK,frozen_class_specific_monomer,structured,614
+GCK,frozen_class_specific_monomer,missing,20
+LDLR,frozen_missense_extension,structured,1027
+LDLR,frozen_missense_extension,polymer,179
+LDLR,frozen_missense_extension,unavailable,170
+BRCA2,corrected_local_3d_and_canonical_polymer,polymer,4389
+BRCA2,corrected_local_3d_and_canonical_polymer,structured,1937
+BRCA2,corrected_local_3d_and_canonical_polymer,missing,330
+KCNQ1,frozen_missense_extension,structured,586
+KCNQ1,frozen_missense_extension,polymer,389
+KCNQ1,frozen_missense_extension,unavailable,86

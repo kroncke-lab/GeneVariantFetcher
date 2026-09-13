@@ -1,0 +1,14 @@
+{
+  "targets": 128,
+  "donors": 6656,
+  "contexts": 282,
+  "donor_batch_size": 512,
+  "model_build_seconds": 1.542031249962747,
+  "batched_exclusion_seconds": 0.021357792196795344,
+  "repeated_exclusion_seconds": 1.475814042147249,
+  "speedup": 69.09955994274958,
+  "maximum_absolute_difference": 0.0,
+  "output_array_bytes": 6815744,
+  "helper_sha256": "3257dfa0fd61d06a60e071b14b0c3a326a42dc10a55cc67bdc49e854b3d38858",
+  "geometry_sha256": "0b2b7db68d9d63a7ecf20397f11cf6e1da46fd6c34eb797b40e5484628c9902d"
+}

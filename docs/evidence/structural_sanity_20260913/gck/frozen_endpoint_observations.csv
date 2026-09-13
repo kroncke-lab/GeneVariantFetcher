@@ -1,0 +1,7 @@
+key,vclass,is_truncating,aa_pos,aa_ref,aa_alt,cdna,protein_notation,variant_id,pmid,source,denominator_source,affected,unaffected,n,uncertain_count,total_carriers_observed,trust_tier,paper_class,study_design,ascertainment,study_type,abstract_only,single_proband_row,merged_duplicate_ids
+V389L,missense,False,389.0,V,L,c.1165C>G,p.Val389Leu,2173,21454522,individual,individual_records,2.0,0.0,2.0,0.0,2.0,trusted,Other,case_series,proband_referral,mixed,0,False,"2173,10000117"
+V389L,missense,False,389.0,V,L,,p.Val389Leu,117,24890200,cohort,total_derived,5.0,0.0,5.0,0.0,5.0,trusted,Other,family_segregation,family_cascade,clinical,0,False,"117,10000164"
+V455E,missense,False,455.0,V,E,,p.V455E,40000606,36208030,cohort,explicit,3.0,25.0,28.0,,28.0,trusted,VUS,cohort_population,population_screening,clinical,0,False,"40000606,50000616"
+W99R,missense,False,99.0,W,R,c.295C>T,p.W99R,20000251,30352420,cohort,total_derived,1.0,0.0,1.0,0.0,1.0,trusted,P/LP,case_series,proband_referral,clinical,0,True,"20000251,30000252"
+W99R,missense,False,99.0,W,R,,W99R,40000057,34635134,cohort,explicit,2.0,0.0,2.0,0.0,2.0,trusted,none,case_series,proband_referral,clinical,0,False,"40000057,50000060"
+W99R,missense,False,99.0,W,R,c.295T>C,p.Trp99Arg,20000323,34680961,individual,individual_records,4.0,0.0,4.0,0.0,4.0,trusted,P/LP,family_segregation,family_cascade,clinical,0,False,"20000323,30000368"

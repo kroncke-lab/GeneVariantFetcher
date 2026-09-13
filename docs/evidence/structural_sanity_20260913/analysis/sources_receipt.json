@@ -1,0 +1,675 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "brca2-coverage",
+      "title": "BRCA2 coverage increased from 127 to 6,326 variants",
+      "queries": [
+        {
+          "id": "coverage",
+          "source": {
+            "label": "BRCA2 frozen-to-corrected comparison",
+            "files": [
+              {
+                "label": "old_vs_new.csv.gz"
+              },
+              {
+                "label": "BRCA2/sensitivity.csv"
+              }
+            ],
+            "caveats": [
+              "The 6,651-variant all-unresolved polymer result is a broader sensitivity, not the primary. Missing geometry is not a zero score."
+            ]
+          },
+          "summary": "The primary adds canonical polymer contexts and local AlphaFold geometry; 330 of 6,656 variants remain unavailable.",
+          "columns": [
+            {
+              "field": "analysis",
+              "label": "Analysis"
+            },
+            {
+              "field": "supported",
+              "label": "Supported variants"
+            },
+            {
+              "field": "unavailable",
+              "label": "Unavailable variants"
+            }
+          ],
+          "rows": [
+            {
+              "analysis": "Frozen domain geometry",
+              "supported": 127,
+              "unavailable": 6529
+            },
+            {
+              "analysis": "Corrected primary",
+              "supported": 6326,
+              "unavailable": 330
+            },
+            {
+              "analysis": "All unresolved polymer sensitivity",
+              "supported": 6651,
+              "unavailable": 5
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "Aggregated finalized audit evidence."
+          }
+        },
+        {
+          "id": "primary-sources",
+          "source": {
+            "label": "BRCA2 primary geometry assignment",
+            "files": [
+              {
+                "label": "BRCA2_figure_source_counts.csv"
+              },
+              {
+                "label": "BRCA2/geometry_audit.json"
+              }
+            ],
+            "caveats": [
+              "Distances do not cross fragment coordinate frames. Low-confidence polymer segments and structured assignments are exclusive; this is geometry coverage, not disease validation."
+            ]
+          },
+          "summary": "The primary assigns 4,389 variants to polymer, 1,810 to local AlphaFold 3D and 127 to experimental 3D.",
+          "columns": [
+            {
+              "field": "source",
+              "label": "Geometry source"
+            },
+            {
+              "field": "variants",
+              "label": "Variants"
+            }
+          ],
+          "rows": [
+            {
+              "source": "AF local 3D",
+              "variants": 1810
+            },
+            {
+              "source": "Experimental 3D",
+              "variants": 127
+            },
+            {
+              "source": "Polymer",
+              "variants": 4389
+            },
+            {
+              "source": "Unavailable",
+              "variants": 330
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "Aggregated finalized audit evidence."
+          }
+        }
+      ]
+    },
+    {
+      "id": "gck-prior",
+      "title": "GCK’s broad score reflects shared priors, counts and smoothing",
+      "assumptions": [
+        "The accepted gene-by-missense prior and all-gnomAD-carriers-unaffected assumption are held fixed."
+      ],
+      "queries": [
+        {
+          "id": "prior",
+          "source": {
+            "label": "GCK accepted prior and singleton calculation",
+            "files": [
+              {
+                "label": "gck/checks.json"
+              },
+              {
+                "label": "prior_sensitivities_DIAGNOSTIC.csv"
+              },
+              {
+                "label": "count_and_fit_weight_groups.csv"
+              }
+            ],
+            "caveats": [
+              "The singleton posterior is a finite-count value, not a lower bound."
+            ]
+          },
+          "summary": "There are 332 singleton units among 634; they supply 1.53% of historical prior-fit weight.",
+          "columns": [
+            {
+              "field": "alpha",
+              "label": "Affected α"
+            },
+            {
+              "field": "beta",
+              "label": "Unaffected β"
+            },
+            {
+              "field": "prior_mean",
+              "label": "Prior mean"
+            },
+            {
+              "field": "strength",
+              "label": "Prior strength"
+            },
+            {
+              "field": "unaffected_singleton_posterior",
+              "label": "A=0, U=1 posterior"
+            }
+          ],
+          "rows": [
+            {
+              "alpha": 1.081159,
+              "beta": 1.837596,
+              "prior_mean": "37.04%",
+              "strength": 2.918755,
+              "unaffected_singleton_posterior": "27.59%"
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "Aggregated finalized audit evidence."
+          },
+          "methods": [
+            {
+              "language": "calculation",
+              "code": "n = A + U; S = α + β; μ = α/S; own posterior = (α + A)/(S + n).\nHistorical prior-fit weight w = 1 − 1/(n + 0.01); μ = Σ(w A/n)/Σw; variance = Σ[w(A/n − μ)²]/M, where M is the number of units."
+            }
+          ]
+        },
+        {
+          "id": "decomposition",
+          "source": {
+            "label": "GCK exact frozen-weight decomposition",
+            "files": [
+              {
+                "label": "supported_distributions.csv"
+              },
+              {
+                "label": "gck/checks.json"
+              }
+            ],
+            "caveats": [
+              "Component means add to the mean score; separate component medians need not add to the median score. Direct prior share is an algebraic share, not causal inflation."
+            ],
+            "filters": [
+              "614 geometry-supported variants; 20 unavailable variants omitted from distributions"
+            ]
+          },
+          "summary": "Across 614 supported variants, the median neighborhood score is 37.41%; the median direct prior share is 60.71%.",
+          "columns": [
+            {
+              "field": "quantity",
+              "label": "Quantity"
+            },
+            {
+              "field": "mean",
+              "label": "Mean"
+            },
+            {
+              "field": "median",
+              "label": "Median"
+            }
+          ],
+          "rows": [
+            {
+              "quantity": "Neighborhood score",
+              "mean": "36.84%",
+              "median": "37.41%"
+            },
+            {
+              "quantity": "Raw-count neighborhood",
+              "mean": "34.75%",
+              "median": "34.91%"
+            },
+            {
+              "quantity": "Prior retention",
+              "mean": "59.64%",
+              "median": "60.65%"
+            },
+            {
+              "quantity": "Direct prior component",
+              "mean": "22.09%",
+              "median": "22.46%"
+            },
+            {
+              "quantity": "Affected-count component",
+              "mean": "14.75%",
+              "median": "14.65%"
+            },
+            {
+              "quantity": "Direct prior share of score",
+              "mean": "62.16%",
+              "median": "60.71%"
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "Aggregated finalized audit evidence."
+          },
+          "methods": [
+            {
+              "language": "calculation",
+              "code": "D = μ × Σ[W S/(S+n)] + Σ[W A/(S+n)].\nRaw-count neighborhood = Σ[W A/n]. W is the saved normalized neighborhood weight with zero target-variant self-weight.\nA constant prior-only donor label yields μ everywhere supported."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "count-controls",
+      "title": "Low own-count posteriors coexist with elevated neighborhood scores",
+      "queries": [
+        {
+          "id": "examples",
+          "source": {
+            "label": "Population-only diagnostic examples",
+            "files": [
+              {
+                "label": "strongest_control_examples.csv"
+              }
+            ],
+            "caveats": [
+              "The score excludes each target variant’s counts. These are numerical controls under the fixed population assumption, not independently established benign labels."
+            ],
+            "filters": [
+              "Example selection: A=0, U≥10, own posterior≤1%, neighborhood score≥10%; population-only origins"
+            ]
+          },
+          "summary": "D217N has an own posterior of 0.47% and a neighborhood score of 33.00%; E279Q is 0.75% versus 22.76%.",
+          "columns": [
+            {
+              "field": "gene",
+              "label": "Gene"
+            },
+            {
+              "field": "substitution",
+              "label": "Substitution"
+            },
+            {
+              "field": "A",
+              "label": "Affected"
+            },
+            {
+              "field": "U",
+              "label": "Unaffected"
+            },
+            {
+              "field": "own_posterior",
+              "label": "Own posterior"
+            },
+            {
+              "field": "neighborhood",
+              "label": "Neighborhood"
+            },
+            {
+              "field": "prior_component",
+              "label": "Prior component"
+            },
+            {
+              "field": "counts_component",
+              "label": "Count component"
+            }
+          ],
+          "rows": [
+            {
+              "gene": "HNF1A",
+              "substitution": "E275A",
+              "A": 0,
+              "U": 66,
+              "own_posterior": "0.34%",
+              "neighborhood": "41.76%",
+              "prior_component": "4.25%",
+              "counts_component": "37.51%"
+            },
+            {
+              "gene": "GCK",
+              "substitution": "D217N",
+              "A": 0,
+              "U": 227,
+              "own_posterior": "0.47%",
+              "neighborhood": "33.00%",
+              "prior_component": "22.14%",
+              "counts_component": "10.86%"
+            },
+            {
+              "gene": "GCK",
+              "substitution": "E279Q",
+              "A": 0,
+              "U": 141,
+              "own_posterior": "0.75%",
+              "neighborhood": "22.76%",
+              "prior_component": "19.86%",
+              "counts_component": "2.90%"
+            },
+            {
+              "gene": "LDLR",
+              "substitution": "D356N",
+              "A": 0,
+              "U": 40,
+              "own_posterior": "0.95%",
+              "neighborhood": "23.94%",
+              "prior_component": "9.05%",
+              "counts_component": "14.89%"
+            },
+            {
+              "gene": "BRCA2",
+              "substitution": "G2274V",
+              "A": 0,
+              "U": 1306,
+              "own_posterior": "0.07%",
+              "neighborhood": "21.92%",
+              "prior_component": "11.03%",
+              "counts_component": "10.88%"
+            },
+            {
+              "gene": "KCNQ1",
+              "substitution": "T153M",
+              "A": 0,
+              "U": 253,
+              "own_posterior": "0.25%",
+              "neighborhood": "24.04%",
+              "prior_component": "15.90%",
+              "counts_component": "8.14%"
+            }
+          ],
+          "preview": {
+            "kind": "partial",
+            "note": "Selected fields from finalized audit outputs.",
+            "totalRows": 23
+          }
+        }
+      ]
+    },
+    {
+      "id": "gck-endpoints",
+      "title": "Two GCK units contain 13 hypoglycemia observations and one unknown",
+      "queries": [
+        {
+          "id": "reviewed-observations",
+          "source": {
+            "label": "GCK frozen endpoint adjudication",
+            "files": [
+              {
+                "label": "endpoint_review.csv"
+              },
+              {
+                "label": "frozen_endpoint_observations.csv"
+              },
+              {
+                "label": "gck/checks.json"
+              }
+            ],
+            "caveats": [
+              "These are retained observations, not a demonstrated count of unique people across publications. Unknown must not become unaffected. The frozen input remains unchanged; the two units are quarantined only in a labeled sensitivity. W99R also retains a source-internal nucleotide notation conflict."
+            ]
+          },
+          "summary": "The 14 frozen affected observations comprise 13 source-confirmed hyperinsulinemic hypoglycemia observations and one unassessed carrier.",
+          "columns": [
+            {
+              "field": "substitution",
+              "label": "Substitution"
+            },
+            {
+              "field": "frozen_affected",
+              "label": "Frozen affected observations"
+            },
+            {
+              "field": "confirmed_HH",
+              "label": "Confirmed HH observations"
+            },
+            {
+              "field": "phenotype_unknown",
+              "label": "Phenotype unknown"
+            }
+          ],
+          "rows": [
+            {
+              "substitution": "W99R",
+              "frozen_affected": 7,
+              "confirmed_HH": 7,
+              "phenotype_unknown": 0
+            },
+            {
+              "substitution": "V389L",
+              "frozen_affected": 7,
+              "confirmed_HH": 6,
+              "phenotype_unknown": 1
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "Aggregated finalized audit evidence."
+          }
+        }
+      ]
+    },
+    {
+      "id": "gck-null",
+      "title": "GCK’s 3D advantage over sequence is ordinary under the conditional null",
+      "queries": [
+        {
+          "id": "conditional-permutations",
+          "source": {
+            "label": "GCK frozen-weight permutation diagnostic",
+            "files": [
+              {
+                "label": "permutation_summary.csv"
+              },
+              {
+                "label": "gck/checks.json"
+              }
+            ],
+            "caveats": [
+              "This is an exploratory internal diagnostic against posterior-derived labels, not independent clinical validation. It does not show that all spatial association disappears."
+            ],
+            "filters": [
+              "614 geometry-supported target positions",
+              "Count bins: 1, 2, 3–5, 6–10, >10",
+              "2,000 seeded permutations within 14 origin/count strata"
+            ]
+          },
+          "summary": "For posterior labels, the 3D-over-sequence MSE gain is 0.001169; the origin-and-count-bin conditional null gives p=0.474263.",
+          "columns": [
+            {
+              "field": "labels",
+              "label": "Evaluation label"
+            },
+            {
+              "field": "observed_gain",
+              "label": "Observed MSE gain"
+            },
+            {
+              "field": "null_mean_gain",
+              "label": "Mean null gain"
+            },
+            {
+              "field": "p_value",
+              "label": "One-sided p"
+            },
+            {
+              "field": "repeats",
+              "label": "Permutations"
+            },
+            {
+              "field": "strata",
+              "label": "Strata"
+            }
+          ],
+          "rows": [
+            {
+              "labels": "posterior",
+              "observed_gain": 0.001169,
+              "null_mean_gain": 0.00115,
+              "p_value": 0.474263,
+              "repeats": 2000,
+              "strata": 14
+            },
+            {
+              "labels": "count_only",
+              "observed_gain": 0.003115,
+              "null_mean_gain": 0.00384,
+              "p_value": 0.726637,
+              "repeats": 2000,
+              "strata": 14
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "Aggregated finalized audit evidence."
+          },
+          "methods": [
+            {
+              "language": "calculation",
+              "code": "Gain = MSE(sequence neighborhood) − MSE(3D neighborhood).\nFor each permutation, the complete count/posterior record and target label move together within source-origin × count-bin strata. The prior, geometry and weights remain fixed."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "crossgene-audit",
+      "title": "All five genes reproduce algebraically, with varying prior retention",
+      "queries": [
+        {
+          "id": "five-gene-summary",
+          "source": {
+            "label": "Cross-gene density reconstruction",
+            "files": [
+              {
+                "label": "allgene_summary.csv"
+              },
+              {
+                "label": "allgene_audit_receipt.json"
+              }
+            ],
+            "caveats": [
+              "BRCA2 uses corrected geometry; other genes retain their stated frozen primary geometry. All evaluations retain the full-class prior and exclude only the target variant unit; other variants at the same residue remain eligible. Posterior-label agreement does not calibrate variant disease risk."
+            ],
+            "filters": [
+              "Frozen gene-by-missense priors; A contributes to α and all U to β",
+              "Diagnostic controls: A=0, U≥10, own posterior≤1%, score≥10%"
+            ]
+          },
+          "summary": "The audit reconstructs 9,847 supported scores from 10,512 units, with maximum absolute error 7.05e-15.",
+          "columns": [
+            {
+              "field": "gene",
+              "label": "Gene"
+            },
+            {
+              "field": "variants",
+              "label": "Input variants"
+            },
+            {
+              "field": "supported",
+              "label": "Supported"
+            },
+            {
+              "field": "prior_mean",
+              "label": "Prior mean"
+            },
+            {
+              "field": "median_density",
+              "label": "Median score"
+            },
+            {
+              "field": "median_raw",
+              "label": "Median raw-count score"
+            },
+            {
+              "field": "median_retention",
+              "label": "Median prior retention"
+            },
+            {
+              "field": "median_prior_share",
+              "label": "Median direct prior share"
+            },
+            {
+              "field": "controls",
+              "label": "Low-own-posterior controls"
+            },
+            {
+              "field": "population_controls",
+              "label": "Population-only controls"
+            }
+          ],
+          "rows": [
+            {
+              "gene": "HNF1A",
+              "variants": 785,
+              "supported": 726,
+              "prior_mean": "10.37%",
+              "median_density": "6.35%",
+              "median_raw": "2.33%",
+              "median_retention": "47.80%",
+              "median_prior_share": "77.32%",
+              "controls": 5,
+              "population_controls": 5
+            },
+            {
+              "gene": "GCK",
+              "variants": 634,
+              "supported": 614,
+              "prior_mean": "37.04%",
+              "median_density": "37.41%",
+              "median_raw": "34.91%",
+              "median_retention": "60.65%",
+              "median_prior_share": "60.71%",
+              "controls": 3,
+              "population_controls": 3
+            },
+            {
+              "gene": "LDLR",
+              "variants": 1376,
+              "supported": 1206,
+              "prior_mean": "15.38%",
+              "median_density": "16.25%",
+              "median_raw": "17.04%",
+              "median_retention": "51.68%",
+              "median_prior_share": "48.46%",
+              "controls": 28,
+              "population_controls": 27
+            },
+            {
+              "gene": "BRCA2",
+              "variants": 6656,
+              "supported": 6326,
+              "prior_mean": "14.86%",
+              "median_density": "17.98%",
+              "median_raw": "41.43%",
+              "median_retention": "73.54%",
+              "median_prior_share": "60.16%",
+              "controls": 68,
+              "population_controls": 66
+            },
+            {
+              "gene": "KCNQ1",
+              "variants": 1061,
+              "supported": 975,
+              "prior_mean": "29.48%",
+              "median_density": "24.62%",
+              "median_raw": "19.84%",
+              "median_retention": "46.26%",
+              "median_prior_share": "56.44%",
+              "controls": 8,
+              "population_controls": 6
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "Aggregated finalized audit evidence."
+          },
+          "methods": [
+            {
+              "language": "calculation",
+              "code": "Prior retention = Σ[W S/(S+n)]. Direct prior share = μ × retention / D.\nAll cross-gene medians refer to supported variants only; controls count zero-affected targets meeting the stated thresholds.\nDisplayed percentages are source proportions ×100, rounded to two decimals."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

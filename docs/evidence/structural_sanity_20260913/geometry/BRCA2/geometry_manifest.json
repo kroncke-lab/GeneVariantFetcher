@@ -1,0 +1,403 @@
+{
+  "canonical_accession": "P51587-1",
+  "canonical_length": 3418,
+  "canonical_sequence_sha256": "02fa9247ce635b2ffc79a7b91b6153d47dc1cc75811ca5003d3f3f68537e673d",
+  "prior_omission": "Earlier run only used experimental7LDG/8PBC and AF API404; local AF proteome fragments were not consulted. It explicitly withheld polymer outside constructs, excluding full-gene IDRs.",
+  "primary": "primary_geometry.csv.gz",
+  "summaries": [
+    {
+      "policy": "primary",
+      "rows": 92286,
+      "structured_positions": 984,
+      "polymer_positions": 2264,
+      "usable_COM_positions": 3248,
+      "unavailable_COM_positions": 170,
+      "frames": 15
+    },
+    {
+      "policy": "experimental_idr",
+      "rows": 51270,
+      "structured_positions": 72,
+      "polymer_positions": 2264,
+      "usable_COM_positions": 2336,
+      "unavailable_COM_positions": 1082,
+      "frames": 3
+    },
+    {
+      "policy": "all_unresolved_polymer",
+      "rows": 92286,
+      "structured_positions": 984,
+      "polymer_positions": 2433,
+      "usable_COM_positions": 3417,
+      "unavailable_COM_positions": 1,
+      "frames": 15
+    }
+  ],
+  "exclusive_routing": "Experimental observed CAlpha position first, including modified2322; else AF max-pLDDT>=70 and individual fragment pLDDT>=70; else all-fragment max<50 to polymer; remaining ambiguous unavailable. The same exclusive source applies to targets and donors.",
+  "experimental_precedence_positions": [
+    2276,
+    2277,
+    2278,
+    2279,
+    2280,
+    2281,
+    2282,
+    2286,
+    2287,
+    2288,
+    2289,
+    2290,
+    2291,
+    2292,
+    2293,
+    2294,
+    2295,
+    2296,
+    2297,
+    2298,
+    2299,
+    2300,
+    2301,
+    2302,
+    2303,
+    2304,
+    2305,
+    2306,
+    2307,
+    2308,
+    2309,
+    2310,
+    2311,
+    2312,
+    2313,
+    2314,
+    2315,
+    2316,
+    2317,
+    2318,
+    2319,
+    2320,
+    2321,
+    2322,
+    2323,
+    2324,
+    2325,
+    2326,
+    2327,
+    2328,
+    2329,
+    2330,
+    2331,
+    2332,
+    2333,
+    2334,
+    2335,
+    3289,
+    3290,
+    3291,
+    3292,
+    3293,
+    3294,
+    3295,
+    3296,
+    3297,
+    3298,
+    3299,
+    3300,
+    3301,
+    3302,
+    3303,
+    3304
+  ],
+  "modified_COM_exclusion": {
+    "position": 2322,
+    "parent": "MET",
+    "observed": "MSE",
+    "COM": "withheld",
+    "CA": "retained"
+  },
+  "AF_fragment_local_policy": "Never merge coordinates or compute across frame IDs; all individually>=70 contexts average equally after normalizing donors. Frames are model alternatives, not independent observations or actual protein copies. No PAE files available; relative domain placements inside a fragment remain uncertain.",
+  "polymer_policy": "One canonical chain frame across full sequence, outside experimental constructs allowed; only same contiguous segment, same chain; b=3.8 Angstrom, exponent=.5; kernel h3 normalizedsigmoid with positive tails.",
+  "disorder_policy": "Conservative consensus: maximum across all covering fragment pLDDTs<50. UniProt MobiDB-lite annotation recorded independently; disagreements not overridden. Low confidence indicates candidate disorder, not experimental proof.",
+  "broad_policy": "Retain experimental and AF ordered routes; all remaining unavailable positions become explicitly assumed-polymer, except observed modified2322 COM remains withheld. Adjacent assumed/consensus polymer residues merge into contiguous segments.",
+  "confidence_counts": {
+    "max_below50": 2315,
+    "max_50_to70": 191,
+    "max_atleast70": 912,
+    "disagree_at50": 137
+  },
+  "uniprot_disorder_regions": [
+    {
+      "type": "Region",
+      "location": {
+        "start": {
+          "value": 37,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 68,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "source": "SAM",
+          "id": "MobiDB-lite"
+        }
+      ]
+    },
+    {
+      "type": "Region",
+      "location": {
+        "start": {
+          "value": 358,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 381,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "source": "SAM",
+          "id": "MobiDB-lite"
+        }
+      ]
+    },
+    {
+      "type": "Region",
+      "location": {
+        "start": {
+          "value": 2430,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 2450,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "source": "SAM",
+          "id": "MobiDB-lite"
+        }
+      ]
+    },
+    {
+      "type": "Region",
+      "location": {
+        "start": {
+          "value": 3393,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 3418,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "Disordered",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000256",
+          "source": "SAM",
+          "id": "MobiDB-lite"
+        }
+      ]
+    }
+  ],
+  "limitation": "Full canonical mapping with partial experimental and predicted fragment-local geometry plus polymer; not a full native BRCA2 biological unit, not a global tertiary structure.",
+  "sources": [
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F1-model_v6.pdb.gz",
+      "sha256": "4a36189f6d92ee2638ae23bd2d6ff4d96e76cb93696ddba0732354274fbc1117",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F1-model_v6.pdb.gz",
+      "canonical_start": 1,
+      "canonical_end": 1400,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F2-model_v6.pdb.gz",
+      "sha256": "21e92470a40c756b60283de30bb177632308a5db7939c53e80b0a7e28a0adfb5",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F2-model_v6.pdb.gz",
+      "canonical_start": 201,
+      "canonical_end": 1600,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F3-model_v6.pdb.gz",
+      "sha256": "1b17252161fc4bc12709999e28cedfdc11762c40671dff01990b194981e032ef",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F3-model_v6.pdb.gz",
+      "canonical_start": 401,
+      "canonical_end": 1800,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F4-model_v6.pdb.gz",
+      "sha256": "d3bac0adddef648a0d391c09c19f4ff75b0ac37ea260688612c1beeb6c308178",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F4-model_v6.pdb.gz",
+      "canonical_start": 601,
+      "canonical_end": 2000,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F5-model_v6.pdb.gz",
+      "sha256": "68bdfd2b837ab1122b4edff6122d95d17532c05a46bae6df9fa4158dc20a5d74",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F5-model_v6.pdb.gz",
+      "canonical_start": 801,
+      "canonical_end": 2200,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F6-model_v6.pdb.gz",
+      "sha256": "fceae5833e8d3db9d168029b6edbf6d0b9e63f92a593c47cd61398b1fdcc771f",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F6-model_v6.pdb.gz",
+      "canonical_start": 1001,
+      "canonical_end": 2400,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F7-model_v6.pdb.gz",
+      "sha256": "f25c99f6edf28599d387b0d269ce4943233a03bd72e4d9817f0604d862137f16",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F7-model_v6.pdb.gz",
+      "canonical_start": 1201,
+      "canonical_end": 2600,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F8-model_v6.pdb.gz",
+      "sha256": "6fca12afeaa9371eadf6aad237c873e06889cd7ee7d2dbf438bc883042d76a20",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F8-model_v6.pdb.gz",
+      "canonical_start": 1401,
+      "canonical_end": 2800,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F9-model_v6.pdb.gz",
+      "sha256": "999d5db53225beeb5e463f760654279901fab20f3e4c97ab257f76c0dd6cac75",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F9-model_v6.pdb.gz",
+      "canonical_start": 1601,
+      "canonical_end": 3000,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F10-model_v6.pdb.gz",
+      "sha256": "2ff2e98c200a6014c38a7f26fd53449917f0207045dc441a90f8d4bc26d9bd01",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F10-model_v6.pdb.gz",
+      "canonical_start": 1801,
+      "canonical_end": 3200,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F11-model_v6.pdb.gz",
+      "sha256": "36f013c6799f6c9de33fd695be9d38ed2aea1abb0095f930b80f779431b4ea4b",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F11-model_v6.pdb.gz",
+      "canonical_start": 2001,
+      "canonical_end": 3400,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F12-model_v6.pdb.gz",
+      "sha256": "10c061edf77be1582544fd8a5de3ec042cf831a7468b61924140f6c0deefafec",
+      "archive_url": "https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v6.tar",
+      "archive_member": "AF-P51587-F12-model_v6.pdb.gz",
+      "canonical_start": 2201,
+      "canonical_end": 3418,
+      "unique_exact_sequence_mapping": true,
+      "observed_WT_mismatches": 0
+    },
+    {
+      "file": "results/missense_structural_extension_20260912/raw/BRCA2/P51587.json",
+      "url": "https://rest.uniprot.org/uniprotkb/P51587.json",
+      "sha256": "befba0a62b75b4f67c7651d0bb175a4ec3ef6a9751be6575af593c9e94cfd82f"
+    },
+    {
+      "file": "docs/evidence/missense_structural_extension_20260912/geometry/BRCA2/BRCA2_canonical_geometry.csv.gz",
+      "sha256": "cae89d06b19e1a6a9a731cd34e99b7aea9acd371818ec6a7dde09e0deaf5c9f6"
+    },
+    {
+      "file": "docs/evidence/missense_structural_extension_20260912/geometry/BRCA2/geometry_identity_report.json",
+      "sha256": "a1598939119f1b5c50b1a2fa161f5ed10ea3478542e5c58b0e4dae47bd77bcfa"
+    },
+    {
+      "file": "docs/evidence/missense_structural_extension_20260912/geometry/KCNQ1/build_geometry.py",
+      "sha256": "098e9fcb88c2ad08adb79554577725cc7d1d95d66219c28cfc0406bdac3c153a"
+    }
+  ],
+  "outputs": [
+    {
+      "file": "primary_geometry.csv.gz",
+      "rows": 92286,
+      "bytes": 676518,
+      "sha256": "0b2b7db68d9d63a7ecf20397f11cf6e1da46fd6c34eb797b40e5484628c9902d"
+    },
+    {
+      "file": "experimental_idr_geometry.csv.gz",
+      "rows": 51270,
+      "bytes": 207169,
+      "sha256": "a42be3bc9b388fab6dd658a109813d8a54dca398dd7a3df747573cfa4bb1e971"
+    },
+    {
+      "file": "all_unresolved_polymer_geometry.csv.gz",
+      "rows": 92286,
+      "bytes": 676602,
+      "sha256": "7e753b5e06d59c94674ebb7a009c8f5d959c7000c478e7b4ec98dcf1859daba8"
+    },
+    {
+      "file": "canonical_confidence_map.csv.gz",
+      "rows": 3418,
+      "bytes": 37563,
+      "sha256": "70bbcd1f085cb1a3e5bd126fa9125fc3f1835544f2fd64373fda97bc2b74eb8e"
+    },
+    {
+      "file": "fragment_confidence.csv.gz",
+      "rows": 16618,
+      "bytes": 135712,
+      "sha256": "9ffc817836b2e38209816f22ba8d7eaadede998b59b83d3ec4b8a18b7334115a"
+    },
+    {
+      "file": "geometry_summary.csv",
+      "rows": 3,
+      "bytes": 231,
+      "sha256": "d5386967cb0f927e96b55c55eaa818db1250e6b7801a0619bedeaa92cef24e98"
+    }
+  ],
+  "checks": {
+    "all_3418_positions_mapped": true,
+    "all_overlapping_sequences_exact": true,
+    "zero_WT_mismatches": true,
+    "no_incomplete_native_COM": true,
+    "exclusive_sources": true,
+    "no_cross_frame_geometry": true,
+    "one_polymer_context_per_position": true,
+    "LF_payloads": true
+  }
+}

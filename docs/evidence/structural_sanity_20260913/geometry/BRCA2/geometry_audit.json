@@ -1,0 +1,94 @@
+{
+  "canonical_positions": 3418,
+  "fragment_rows": 16618,
+  "confidence_aggregates_reconstructed": true,
+  "experimental_coordinates_parsed_exactly_unchanged": true,
+  "full_canonical_rows_per_frame_chain": true,
+  "exclusive_source_assignments": true,
+  "AF_individual_fragment_threshold70": true,
+  "polymer_consensus_max_below50": true,
+  "one_canonical_polymer_context_per_position": true,
+  "no_cross_frame_donor_distances": true,
+  "same_segment_same_chain_polymer": true,
+  "variant_only_self_exclusion": true,
+  "selected_density_and_weights_reference_agreement": true,
+  "selected_experimental_densities_unchanged": true,
+  "reference_checked_target_ids": [
+    "BRCA2|lit:P3292L",
+    "BRCA2|lit:T2310I",
+    "BRCA2|lit:K2729N",
+    "BRCA2|lit:T1104P",
+    "BRCA2|lit:V109G",
+    "BRCA2|lit:T751S"
+  ],
+  "reference_density_rows": [
+    {
+      "variant_id": "BRCA2|lit:P3292L",
+      "density": 0.22637265073658008,
+      "density_source": "structured",
+      "donor_count": 23
+    },
+    {
+      "variant_id": "BRCA2|lit:T2310I",
+      "density": 0.15342791435757852,
+      "density_source": "structured",
+      "donor_count": 102
+    },
+    {
+      "variant_id": "BRCA2|lit:K2729N",
+      "density": 0.17718870102775788,
+      "density_source": "structured",
+      "donor_count": 1462
+    },
+    {
+      "variant_id": "BRCA2|lit:T1104P",
+      "density": 0.19700641293520105,
+      "density_source": "structured",
+      "donor_count": 547
+    },
+    {
+      "variant_id": "BRCA2|lit:V109G",
+      "density": 0.18284451407004595,
+      "density_source": "polymer",
+      "donor_count": 272
+    },
+    {
+      "variant_id": "BRCA2|lit:T751S",
+      "density": 0.1829667235199286,
+      "density_source": "polymer",
+      "donor_count": 1088
+    }
+  ],
+  "files": [
+    {
+      "file": "all_unresolved_polymer_geometry.csv.gz",
+      "sha256": "7e753b5e06d59c94674ebb7a009c8f5d959c7000c478e7b4ec98dcf1859daba8",
+      "LF": true
+    },
+    {
+      "file": "canonical_confidence_map.csv.gz",
+      "sha256": "70bbcd1f085cb1a3e5bd126fa9125fc3f1835544f2fd64373fda97bc2b74eb8e",
+      "LF": true
+    },
+    {
+      "file": "experimental_idr_geometry.csv.gz",
+      "sha256": "a42be3bc9b388fab6dd658a109813d8a54dca398dd7a3df747573cfa4bb1e971",
+      "LF": true
+    },
+    {
+      "file": "fragment_confidence.csv.gz",
+      "sha256": "9ffc817836b2e38209816f22ba8d7eaadede998b59b83d3ec4b8a18b7334115a",
+      "LF": true
+    },
+    {
+      "file": "geometry_summary.csv",
+      "sha256": "d5386967cb0f927e96b55c55eaa818db1250e6b7801a0619bedeaa92cef24e98",
+      "LF": true
+    },
+    {
+      "file": "primary_geometry.csv.gz",
+      "sha256": "0b2b7db68d9d63a7ecf20397f11cf6e1da46fd6c34eb797b40e5484628c9902d",
+      "LF": true
+    }
+  ]
+}

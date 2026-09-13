@@ -1,0 +1,32 @@
+# Agy independent methodological review
+
+Requested model: gemini-3.1-pro-high, high effort. Completed one-turn headless CLI consultation; raw response does not echo actual model identifier or dollar cost. Reviewer saw the saved aggregate brief only and did not inspect source files.
+
+**1. Verified Conclusions and Uncertainties**
+The mathematics reveal a severe weight imbalance driven by the fixed weighting function `w=1-1/(n+.01)`. For singletons (`n=1`), `w` is approximately 0.01, whereas for large `n`, `w` approaches 1. In GCK, singletons comprise 52.4% of variants but contribute only 1.53% of the prior fitting weight. Consequently, the prior mean (`mu=0.370`) is heavily skewed toward frequently observed variants (often clinical).
+
+Furthermore, calculating variance `v` by dividing by `M` (total units) instead of `sum(w)` dramatically shrinks the variance because `sum(w) << M` (due to the multitude of down-weighted singletons). This tiny variance forces a massive prior strength (`S=2.91`). Therefore, a population singleton (`A=0, U=1`) only reduces the posterior to 0.276, and the median spatial density sits artificially high at 0.374. The high density is a mathematical artifact of this low-variance, heavily weighted prior, not a biological implication that most residues cause disease. A major uncertainty is the conflation of opposing mechanisms (activating vs. inactivating) within the clinical `A` counts, which fundamentally blurs the functional signal.
+
+**2. BRCA2 Hybrid Geometry Plan and Tests**
+To safely introduce an auditable canonical-IDR polymer layer alongside the existing distinct 3D frames without violating the distance rules:
+*   **Disjoint State Definition:** Treat the geometry as a disjoint union of valid 3D blocks and contiguous IDR segments. Never define distances between distinct 3D frames, nor between a 3D atom and an IDR residue.
+*   **Explicit IDR Validation:** Create an explicit manifest of segments that are biologically validated as intrinsically disordered. Missing 3D sequence (e.g., unresolved ordered domains or cleaved regions) must remain strictly "missing," not arbitrarily converted to IDR.
+*   **Distance Computation:** For variants sharing a 3D frame, use Euclidean distances. For variants within the *same* validated, contiguous IDR segment, use `3.8*sqrt(|i-j|)`.
+*   **Context Normalization:** If a canonical IDR segment maps to multiple assembly copies, compute its internal donor distances once per canonical sequence context to prevent overcounting, adhering to the equal-averaging rule.
+*   **Tests:**
+    1. Assert that cross-frame or 3D-to-IDR distance lookups return infinity/null.
+    2. Assert that variants in missing, non-IDR regions have exactly zero neighbors.
+    3. Assert IDR calculations only execute within unbroken, explicitly labeled IDR intervals.
+
+**3. GCK Diagnosis**
+The illusion that nearly all GCK residues are linked to MODY stems from three compounding factors:
+*   **Prior Floor and Weighting:** The interaction of the `w` function and the division by `M` creates a highly rigid prior. Single gnomAD observations cannot pull the posterior close to 0; they floor at 0.276. Spatial local averaging simply propagates this elevated baseline across the map.
+*   **Mechanism Mix:** Pooling MODY (loss-of-function) and hypoglycemia (gain-of-function) mutations into a single `A` count conflates diametrically opposed molecular phenotypes. Spatial averaging of activating and inactivating clusters yields a generic "disease" signal that neutralizes genuine local biophysics.
+*   **Sparse Support:** With only 634 units across the protein, neighborhood density is heavily reliant on the prior. The marginal MAE improvements (AlphaMissense+density 0.1234 vs. AM-only 0.1246) indicate that while a genuine local signal exists, it is overwhelmed by the prior's high floor and the mixed-endpoint labeling.
+
+**4. Ranked Immediate Checks and Corrections**
+1.  **Split Counts by Mechanism (Correction):** Separate activating (hypoglycemia) and inactivating (MODY) clinical `A` counts into distinct analyses. Averaging opposing functional effects destroys spatial biological signal.
+2.  **Implement the Disjoint 3D/IDR Mask (Correction):** Apply a strict boolean mask preventing distance calculations between distinct 3D blocks or between 3D and IDR segments, ensuring the BRCA2 IDR polymer layer is safely isolated.
+3.  **Audit Missing vs. IDR Labels (Check):** Before applying the IDR formula, require an explicit array of `is_validated_idr`. Fail execution if any missing 3D coordinate defaults to IDR without this explicit flag.
+4.  **Report Effective Weight Ratios (Check):** Automatically log `sum(w)/M` and the fraction of weight originating from `n=1` units during prior fitting to flag when the fixed weighting rule over-leverages a handful of variants.
+5.  **Evaluate Null-Model Density (Check):** Permute the `A` and `U` counts among the variants (preserving geometry) to verify if the density MAE improvement is biologically meaningful or just an artifact of the high prior mean smoothing through the kernel.

@@ -1,0 +1,58 @@
+{
+  "prompts_byte_identical": true,
+  "prompt_sha256": "ff3cd311dfa43275131a514c6f8c5fccd7fbe777407e2dc80519d39d4bf34cbf",
+  "agy_status": {
+    "cli": "/Users/kronckbm/.local/bin/agy",
+    "requested_model": "gemini-3.1-pro-high",
+    "requested_effort": "high",
+    "started_utc": "2026-09-13T13:14:25.809392+00:00",
+    "prompt": "agy_prompt.txt",
+    "scope": "Aggregate mathematical/scientific context only; no internal source access authorized to reviewer.",
+    "timeout_seconds": 270,
+    "exit_code": 0,
+    "status": "returned",
+    "elapsed_seconds": 32.45,
+    "completed_utc": "2026-09-13T13:14:58.260247+00:00",
+    "response_status": "SUCCESS",
+    "actual_model": "not echoed in CLI response",
+    "usage": {
+      "input_tokens": 15434,
+      "output_tokens": 3227,
+      "thinking_tokens": 2104,
+      "cache_read_tokens": 0,
+      "total_tokens": 18661
+    },
+    "cost_usd": null,
+    "cost_note": "CLI response did not provide dollar cost",
+    "provider_duration_seconds": 29.513587,
+    "num_turns": 1
+  },
+  "grok_status": {
+    "cli": "/Users/kronckbm/.local/bin/grok",
+    "requested_model": "grok-4.6",
+    "requested_effort": "high",
+    "started_utc": "2026-09-13T13:14:25.809247+00:00",
+    "prompt": "grok_prompt.txt",
+    "scope": "Aggregate mathematical/scientific context only; no internal source access authorized to reviewer.",
+    "timeout_seconds": 270,
+    "exit_code": 0,
+    "status": "returned",
+    "elapsed_seconds": 78.07,
+    "completed_utc": "2026-09-13T13:15:43.879917+00:00",
+    "response_status": "end_turn",
+    "actual_model": [
+      "grok-4.6-build"
+    ],
+    "usage": {
+      "input_tokens": 14123,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "output_tokens": 4202,
+      "reasoning_tokens": 2874,
+      "total_tokens": 18325
+    },
+    "cost_usd": 0.01817572,
+    "num_turns": 1
+  },
+  "disposition": "REVIEW_DISPOSITION.md"
+}

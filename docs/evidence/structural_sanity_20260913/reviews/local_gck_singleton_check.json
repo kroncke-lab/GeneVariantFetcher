@@ -1,0 +1,11 @@
+{
+  "input": "docs/evidence/class_matched_penetrance_20260912/structural/GCK_structural_input_variants.csv.gz",
+  "units": 634,
+  "all_n1": 332,
+  "all_n1_fraction": 0.5236593059936908,
+  "population_only": 385,
+  "population_only_n1": 246,
+  "non_population_only_n1": 86,
+  "prior_strength": 2.918755445884497,
+  "prior_mean": 0.37041792226820786
+}

@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-09-12.
+Last reviewed: 2026-09-13.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -125,14 +125,36 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       whole-gene structural claim. All 218 PPA tests and independent output,
       geometry, and selected LOO reconstructions pass:
       [`missense structural extension`](docs/evidence/missense_structural_extension_20260912/README.md).
+- [x] **Correct BRCA2 polymer coverage and sanity-check all five maps with
+      Agy and Grok CLI reviews (2026-09-13).** The prior BRCA2 run omitted
+      locally cached AlphaFold fragments and full-sequence candidate IDRs.
+      Canonical mapping, source-exclusive local fragment geometry and
+      same-segment polymer distances now support 6,326/6,656 missense units:
+      4,389 polymer, 1,810 local AlphaFold and 127 experimental. All previous
+      experimental scores reproduce; broader assumed-polymer sensitivity
+      supports 6,651. Six scenarios, complete variant-only outer LOO and
+      independent weight/prediction/metric audits are frozen. Across genes,
+      neighborhood scores are posterior-derived features, not individual
+      disease probabilities. GCK WT-like D217N has own posterior 0.47% versus
+      neighborhood score 33.0%; source/count-conditioned permutations do not
+      establish a distinct 3D advantage over sequence proximity. Evidence,
+      corrected figures and reviewer dispositions:
+      [`structural sanity audit`](docs/evidence/structural_sanity_20260913/README.md).
 - [ ] **Next: curate GCK identity/endpoints and repeat the fixed comparison.**
       Resolve 19 canonical-WT mismatches against source/transcript evidence;
       adjudicate mixed MODY versus activating/hypoglycemia counts and ambiguous
-      protein-key/genomic-allele identities. Preserve existing frozen evidence,
-      then recompute the full-dataset empirical prior and variant-only LOO
-      density. The population-inclusive redo remains pooled clinical evidence,
-      not MODY-specific validation. Review queues are in the original pilot's
-      `eligibility/` folder and the redo's complete clinical join ledger.
+      protein-key/genomic-allele identities. Start with the six source rows for
+      W99R/V389L: 14 frozen affected observations reconcile to 13 hypoglycemia
+      observations plus one phenotype-unknown carrier, not MODY cases or a
+      deduplicated person count. Resolve the W99R nucleotide notation conflict
+      and distinguish mild hyperglycemia from diagnosed diabetes. The exact
+      source review is in the sanity audit's `gck/endpoint_review.csv`.
+      Preserve unknowns, source ownership and frozen evidence, then recompute
+      the gene-by-missense empirical prior and variant-only LOO density.
+      Display own count posteriors alongside neighborhood features. The current
+      two-unit exclusion sensitivity is not a fully adjudicated MODY analysis.
+      Other review queues are in the original pilot's `eligibility/` folder
+      and the redo's complete clinical join ledger.
 - [ ] **Follow through on the structural comparisons.** Prioritize HNF1A and
       KCNQ1 disease-specific endpoint/count curation, then repeat the fixed
       variant-only LOO comparisons with AM plus sequence as a required control.

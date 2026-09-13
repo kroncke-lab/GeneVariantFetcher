@@ -1,0 +1,53 @@
+{
+  "purpose": "Mandatory pre-commit formatting after the numerical run. No Python syntax-tree changes. Original execution hashes are retained; current source equivalence is recorded here. Numerical artifacts remain unchanged.",
+  "files": [
+    {
+      "file": "benchmark_outer_loo.py",
+      "executed_source_sha256": "7c9fc3676e341b94e1fe284ca01eb8a34cac07e7c8bccc25812377ede4a5bbda",
+      "formatted_source_sha256": "dbefec37642ca6e9666bdcf04c1125fc6ea90d08fe4614b1812b8b9accb9bd23",
+      "identical_ast_sha256": "6aadb7d49ca41c4aa1cf505093a5938211971240d0285f634f68901644b17591"
+    },
+    {
+      "file": "audit_all_genes.py",
+      "executed_source_sha256": "6a16e0bd77538710dce9785a4fa4c67d5a102b123497cb7065e18610db9a024a",
+      "formatted_source_sha256": "e3fc1583aec606693584d0e18b7b8fe8fe9a36e6dc240a41766a80320542c2a7",
+      "identical_ast_sha256": "50c2b22a1c64e3a8b3c9eb5ca907295d295cf1bb1ef2d4bcf26e5798f0db6311"
+    },
+    {
+      "file": "test_outer_loo.py",
+      "executed_source_sha256": "cf1295c9ecca3832754307fa7b16543402e23ef38da2f687a08a37cb215e766a",
+      "formatted_source_sha256": "c4c723c7c015c404365a965642d17b2d92ebe8a6581753f830494672e568a456",
+      "identical_ast_sha256": "44c9e0f6b426e1ea9d6294acbc4d91994b5d408442ca3044eed476ab4d04a6d1"
+    },
+    {
+      "file": "outer_loo.py",
+      "executed_source_sha256": "3257dfa0fd61d06a60e071b14b0c3a326a42dc10a55cc67bdc49e854b3d38858",
+      "formatted_source_sha256": "9134c84013bcd200877a9181cb8a919a72901ff9c37237ba937d2d9c5a7c2dd0",
+      "identical_ast_sha256": "7871bb236f0962ae8d9b335254c3191a630cdbd772784e8de267b029b03b52ae"
+    },
+    {
+      "file": "audit_brca2_run.py",
+      "executed_source_sha256": "7a0f112834a8e1e7d18cbef05ea17cc0904e6fdf706960543173cf4ba9b356dc",
+      "formatted_source_sha256": "0d864e4ac79f41900538e7008143c392bde128fe0a2f080eb9ca9a8c13701b05",
+      "identical_ast_sha256": "0746675668b324639a6c60408384ea63bf3875eed5d350a21782082a718a8840"
+    },
+    {
+      "file": "reviews/run_cli_reviews.py",
+      "executed_source_sha256": "3004134d70288167e7714dd4d970dfabca2255664d63e5bc2355a708152e52e1",
+      "formatted_source_sha256": "a0acc37655a7181a5d6f16ac56c602eb6baa00c7a3ddd2f33525c35d5e44123b",
+      "identical_ast_sha256": "aa6645cfaf31fc8791b457d4ca725180f356b1962e35b5d044f4ef9ad6ca735f"
+    },
+    {
+      "file": "geometry/BRCA2/build_geometry.py",
+      "executed_source_sha256": "af34bbb4e5ac28faf87244c7124ca9771fb8b606e07301167a23d4c379a41d5a",
+      "formatted_source_sha256": "4768a8f46ac178cb05fea8ff226ccb6bb1d616176e5cd40c62267c72f919bea6",
+      "identical_ast_sha256": "e904b0e00762ea4bbad3d2de9aac9603af6501384e274bac61995702b70ca502"
+    },
+    {
+      "file": "geometry/BRCA2/audit_geometry.py",
+      "executed_source_sha256": "21a6a57f54070cfaf4e109c2709e90910a345d4d42eb71bb6ccfa66fbfce79af",
+      "formatted_source_sha256": "2ea51ab4de3879503704322185a802e4fdbfa2e41b75276b3dc981f9a03cfc13",
+      "identical_ast_sha256": "e97935f473b4e99940ac3bd687d5e1d269f5f76f51a8dc264da9581a7284b210"
+    }
+  ]
+}

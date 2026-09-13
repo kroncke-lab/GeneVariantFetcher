@@ -1,0 +1,12 @@
+{
+  "scope": "Files read locally to prepare necessary aggregate context; reviewers received saved prompt only, not source files.",
+  "sources": {
+    "docs/evidence/missense_structural_extension_20260912/README.md": "62bdfa00f0511965d6d7b6ce6469fe85441460e50a4ce6287fdb177e5af8385c",
+    "docs/evidence/missense_structural_extension_20260912/run_structure.py": "ae27f5b042f5603b1da77eae08cc884717744056a8cef7eaa81a2ff9e8a56438",
+    "docs/evidence/missense_structural_extension_20260912/geometry/BRCA2/README.md": "d392183222647fc24743d29c03aca8b1b92fbeebce9571de77d5069718ad88a1",
+    "docs/evidence/missense_structural_extension_20260912/geometry/BRCA2/geometry_summary.csv": "0d2c03ab35004ae5286978108c5454640942d32c6487b383f4bbe9d96bfb0387",
+    "docs/evidence/class_matched_penetrance_20260912/README.md": "2a1a870793808ad7507373e61a4e60490e4fbb0d6e3a21248b02f2bbdc2a29c2",
+    "docs/evidence/class_matched_penetrance_20260912/structural/README.md": "b5f5d9b527948801766c9e5b976cb4bacb849900e34a30b50fb7752eb1f6f17b",
+    "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b"
+  }
+}

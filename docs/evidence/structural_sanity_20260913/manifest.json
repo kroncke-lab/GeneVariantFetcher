@@ -1,0 +1,799 @@
+{
+  "schema_version": 1,
+  "analysis_date": "2026-09-13",
+  "contract": "Fixed gene-by-missense empirical priors; alpha affected; beta literature unaffected plus all gnomAD assumed unaffected. Variant-only global outer LOO retaining other same-residue units. Positive-tail sigmoid; separate 3D frames and same-segment canonical polymer. Neighborhood scores are features, not target disease risks.",
+  "repository_commits": {
+    "GeneVariantFetcher": "0b839c7dd4c8d36208b37795cabc29cab99a59b7",
+    "ProteinProximityAnalysis": "1fd57c17a71da01104b5b8533006058a20136538",
+    "BayesianPenetranceEstimator": "e048e64d4cfd42800f7878cb1c56fd664e926a60"
+  },
+  "inputs": {
+    "BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/GCK_protocol/observations.csv": {
+      "sha256": "2feee25af4eb4ed3c4700ebd91a0d3f1024c50a31dd2334a86bb7b8715da3a14",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/README.md": {
+      "sha256": "2a1a870793808ad7507373e61a4e60490e4fbb0d6e3a21248b02f2bbdc2a29c2",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part001.csv.gz": {
+      "sha256": "447803cfabb8a9124ed97a2a9bfad7e534e0658e5cfcc543fe24282f2e980422",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part002.csv.gz": {
+      "sha256": "89d0e23f66e6b6097ec4276815a2976b31407546f79d4f7a2103701e9c7f7b5d",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/GCK.part001.csv.gz": {
+      "sha256": "6da9f8a453ebd28f90aae682d8d7591c45710d96602ac9a7e735d26d1f03c0e8",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/HNF1A.part001.csv.gz": {
+      "sha256": "c0218639136467405437bed0672cabdd85eeea139b0e23af4e57c3290b194818",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/KCNQ1.part001.csv.gz": {
+      "sha256": "194e11c5d12b1b92d0954311811615a757c42b89e66a3a1a59d9f839699616e9",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/LDLR.part001.csv.gz": {
+      "sha256": "b45c7c023430880c2042104b43700c82b2339b3a9f684bae68a27bdb4e003403",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": {
+      "sha256": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part001.csv.gz": {
+      "sha256": "3d9992235f453a9550fa9d1e3b633ec049a1a68552baecf7899838e8752c41c3",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part002.csv.gz": {
+      "sha256": "544900d971b99ab6ad992b630e6511015a12183ef9a5ee642315c677d0e65701",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part003.csv.gz": {
+      "sha256": "926c0f597770c91a89c0cf570ad0adc987c950ef32d47b219b0ac68ff49760b4",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part004.csv.gz": {
+      "sha256": "c739fb4c4f05c7a3c7d8af238eb975ac00b18f8ad3ff00228bcd47408340ff4b",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part005.csv.gz": {
+      "sha256": "2eaf8288be0c2b41e6f9ecd7ce265f465d51c05c7e45a2993e9f50ebe97f5ea5",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part006.csv.gz": {
+      "sha256": "c415aabcec25f294d2887793db1e920013a635a34820bd0453e3afd3fda9455d",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part007.csv.gz": {
+      "sha256": "797f626d0977b0924dc03e4bf0aa4676523806aa2ce8360628a7311ae2aa3028",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part008.csv.gz": {
+      "sha256": "d6b6a8637da55778eb435fc36867a4ce9543c0194b57013dd38233a3c06ebb66",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part009.csv.gz": {
+      "sha256": "fb33ffc8d54ab842a374e7f130dddb14bb6622663cf53fcbff43ba34600bcd14",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part010.csv.gz": {
+      "sha256": "c4377ec69e97fe1f6d1a4ed7972e3ddb175db854675a1b96a2b4f39fea49a8ab",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part011.csv.gz": {
+      "sha256": "16af84014e6354a590dd3466199772b5ff44e28b4e29d18fa9b5f001b01f7bfc",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part012.csv.gz": {
+      "sha256": "2bff60ab3f76cdda403720dcc2235ed501511a59aea0546cd5908787fc02e53d",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part013.csv.gz": {
+      "sha256": "e3a4e5a93a1b8f9b1dbbfe9fe1be41c74ff0feba6fceb47dcedc617f28b3a9b4",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part014.csv.gz": {
+      "sha256": "8554833b59510d06ed620480bd968695b0e3f45d78c8d16eac3bf80f1105392c",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part015.csv.gz": {
+      "sha256": "ab64d2b039233cff4d098fcdd97a22bd409780560e07c9b33f2bb0694b502202",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_normalized_weights.part016.csv.gz": {
+      "sha256": "f15e02029a0a5659a337dce088487fddb96801aca833bd16b707af7bc53d597a",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_variant_density.csv": {
+      "sha256": "0798cd45c19e01e98bc9a56958bfbc8abc467c9633154961996738fd6935d3cd",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_structural_input_variants.csv.gz": {
+      "sha256": "e2b4241a051e212c9de83d84de7356433859d37ddf995141b3bde5531dc73334",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/GCK_variant_loo_metrics.csv": {
+      "sha256": "b939b1f34d2f401d38d9d5a43ea568cfb15dee4dcaf477f38dc612bff68a6ae3",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/structural/README.md": {
+      "sha256": "b5f5d9b527948801766c9e5b976cb4bacb849900e34a30b50fb7752eb1f6f17b",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/gck_structural_pilot_20260912/pilot_statistics.py": {
+      "sha256": "7549282115f176c32ec6a19cb0e74e4d425045e57327b8e6bf5efb180f097953",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/README.md": {
+      "sha256": "62bdfa00f0511965d6d7b6ce6469fe85441460e50a4ce6287fdb177e5af8385c",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/primary_density.part001.csv.gz": {
+      "sha256": "0028cfbbae8c8404379b20c1f9e4c3aba0b33fa3949c2873394327edfcf219d5",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/primary_density.part002.csv.gz": {
+      "sha256": "5c2c027b6c74787f2475f72d3da690dc952a9a5cacda5fbc0df275cf1d32fbad",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/primary_density.part003.csv.gz": {
+      "sha256": "c6b6fbb7fb5ce7e21e7bee9b5ab35606c5bdf8a1d71644065469e0070e87c0d5",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/primary_density.part004.csv.gz": {
+      "sha256": "bc3cb02171864c3c2d6e039edf1384d61dcbf9d2910615656faaf2618b95c7c8",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/HNF1A/primary_density.part001.csv.gz": {
+      "sha256": "14f3459f0b61324715a90596010f59826d0127b632d2b1b38c876a99cc672a8d",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/HNF1A/primary_weights.part001.csv.gz": {
+      "sha256": "ff5d3d218d1e58d5332da251ca195b869f680e6fd3ba2d24cb1d1d4ac1c7c450",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/HNF1A/primary_weights.part002.csv.gz": {
+      "sha256": "02c48159a24028d2e8db06ee81e272307ce6c80658e187744d0d9e59025e4780",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/HNF1A/primary_weights.part003.csv.gz": {
+      "sha256": "69d525152e8f58cdef0d81c175d2c6a98732be43d561050eef7ea43438ec91f0",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/HNF1A/primary_weights.part004.csv.gz": {
+      "sha256": "2d3cfe84c6868ef302790be4b03795d910f35197c43cecb947ff539b195ce161",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_density.part001.csv.gz": {
+      "sha256": "6607bdd7f5e5a451b3d68f6fe3618ecee695e0034f7f9d10eeb5bb8a2fb54227",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part001.csv.gz": {
+      "sha256": "2ffadf5430b9de53e07d35227fccb872d83952ed9ffafd8c8302eabf19fbe198",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part002.csv.gz": {
+      "sha256": "d308a5349968e8ed858aa0a5463d03f032474416271b9544f384eb64e7b3f4f5",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part003.csv.gz": {
+      "sha256": "4bfeefd52ac4e268e7618245830796d31697175150f68e09d498b5ddae5d9a3b",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part004.csv.gz": {
+      "sha256": "993830e2566d48f9b2b402650261c0db7e51b89d7a7119dabfff30c201bdbef9",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part005.csv.gz": {
+      "sha256": "26bf1dee96c4136e8460444a330892316c5f29230014a3dcb1d1161278b10108",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part006.csv.gz": {
+      "sha256": "c489f4793c77679b2e6fb928cb86ff2ced9aec523f3e7db7a1b0a087ff1cb350",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part007.csv.gz": {
+      "sha256": "129719f1e4d70524f5e6192542ccb9d23070f624b994367fda54bfd466544fbc",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part008.csv.gz": {
+      "sha256": "c3103007db5bca2e698c1cc6aa0a8c294064b8dd4ada6c9d3fb568958f9432be",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part009.csv.gz": {
+      "sha256": "3c54ececaac1e00f5fa873d05ce5ba2338c17cdfb3fd81407a37dd30d220aace",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part010.csv.gz": {
+      "sha256": "53eedece1cbdf13faf3c96fe056627d7edcfe169c64639820da56c69149ad846",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_weights.part011.csv.gz": {
+      "sha256": "01ab9c998eee5eff3d6e9b4a33c074a281d23ee71c52426a7d8d44dc327933da",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_density.part001.csv.gz": {
+      "sha256": "8ee15b6252ff6d9f94b35b80e279ef84c18fd87bcdc6ec3cf5568a489354a501",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part001.csv.gz": {
+      "sha256": "7a8040fd0c5ff2cadbbae2097ac7822a74457a8d4aa28ac427f5f5615b578abf",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part002.csv.gz": {
+      "sha256": "1e40fb0b83e9b522c82c4cc7337a63dc79e66d1a9f65b9fb2121988e236bf282",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part003.csv.gz": {
+      "sha256": "9e3d27892a1d9fd8163da1049719cf39b91d925d2699caa095bd1c1347934a3c",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part004.csv.gz": {
+      "sha256": "b53d837514b40ca4ccb3b7bc35fac2e6b35a9e0b1dd9f7fff79f402afec80c31",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part005.csv.gz": {
+      "sha256": "91d9d4b1f03250386b107928b8605b23ead5c5ea8c71a1cebb390c4af07e183d",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part006.csv.gz": {
+      "sha256": "8ad6095dacc89b0053e042932e0804c22b6ab619f999f8f668664b5974450d36",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part007.csv.gz": {
+      "sha256": "9cd0ab48f0aa2f338ac784977f46982fff4d8baba185b18b37f9cdde2920db62",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part008.csv.gz": {
+      "sha256": "be29cb5bc6a21d6a10f3ca6847cdcee3e54852c28807d50963e2207a501d496c",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part009.csv.gz": {
+      "sha256": "b42525b319354ab799c0fe26a9ad9e7f39f1282982fdfe316c88f71fd5136b57",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part010.csv.gz": {
+      "sha256": "e66d56adb15ff6e499d17f5b6fb09b6206143f3198a7c22e32a4b34d5e92aa07",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part011.csv.gz": {
+      "sha256": "6978f6ded0b6e5883101d1c1006dadcdf9c9ce9c7cda0704f2772efdc14fdd83",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part012.csv.gz": {
+      "sha256": "4e231a5e0c97e41e450e8aa11660034c2ac8a648a36c1c60069e2f6eb24011a0",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part013.csv.gz": {
+      "sha256": "be5474e54d601eb727167448dacec795aa19f9a4746625ef9894116943dbac59",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part014.csv.gz": {
+      "sha256": "9cff43d923fca907a809fa85902afb056a8869b4f74cf4efcaf735e6c1ea160d",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part015.csv.gz": {
+      "sha256": "51698534ac7f830ad0fe4ba7ed2412360c1a642cb9a8a9a3fed6335eade007b6",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part016.csv.gz": {
+      "sha256": "a094f64862a87dfb70c77e4e4b084fe6bd4a20b6d2552566815f5aaa7426cdb9",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part017.csv.gz": {
+      "sha256": "ccc547c0eeaeeff1a8eeced6d5aa29eba06a081c7fd2e459e17d50a51a6342ad",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part018.csv.gz": {
+      "sha256": "d8fcb9aa49d0dbbaff72fe4613555fcfb35dc5c7ac102db6f6665c469af0a204",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part019.csv.gz": {
+      "sha256": "af75af8cce9d16cec8a0abccc14e51dd5f436074e70e5999a5dd271ab13bc7bf",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part020.csv.gz": {
+      "sha256": "1a1fa54182f6ab011f411b7d6530824721ead369eeea31076828d745ca7ba4c5",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part021.csv.gz": {
+      "sha256": "dff1a80dbb281555eae3d88cb2686622f9ee8ab86f1a7ede6215c35aa2303284",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part022.csv.gz": {
+      "sha256": "ad5ba9308e7b0444fd994da3dfe0a84c59ea7f912b7f6750c147fafed2ba81f4",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part023.csv.gz": {
+      "sha256": "6943b880652e8a2191cb08027d132abac89195e8772bda7b9ea3e7c4ea82dd5f",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part024.csv.gz": {
+      "sha256": "c5fdf130f8a4ef93a07ea02ca60aea3407b7ae7fc174789c9efa3a2fd474168c",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part025.csv.gz": {
+      "sha256": "ad46dfee58c1658611323984eba42a6773c8fc75d37b5b027845aa1aeb66510e",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part026.csv.gz": {
+      "sha256": "9815f203f5d8c97806adc2432980ef7c503e1ccddeb70dce6a2936643c52c0af",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part027.csv.gz": {
+      "sha256": "4e357f482482ecd7c384c5a8c2b4303a74e907f92b5b23d1c6a1cb1026af39fe",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part028.csv.gz": {
+      "sha256": "f583f9d035973e2a2b95b3c5806609c3b755596328d6ae3228bb9dc6049e0cc2",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part029.csv.gz": {
+      "sha256": "2dc91176b3e031ee2ff039267fbdfe4e6b5cc18ff139a67d2fed282d17ecd6e3",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part030.csv.gz": {
+      "sha256": "75742e8acf973ebb6d6ffeddd6dd161fa3dc8e17fad180ac31d425a7bae7ee82",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_weights.part031.csv.gz": {
+      "sha256": "ceda6524614c4c5b940b297293efd13073a7cb51df7da6e1bbc61a3b5f41f016",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/geometry/BRCA2/BRCA2_canonical_geometry.csv.gz": {
+      "sha256": "cae89d06b19e1a6a9a731cd34e99b7aea9acd371818ec6a7dde09e0deaf5c9f6",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/geometry/BRCA2/README.md": {
+      "sha256": "d392183222647fc24743d29c03aca8b1b92fbeebce9571de77d5069718ad88a1",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/geometry/BRCA2/geometry_identity_report.json": {
+      "sha256": "a1598939119f1b5c50b1a2fa161f5ed10ea3478542e5c58b0e4dae47bd77bcfa",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/geometry/BRCA2/geometry_summary.csv": {
+      "sha256": "0d2c03ab35004ae5286978108c5454640942d32c6487b383f4bbe9d96bfb0387",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/geometry/KCNQ1/build_geometry.py": {
+      "sha256": "098e9fcb88c2ad08adb79554577725cc7d1d95d66219c28cfc0406bdac3c153a",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/missense_structural_extension_20260912/run_structure.py": {
+      "sha256": "ae27f5b042f5603b1da77eae08cc884717744056a8cef7eaa81a2ff9e8a56438",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/population_inclusive_penetrance_20260912/predictors/population_predictors.csv.gz": {
+      "sha256": "79ed3b008b4d1cb0798ba55bf21c63310f41b5debe629f15e2a7499b74946833",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/docs/evidence/prior_count_predictors_20260912/variant_counts.csv.gz": {
+      "sha256": "c251fa6d8d47b1163aab3d0e9742e1e1d89ba1d8dafc9351cd376af5d24d6731",
+      "storage": "git"
+    },
+    "GeneVariantFetcher/results/missense_structural_extension_20260912/raw/BRCA2/P51587.json": {
+      "sha256": "befba0a62b75b4f67c7651d0bb175a4ec3ef6a9751be6575af593c9e94cfd82f",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/all_global_exclusions.float64": {
+      "sha256": "f22f54e88616915b03d945b096c486e649d1554312897fdb0f9748c4d41a9bd3",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_00000_00128.npz": {
+      "sha256": "6d4e7d8a12b2bf322378a54d67b7262c6a9e7f860c403af05bedf1130b16868d",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_00128_00256.npz": {
+      "sha256": "255a144fdb9930e589e095efebfb7dea65921bb18dcb8c8e2324227190a04683",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_00256_00384.npz": {
+      "sha256": "31b4e59231640e30f3f54bc8df6f7dcb38c575f215c152103c39c46b9a366277",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_00384_00512.npz": {
+      "sha256": "9b756f977cfd632d77c25b58cda1ecb6d6a6290376976ae03374ba4462e4acd7",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_00512_00640.npz": {
+      "sha256": "0839165f0e9c89fe18be5c53abbe7fa700cca03da6792fe934e59ca8613c7174",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_00640_00768.npz": {
+      "sha256": "4247b5c492ac4587484a1c2867159bc72569432df8a14f0d9ccdccf4c5e5ef65",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_00768_00896.npz": {
+      "sha256": "5f45a1edc688666dd0b0de340c12588758d5c60613ca684f2aa1a10ab48971fb",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_00896_01024.npz": {
+      "sha256": "b2a13cc3f34e8cde3058b94468f69183869c1da73403941e0d49feb5a37e9d4a",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_01024_01152.npz": {
+      "sha256": "d288b50c091255ef7bd195db914b1448dfffc1846e28712be6aa0154b7e5bbf2",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_01152_01280.npz": {
+      "sha256": "243c7f2c3afc00321b0dd9ccf8fb731ab28b5cc4c5d0fc4dcb491bc1b9f05410",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_01280_01408.npz": {
+      "sha256": "2b7ca97602b8d5ac8c495806a5f04aa2e84749513888a8e9ec114d2d00e14cf1",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_01408_01536.npz": {
+      "sha256": "879a6bf71ca83d3a0fe5f44250013056cf31e1ad030b1a192428f92e9fcab073",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_01536_01664.npz": {
+      "sha256": "eb9d15399569d9a4130f15b5be11920af40d5b120395a1cf2320a956edcdca7b",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_01664_01792.npz": {
+      "sha256": "1addb05a56ef1d4f06b3d27f6cc5df1e2fc724d7c462394fe5518fe499d8c785",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_01792_01920.npz": {
+      "sha256": "a32b22cabe0d3fa7b1d0e0361fa8d4d383691b4a8f8b48380eca1b7ae5216535",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_01920_02048.npz": {
+      "sha256": "43b6810a811c4d28c59e0789a49f2d7c1dee05cc309c7afdd308e016391daf7d",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_02048_02176.npz": {
+      "sha256": "a2f82b446a5cb96a31c5c2d623564e6479cbac8a594cd7815041b17a1db84281",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_02176_02304.npz": {
+      "sha256": "c4cb39a4eded04a3a3650fa804e26f0cde1ddf8b8903b74d6abbc1ac696df73e",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_02304_02432.npz": {
+      "sha256": "52aea313e4d7bd36c75177365027031cefe9f002a6e6cc7afb50509fea057c33",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_02432_02560.npz": {
+      "sha256": "88e8fb092928dc6781aa04681abe0b0eda469e0338b21ebb55decfde0966f2c2",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_02560_02688.npz": {
+      "sha256": "ba049216bd356eafbc21302d84c1a8851d2ed978df40bae26879dae722167c8a",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_02688_02816.npz": {
+      "sha256": "b3cf285d2a0735c8b5934e93f42473a0c9936a0399a967468d9e2b99d286e026",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_02816_02944.npz": {
+      "sha256": "9deee82084b2a82cae8f414deb23e19239be4723ed96b29caa7e718a54cb87a2",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_02944_03072.npz": {
+      "sha256": "dc8be429c3fb2b5636ba4ff91d2dc5da6a99d4db266d8adb07e17dcee761eac0",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_03072_03200.npz": {
+      "sha256": "991f04b5654482d64fbe9357ad32b3f4321cacba1bd3ccd899b9d38772d18d6c",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_03200_03328.npz": {
+      "sha256": "d5fee55ef8e3d17732bc104caf505dc843e48524398f9fa2560de976c33f7d16",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_03328_03456.npz": {
+      "sha256": "b061f19ae814fb8ad3c7ac8fb1de0dfb06e1469aac641f783602f6295816e7aa",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_03456_03584.npz": {
+      "sha256": "8e3d79627bfd8815688b0ef087c73ecd8a2abcc488910d77ee2ba2ceeef07a34",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_03584_03712.npz": {
+      "sha256": "34a69f896ae270c923a3bd46c2e58f264922b9a81f095d072ca85dabca52953c",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_03712_03840.npz": {
+      "sha256": "1c02b5038a73123db82dd16d8dede11a153f77d3a52454fd525820d67e2cbe27",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_03840_03968.npz": {
+      "sha256": "f93a19bf6de5cbfc1e69ed07f71ae25f0ec45ea87bef85b43eaa5abc57f9c1c2",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_03968_04096.npz": {
+      "sha256": "753aee614a2af088b4aef471adde1d0d5f5fd47f110cf5b0841449a64a9e9ca8",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_04096_04224.npz": {
+      "sha256": "892148f1a39b5f045cad9fb0aad470071121d78d4d9f885786a73fa51f33f46a",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_04224_04352.npz": {
+      "sha256": "5fb7f182d6a53b189f0ac9d0a303d0e0be8d4c70c8535b412f5d311be6d8e656",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_04352_04480.npz": {
+      "sha256": "8ea156659da0bf831d5f553d4eab2bd36ac0dd9b3c6e8089fbda7991d51bf296",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_04480_04608.npz": {
+      "sha256": "3e3a06e1cee1680f678692915da6209ec271a814b9606dd7d784388dad5b80e4",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_04608_04736.npz": {
+      "sha256": "423666c7120187e24e716a12ed7d5d78aebc9b50f85640a16821f016348e95d3",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_04736_04864.npz": {
+      "sha256": "2aaf50ccfe059e8046b26bf7cdf431ea79b165ad4f3778ce50c3680db39d7a27",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_04864_04992.npz": {
+      "sha256": "b5354bd35df94d1e3ff4f0a33ee5883474ce9c6f6d7dbf1da8207f5e6399ff19",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_04992_05120.npz": {
+      "sha256": "340c9bf1ad0bf0d3e1fde90d40a6f4aff3858840373cb7029016dc7ff5f385c8",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_05120_05248.npz": {
+      "sha256": "e2da6895f6f6b98b26ecd3209179c58baa13573d9d6dcbe1f6ad6fd80559b958",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_05248_05376.npz": {
+      "sha256": "873bbc25359dc827e6d713f099d21b5765959ad08976e08cbd9f46d07c94fa03",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_05376_05504.npz": {
+      "sha256": "a17b85aed6912bd9ff6b089bf8d708ac0e9ac4ecbbe2c25e141dde5086e879e4",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_05504_05632.npz": {
+      "sha256": "ab5e843f4b3d8eb48a3f64b5c8b2a87c6e1580c491303b969767c37ce64ccb8c",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_05632_05760.npz": {
+      "sha256": "2b2f3c598b3b13b9d114e7dd6a62f0730ffcf5e3b3dbb9ddda553627c3a22e87",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_05760_05888.npz": {
+      "sha256": "9875491417dc056308c9b13979dfd9a8755905c7eadaf52ad6853fa21ad25c27",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_05888_06016.npz": {
+      "sha256": "2dcad40d9db330d67283371b9b205fb049b3f6f56fb5bf08e82fbc36aefe7a4a",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_06016_06144.npz": {
+      "sha256": "dfc1ff7190de717cf40d90458ab027c06e9585e2cc68d048665bbe72d9f78975",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_06144_06272.npz": {
+      "sha256": "940bff10e8ac4f4b84bb8f7598b39e03653d39eccaf681099f0209e21f3ecfba",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_06272_06400.npz": {
+      "sha256": "aced4102dbe1fb05e027dbf6483e5dd60fa28dec53027c57c807baeb4ec0e590",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_06400_06528.npz": {
+      "sha256": "b950b8e32f923aa1b38024394382a24bf1915798596c485194a671de3d1c2200",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/BRCA2/weights_06528_06656.npz": {
+      "sha256": "00dc8e2c2de1b8f264e5fc46194f0f4ab6adff59707ac31b921e2e7ac586787b",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/gck/raw/PMC10131484.xml": {
+      "sha256": "5086cf91eff497eea8f9507fcfb7cf1ad7c9548a5d6ae3443ea8ccfa00ed85a6",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/gck/raw/PMC6240136.xml": {
+      "sha256": "860b6d07e928ee672d80017d74efd59010790b122d87018db2906972863581bb",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/gck/raw/PMC8507241.xml": {
+      "sha256": "1a5ed8e7c214aac96a66e05839b0121e0953716b12b629c2db06c0f3562ad8cc",
+      "storage": "local_cache"
+    },
+    "GeneVariantFetcher/results/structural_sanity_20260913/gck/raw/PMC8535713.xml": {
+      "sha256": "a9877407960ff6693ec2780f332940b0157fd91111c184dd30dec44f1d6cd68d",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F1-model_v6.pdb.gz": {
+      "sha256": "4a36189f6d92ee2638ae23bd2d6ff4d96e76cb93696ddba0732354274fbc1117",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F10-model_v6.pdb.gz": {
+      "sha256": "2ff2e98c200a6014c38a7f26fd53449917f0207045dc441a90f8d4bc26d9bd01",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F11-model_v6.pdb.gz": {
+      "sha256": "36f013c6799f6c9de33fd695be9d38ed2aea1abb0095f930b80f779431b4ea4b",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F12-model_v6.pdb.gz": {
+      "sha256": "10c061edf77be1582544fd8a5de3ec042cf831a7468b61924140f6c0deefafec",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F2-model_v6.pdb.gz": {
+      "sha256": "21e92470a40c756b60283de30bb177632308a5db7939c53e80b0a7e28a0adfb5",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F3-model_v6.pdb.gz": {
+      "sha256": "1b17252161fc4bc12709999e28cedfdc11762c40671dff01990b194981e032ef",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F4-model_v6.pdb.gz": {
+      "sha256": "d3bac0adddef648a0d391c09c19f4ff75b0ac37ea260688612c1beeb6c308178",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F5-model_v6.pdb.gz": {
+      "sha256": "68bdfd2b837ab1122b4edff6122d95d17532c05a46bae6df9fa4158dc20a5d74",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F6-model_v6.pdb.gz": {
+      "sha256": "fceae5833e8d3db9d168029b6edbf6d0b9e63f92a593c47cd61398b1fdcc771f",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F7-model_v6.pdb.gz": {
+      "sha256": "f25c99f6edf28599d387b0d269ce4943233a03bd72e4d9817f0604d862137f16",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F8-model_v6.pdb.gz": {
+      "sha256": "6fca12afeaa9371eadf6aad237c873e06889cd7ee7d2dbf438bc883042d76a20",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/output/BRCA2/structure/fragments/AF-P51587-F9-model_v6.pdb.gz": {
+      "sha256": "999d5db53225beeb5e463f760654279901fab20f3e4c97ab257f76c0dd6cac75",
+      "storage": "local_cache"
+    },
+    "ProteinProximityAnalysis/src/alphafold_rin/empirical_context.py": {
+      "sha256": "99086331d36d276e8fd71d629d5210933228165b3ba9017e9d5f402c7eb7c111",
+      "storage": "git"
+    },
+    "ProteinProximityAnalysis/src/alphafold_rin/empirical_density.py": {
+      "sha256": "48d3e655bd925d31e68bb7319c100f713e94a3039ba85edf4d7cb85349445589",
+      "storage": "git"
+    }
+  },
+  "artifacts": {
+    "README.md": "84662d1b7ab9548f844809e5cc26aab41388946f06dc1902719efa6f97cbdb08",
+    "analysis/ALL_GENE_AUDIT.md": "fd149a5a96109e0ceb829f5bf29a006ab0e477bba705b766f3f0b5797686afb4",
+    "analysis/BRCA2/audit_recomputed_metrics.csv": "0fd33ebbfb7376a91c595298230dad827443c956480e0a190c4a35f6ec79c5b0",
+    "analysis/BRCA2/audit_selected_predictions.csv": "d971c924d67397546c0648dd95a8d15d1057789f72bde6f5f9b7b6897055fef3",
+    "analysis/BRCA2/cache_manifest.json": "7948ec829101e706847ab1634ddeaae6c728abc33fc7c5cbe043ba456e5daec5",
+    "analysis/BRCA2/checks.json": "0c1ab0c79f3942d16cafb4c040ac3404fdf0105117c5c28e6f97de2792da0df7",
+    "analysis/BRCA2/density_scenarios.part001.csv.gz": "922308775601980e23932ea47c019bf6a2e02ad26e136cedb7d53917806b4193",
+    "analysis/BRCA2/density_scenarios.part002.csv.gz": "515163a9d995ef6bbff7d925c98e35b5eaeb7a71f6491bc6a80b8bdfcf7517b8",
+    "analysis/BRCA2/density_scenarios.part003.csv.gz": "1d36c2dfc6bdfbdc0584318cc571e307a7439c2ef075f968c16bb710a092df87",
+    "analysis/BRCA2/density_scenarios.part004.csv.gz": "b31bda3af45f251268b82b637e99ac4181b24616a08be3ed8387c1a2b427d1d5",
+    "analysis/BRCA2/density_scenarios.part005.csv.gz": "b85948d7c1c22bcf830706f5bfd17a242ee5f8eb9f36cb6718a9aab9c67dd893",
+    "analysis/BRCA2/density_scenarios.part006.csv.gz": "84e64d13f8f1763841c834bbb236193205000483a5886067b446a1bf48e91f9e",
+    "analysis/BRCA2/density_scenarios.part007.csv.gz": "653aede85deb1700b73565396b859b958f1a2aa4292714d9e29f3d17b9d08bfe",
+    "analysis/BRCA2/density_scenarios.part008.csv.gz": "61708af7d3d85328ee0be1a1a6e3cc5a00ec89e6d7bda5a759af89a567bcfa2e",
+    "analysis/BRCA2/density_scenarios.part009.csv.gz": "5c9f78f737a45e2dfdb2575eaf0eb757d2193b9e0756ce91c4b168b92a1537af",
+    "analysis/BRCA2/density_scenarios.part010.csv.gz": "dcf2e8a32fc1aa203e19d004ac7058deea2781047d8a96de770c0c839f340771",
+    "analysis/BRCA2/density_scenarios.part011.csv.gz": "3ffbe53238c3e178fb7ffb78f425a7da52e9d211c6fe176ca102bfae603fe25b",
+    "analysis/BRCA2/density_scenarios.part012.csv.gz": "f5c10ec4a4ca1c87d7d17912bcd7dd2501e502a68c7d33a2dc410f9004cdfe7e",
+    "analysis/BRCA2/density_scenarios.part013.csv.gz": "a228a4e52cfa33ba3bb37c51d8e6463067a0e9a8c89999cba48ea71bc7a6da07",
+    "analysis/BRCA2/density_scenarios.part014.csv.gz": "83fff2ecce0a892e86f904f23877e730cb2917af5ce006f220c6b58583cbf979",
+    "analysis/BRCA2/density_scenarios.part015.csv.gz": "daef6a60345f65a1c3d162070f38e0fcb3f9e804533727d5c71ce767607d40d9",
+    "analysis/BRCA2/density_scenarios.part016.csv.gz": "539ec1ea1090e7d9cfb83573bfd2aa7e3f6b09be6317052364f85851d989c472",
+    "analysis/BRCA2/independent_audit.json": "fbc063494659f54d001041abaf90a441ed743d694966bbf5c6bb5955ef0bfc85",
+    "analysis/BRCA2/loo_metrics.csv": "c52f70fe4f5e6147da2dc3be3054e18a12ffb907d43692871b4bd58c75698070",
+    "analysis/BRCA2/loo_predictions.part001.csv.gz": "5f13c4efb7fcb009a4be8c30e8e1f8e4b0667d5ae510e735fa1ee31978464e24",
+    "analysis/BRCA2/loo_predictions.part002.csv.gz": "9adbf887970aebabe2f44b5fb53941157264c21d2334a5dc0397d0bf8ebd034b",
+    "analysis/BRCA2/loo_predictions.part003.csv.gz": "55e7dc880be9afe55b1f7d6e0fe3009e7c6c040041545d07b59d481d3a715db1",
+    "analysis/BRCA2/loo_predictions.part004.csv.gz": "b8d476e383894d290d30b1a04a7b5eca921f70e7b5d50999cabed596bc1792b3",
+    "analysis/BRCA2/loo_predictions.part005.csv.gz": "f14402da56724fcbc8df25eaf6cc11a1fdd26203bbbbd8cf2af4b8fa4b4125b2",
+    "analysis/BRCA2/loo_predictions.part006.csv.gz": "7ce942a7773e149c41833751db79462988fa5093f7e07791b04817a5a3df354b",
+    "analysis/BRCA2/loo_predictions.part007.csv.gz": "0d0d38b902f25faf834bb6cc27bf11933ed2c8f8ad944d03053d9c89b01ee91d",
+    "analysis/BRCA2/loo_predictions.part008.csv.gz": "ce7ba92b604002d2ff675fa7c0ec657146be5d827dd7abd9eb96c351178605d6",
+    "analysis/BRCA2/loo_predictions.part009.csv.gz": "c42f1a80d60e4c810c8472849a80bc053ef2b9adce9da9c0d0d889d76474f7f0",
+    "analysis/BRCA2/loo_predictions.part010.csv.gz": "11f0cca097b287de7139c5268bc52b7afa4c6c82b3751e471934b03b818d51c2",
+    "analysis/BRCA2/loo_predictions.part011.csv.gz": "7360a6e299b063914aa58e5053ca7ff5f4261d599a11240d3fa8a1e17a366f2c",
+    "analysis/BRCA2/loo_predictions.part012.csv.gz": "b20536cc3bbbe665fbfab384279a2c1c2966045ee1307b5005c0e4b24b93ea59",
+    "analysis/BRCA2/loo_predictions.part013.csv.gz": "59c2d1745fb542a69ba361fbaffb2fd889aaeb654e0a4214daa1ff7034839bbb",
+    "analysis/BRCA2/loo_predictions.part014.csv.gz": "4b54414fd0e45c3ec4abe5db65669070dad243bf3cae80188dcaf794b3d2f023",
+    "analysis/BRCA2/loo_predictions.part015.csv.gz": "b6cd0118ce597a96ad145fb1cc20d7651a7e97f91ea1e1c6cd2a48c0db209d1f",
+    "analysis/BRCA2/loo_predictions.part016.csv.gz": "e904eca422ebbb39e6ea57612d93bda63c477f16ec36f76ab07bc3c1f50efd43",
+    "analysis/BRCA2/loo_predictions.part017.csv.gz": "078225502c0004ea8c31e04b50d4a21bcbb5504c824c1479a559b655f5324e24",
+    "analysis/BRCA2/loo_predictions.part018.csv.gz": "fa21e9b378daa8f2dc5706c746fb3de2af63892ff3cf189659f8c91d6e1ba732",
+    "analysis/BRCA2/loo_predictions.part019.csv.gz": "2f70ac70c9fc7aab6c6ff252441c42ad13146c262409d123e6193d817f66bb0e",
+    "analysis/BRCA2/loo_predictions.part020.csv.gz": "d2a179f4a3b818fd9fc1ce16c12372b0517c940f63bc598334c67e73a1ca52b9",
+    "analysis/BRCA2/old_vs_new.csv.gz": "ec5b9cd855403b235c423104fe202abba03e1b5bc1b19e8671abeb0ff5912716",
+    "analysis/BRCA2/primary_density.part001.csv.gz": "009d3e5b3198576f5c6ccaacb2358b5b428325f8ad5a0754e47e60cf05dbc446",
+    "analysis/BRCA2/primary_density.part002.csv.gz": "7dc10354c8cad3b00b9db21f72a5add1e3bd19d889480137c472786d805ce0b2",
+    "analysis/BRCA2/primary_density.part003.csv.gz": "23fe4288bc9694aa2a4b965d3e6997fdcc48b236e30fe41305dfaeac96b970ac",
+    "analysis/BRCA2/primary_density.part004.csv.gz": "e777d4d82e5f0fbb98f74d1e444f456b449e59f4350b8029e1ec959c7bb1867d",
+    "analysis/BRCA2/primary_density.part005.csv.gz": "4c542259ddf4065e384ba4c91830ccf2c9ed83722739c528fa07b8dfa20e9963",
+    "analysis/BRCA2/sample_donor_contexts.part001.csv.gz": "4eeee55e6aee8a713eb249fadb68a5322b93f973576b7aec3c1428b31baf5043",
+    "analysis/BRCA2/sample_donor_contexts.part002.csv.gz": "25338586eda886734aa0588a145ab345cb32253694661debe844a3b0af5094af",
+    "analysis/BRCA2/sample_donor_contexts.part003.csv.gz": "561159a293793105b48c312a982fabfc4e74057ef2264e73d35c050668dab1f4",
+    "analysis/BRCA2/sample_donor_contexts.part004.csv.gz": "1e94576c954d9862d9975fdedce5909dfc7fbebae0676a3a879fbc0b38368135",
+    "analysis/BRCA2/sensitivity.csv": "30c81c6c76cad2d3c3233a69aa5288d35990d4f6acb98842f7282f1ab099b423",
+    "analysis/BRCA2_POLYMER_CORRECTION.png": "61514acdb5eb6eb6b0df56e047d5787ad4fb5a174f92581ee76822b8f9baf5dc",
+    "analysis/BRCA2_figure_source_counts.csv": "dcdfb028f9b38899ed040d36007505cc6014c4b0a76b6921e57a85e637660928",
+    "analysis/allgene_audit_receipt.json": "3c474a0c1e203a826be760245a96f1a9e1ba3fd02fa1b3d70088acaba5ac939e",
+    "analysis/allgene_density_source_coverage.csv": "bc0fc51a648f0f3e5a5e928c325ac0a53ae22ea6e99d5bbd26a8197d5bb232f8",
+    "analysis/allgene_summary.csv": "f13c7798c3fdaf47a6a5b023c7114b6388e1be319080f85c8432e5d3e2c9d8a9",
+    "analysis/sources_receipt.json": "816ca7706f4aff2ebe6504d8b0f658e5b1ccff4648e383fb4174739efd3cd333",
+    "analysis/strongest_control_examples.csv": "73c88d76c9a15fb3393eda4b7e51af44eedba0f0323257a4b7ca060841fc0709",
+    "analysis/variant_diagnostics/BRCA2.part001.csv.gz": "1003baff14a9c01e2fa1f3c0a656b57031d3be537a24d02f3813dd0be7e1fd96",
+    "analysis/variant_diagnostics/BRCA2.part002.csv.gz": "78ea6bd0208a2820087c2163419e279e14ab02c421f2383edf445f089affe95e",
+    "analysis/variant_diagnostics/BRCA2.part003.csv.gz": "74d02e66b12a3f7f3ad3c4edd0839a197fbb255e0bdb336f9a182bf5774bc433",
+    "analysis/variant_diagnostics/BRCA2.part004.csv.gz": "5176467e6b02cd0dcb65975094e779f7edea88f457f924af7e3890b33ad8c7a5",
+    "analysis/variant_diagnostics/BRCA2.part005.csv.gz": "4540993c1ff0387c76a41a185a95857823720b82ddd0db0c4d7578fe203c24ac",
+    "analysis/variant_diagnostics/GCK.part001.csv.gz": "04372931592972d10db9bf6671fb3208f0f6ad5bf15ef1abcc39432f6e2c004a",
+    "analysis/variant_diagnostics/HNF1A.part001.csv.gz": "2c490e22f8e0bb72ec82b5caf96cadff0d23dc5e006f85fd8fc8e1b3833ad7a2",
+    "analysis/variant_diagnostics/KCNQ1.part001.csv.gz": "36813c49f128be7b641232be25194f7ccd3fcd98c67faf101ab1619d8ba961a2",
+    "analysis/variant_diagnostics/LDLR.part001.csv.gz": "206cd751f8b621ff30b357a15de21c55cd82b475f11f38cabdbc76e790fd901a",
+    "audit_all_genes.py": "e3fc1583aec606693584d0e18b7b8fe8fe9a36e6dc240a41766a80320542c2a7",
+    "audit_brca2_run.py": "0d864e4ac79f41900538e7008143c392bde128fe0a2f080eb9ca9a8c13701b05",
+    "benchmark_outer_loo.py": "dbefec37642ca6e9666bdcf04c1125fc6ea90d08fe4614b1812b8b9accb9bd23",
+    "formatting_receipt.json": "fbce8ab0727e9b320ee6d6adff17310019672b75ea612615172785f1b33d059e",
+    "freeze.py": "198eb69b13ce28db7629ba841a2dffa164680b352ae5a5daabce4483a9a4f3da",
+    "gck/GCK_PRIOR_ENDPOINT_SENSITIVITY.png": "28a574755dcda9ea021651f464aa01fa5ae2df1906c59f213e1a2c04e48ae916",
+    "gck/GCK_SANITY.png": "aa0ab52fb94a6f5e03b6bde1d38ba8c76b96a9ff13be233069acdeddad09bb53",
+    "gck/README.md": "853ed61343c2938225c5236745914749066665f04903feedf9f2f061c1f1e2e2",
+    "gck/audit_gck.py": "cf952fae8f403c1c9f57b05291d57af22f03e4ab7b3f5989a6cd9abf277a36df",
+    "gck/checks.json": "66ea6b884eb72189079c78166f95e0c11b0f57a22ea2005992e8eafa9236dc21",
+    "gck/count_and_fit_weight_groups.csv": "1dc7b955f1e28f34187afa369fb0d9fbd847282639c0d69f17a6490de68971fe",
+    "gck/endpoint_review.csv": "9de08f3c8505296c4ba427859734313be38d2a21b780f42b2494b45081e7c8eb",
+    "gck/frozen_endpoint_observations.csv": "df1881316cc9b3c449676c86ff204ac42d77ae37f42efb0b3b17b97ae2c5aff1",
+    "gck/frozen_endpoint_provenance.json": "04268d9a9fb7a5a630604b7d8a57c88439af3e97ad4ab41a671479d3ac038651",
+    "gck/frozen_same_row_loo_metrics.csv": "c52aa56a8cd482dbc736b54c32bfe55062c8792079f63dcee21475d215215d5c",
+    "gck/permutation_replicates.csv.gz": "2e94a51b4985bd9abfb37e42a3bfbfbc2efeb27c8b060a7ad31dfedf767c9fb7",
+    "gck/permutation_summary.csv": "dccabbcd363564402ab32d3a075576cc3f021379d8e06ba60c7c4359bf2ecd46",
+    "gck/primary_sources.json": "70b8702d8944fc1feb579215e7ed2d23c618e0e3aeb7186d50c28e4f0b0c3263",
+    "gck/prior_sensitivities_DIAGNOSTIC.csv": "605cc74a2a9472c97d7d523a49c9e00d16f5a65d6176d6c31807473e0e06852e",
+    "gck/supported_distributions.csv": "d179ba00962e00f6f667c224413ba9d020b596d2b25fad378b32947db784e413",
+    "gck/variant_diagnostics.csv.gz": "d50b90969191b1bb3bcb04db9c38e4c4490965e284bbef9f721fd9e96a55bc9f",
+    "gck/variant_examples.csv": "1d5ddd735a1319a0c398f13ba19370c526c8fe1a98fe15e65fa63784f95a0c5a",
+    "geometry/BRCA2/P51587-1.fasta": "5152ac364fa3ef033e6a33d651d1d4208d8d38ea7c59999624e3fa81937774d1",
+    "geometry/BRCA2/README.md": "c5524af510442bf7d56bb1c2de840b06bd3ffd5b0ee46909ec3375fa62dbd618",
+    "geometry/BRCA2/all_unresolved_polymer_geometry.csv.gz": "7e753b5e06d59c94674ebb7a009c8f5d959c7000c478e7b4ec98dcf1859daba8",
+    "geometry/BRCA2/audit_geometry.py": "2ea51ab4de3879503704322185a802e4fdbfa2e41b75276b3dc981f9a03cfc13",
+    "geometry/BRCA2/build_geometry.py": "4768a8f46ac178cb05fea8ff226ccb6bb1d616176e5cd40c62267c72f919bea6",
+    "geometry/BRCA2/canonical_confidence_map.csv.gz": "70bbcd1f085cb1a3e5bd126fa9125fc3f1835544f2fd64373fda97bc2b74eb8e",
+    "geometry/BRCA2/experimental_idr_geometry.csv.gz": "a42be3bc9b388fab6dd658a109813d8a54dca398dd7a3df747573cfa4bb1e971",
+    "geometry/BRCA2/fragment_confidence.csv.gz": "9ffc817836b2e38209816f22ba8d7eaadede998b59b83d3ec4b8a18b7334115a",
+    "geometry/BRCA2/geometry_audit.json": "5179b82effecbf52cea5d737bbe0c9613b1fa15f83e61247485c489529eafd9e",
+    "geometry/BRCA2/geometry_manifest.json": "7fe24698038aad366098e7013655859df777d5266221288a1cdad64c18a09614",
+    "geometry/BRCA2/geometry_summary.csv": "d5386967cb0f927e96b55c55eaa818db1250e6b7801a0619bedeaa92cef24e98",
+    "geometry/BRCA2/primary_geometry.csv.gz": "0b2b7db68d9d63a7ecf20397f11cf6e1da46fd6c34eb797b40e5484628c9902d",
+    "make_brca2_figure.py": "2cf8df13bb3b951e6db108f3b2867e9cf465ae1129ff4905772f18d2e06eb881",
+    "outer_loo.py": "9134c84013bcd200877a9181cb8a919a72901ff9c37237ba937d2d9c5a7c2dd0",
+    "outer_loo_benchmark.json": "3de550bacf9d96b538a409076aee7e69d45014ed072dbc903a0b6eda4902ac1a",
+    "reviews/REVIEW_DISPOSITION.md": "69fa976938aa83251affd5981510c6ab8cc20b630a5a895204649df47f9be374",
+    "reviews/agy_prompt.txt": "ff3cd311dfa43275131a514c6f8c5fccd7fbe777407e2dc80519d39d4bf34cbf",
+    "reviews/agy_raw.json": "d888fbabcfc76c3809b29c953f1bd9fe9078a9ab67ff54750e2d8fbdb7472a98",
+    "reviews/agy_review.md": "316c7bdc3bf77d58a471ee0da73fba376e936737716c81652d96a49ddd43a2b2",
+    "reviews/agy_status.json": "0ad3751ebfd21a037ff154191ad61e23ac077e35a3cc3dbed52fef11740c41ff",
+    "reviews/agy_stderr.log": "3a7f8550106d86abb322e8ed0fb30a0296c0e97c6be03d5a8033b99d16737459",
+    "reviews/cli_identity.json": "c9381d533fcebc65c59292b941b5cd6a4ea34c9a4e0de6a5c4e87b81b7b3ddd9",
+    "reviews/consultation_summary.json": "e92522257f105a5a36500cee19d0e645deb27b726a3ceb75455b0a3d186c4820",
+    "reviews/grok_prompt.txt": "ff3cd311dfa43275131a514c6f8c5fccd7fbe777407e2dc80519d39d4bf34cbf",
+    "reviews/grok_raw.json": "64f5348f5d696615b50304051a9c4a0403b9e1384b8f257cc9e8220fece214bd",
+    "reviews/grok_review.md": "ef5ea6b0b6f103e5accc9bd0cb0ef3dbccbbb63ef5cbf196cc078db5f2f250b0",
+    "reviews/grok_status.json": "bd138f6dbeb01db6c2dc70745d7723c5c4ff1c239e17f69d550752c36eb50421",
+    "reviews/grok_stderr.log": "4cf393b0d35df2e991a6aedb7b7ab5a9fc0d14d8fe00051e72edb73fe94df892",
+    "reviews/local_gck_singleton_check.json": "98966fee5aba47cf85323a93063ba103af510de9ecda61dab0a754f1e726feea",
+    "reviews/local_source_receipt.json": "beca8a1fab48a9b916505923e23b2f1b10f0f736cddb764c85b24611cfb94163",
+    "reviews/run_cli_reviews.py": "a0acc37655a7181a5d6f16ac56c602eb6baa00c7a3ddd2f33525c35d5e44123b",
+    "reviews/shared_prompt.txt": "ff3cd311dfa43275131a514c6f8c5fccd7fbe777407e2dc80519d39d4bf34cbf",
+    "run_brca2.py": "747fdddc46fa97bc5b4b8243a06c22e9f818d6b8d5382a011dc4e3ae2112c181",
+    "test_outer_loo.py": "c4c723c7c015c404365a965642d17b2d92ebe8a6581753f830494672e568a456"
+  },
+  "cache_note": "Large numeric caches and original external structure/paper downloads stay outside Git. Their hashes are verified locally; compact geometry, all prediction rows and independent audits are committed.",
+  "formatting_note": "Original execution byte hashes retained. formatting_receipt.json proves AST-identical Ruff formatting; independent output audits repeated using formatted sources."
+}

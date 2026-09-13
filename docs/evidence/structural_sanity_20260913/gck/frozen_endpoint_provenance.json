@@ -1,0 +1,6 @@
+{
+  "source_path": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/GCK_protocol/observations.csv",
+  "source_sha256": "2feee25af4eb4ed3c4700ebd91a0d3f1024c50a31dd2334a86bb7b8715da3a14",
+  "selection": "key in W99R,V389L,V455E; all six retained observation rows",
+  "rows": 6
+}
