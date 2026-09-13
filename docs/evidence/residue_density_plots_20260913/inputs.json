@@ -1,0 +1,24 @@
+{
+  "input_hashes_relative_to_evidence": {
+    "missense_structural_extension_20260912/geometry/HNF1A/P20823-1.fasta": "967a71ba59d065c7c95e12006d9752fb3cdcb81218af42ff67035cc9a941cdd1",
+    "structural_sanity_20260913/analysis/variant_diagnostics/HNF1A.part001.csv.gz": "2c490e22f8e0bb72ec82b5caf96cadff0d23dc5e006f85fd8fc8e1b3833ad7a2",
+    "gck_structural_pilot_20260912/geometry/P35557-1.fasta": "4c5dec7349184d7d7437065146449757b2261065eedddc6a52a15b0dae6cc9e7",
+    "structural_sanity_20260913/analysis/variant_diagnostics/GCK.part001.csv.gz": "04372931592972d10db9bf6671fb3208f0f6ad5bf15ef1abcc39432f6e2c004a",
+    "missense_structural_extension_20260912/geometry/LDLR/P01130-1.fasta": "88bbd0d752fab8fe9c4afc75d933a862ae01f052e5a710326507d973fa091c36",
+    "structural_sanity_20260913/analysis/variant_diagnostics/LDLR.part001.csv.gz": "206cd751f8b621ff30b357a15de21c55cd82b475f11f38cabdbc76e790fd901a",
+    "structural_sanity_20260913/geometry/BRCA2/P51587-1.fasta": "5152ac364fa3ef033e6a33d651d1d4208d8d38ea7c59999624e3fa81937774d1",
+    "structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part001.csv.gz": "1003baff14a9c01e2fa1f3c0a656b57031d3be537a24d02f3813dd0be7e1fd96",
+    "structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part002.csv.gz": "78ea6bd0208a2820087c2163419e279e14ab02c421f2383edf445f089affe95e",
+    "structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part003.csv.gz": "74d02e66b12a3f7f3ad3c4edd0839a197fbb255e0bdb336f9a182bf5774bc433",
+    "structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part004.csv.gz": "5176467e6b02cd0dcb65975094e779f7edea88f457f924af7e3890b33ad8c7a5",
+    "structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part005.csv.gz": "4540993c1ff0387c76a41a185a95857823720b82ddd0db0c4d7578fe203c24ac",
+    "missense_structural_extension_20260912/geometry/KCNQ1/P51787-1.fasta": "cca1e75c23816b32d80ac5a4c1959d9559828c8143d467a1bd6c47ed8ac918d6",
+    "structural_sanity_20260913/analysis/variant_diagnostics/KCNQ1.part001.csv.gz": "36813c49f128be7b641232be25194f7ccd3fcd98c67faf101ab1619d8ba961a2"
+  },
+  "plot_script_sha256": "5e49b5820ef51b6ddc899ca4e5e7f19bb58e7a1b8981f5125b5f6144293ba0ad",
+  "aggregation": "Equal mean of supported variant-only LOO densities within each canonical residue; min/max are between-variant range, not uncertainty bounds. No new fitting, donor changes or count updates.",
+  "y_scale": [
+    0,
+    1
+  ]
+}

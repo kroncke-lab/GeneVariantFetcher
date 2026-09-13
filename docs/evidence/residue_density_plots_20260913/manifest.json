@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-13",
+  "description": "Five residue summaries of unchanged, frozen variant-only LOO densities. Figure exports and independent aggregation audit.",
+  "artifacts": {
+    "ALL_GENES_PENETRANCE_DENSITY_BY_RESIDUE.pdf": "5ff991532292503c99a422f263356aaa2daf28c4661862cb473bdf3d9b8bf03a",
+    "ALL_GENES_PENETRANCE_DENSITY_BY_RESIDUE.png": "1ddbf34a84837edb78b889793e7607b373382ec733e52d2a0d5684ce6a78a47b",
+    "BRCA2_PENETRANCE_DENSITY_BY_RESIDUE.pdf": "05b2a5de05a8c6c097b95eac8fc4795b5ac54fd761dcbdcf07c98fd00a311632",
+    "BRCA2_PENETRANCE_DENSITY_BY_RESIDUE.png": "e95d3f37ccfe175128c6b431159d0629917f6d4efc42f8d824c4b99ccec82893",
+    "GCK_PENETRANCE_DENSITY_BY_RESIDUE.pdf": "2431d93a1090cb253f7c36d22dd5ca272858733ec7ccb8a2e2dcaa3d3fde379b",
+    "GCK_PENETRANCE_DENSITY_BY_RESIDUE.png": "a39e162cf11ec7de7ac13eb0e63bb3e98dec2b3dc037dca1eeb18ba35f28f391",
+    "HNF1A_PENETRANCE_DENSITY_BY_RESIDUE.pdf": "eb15b9df971b4ba2ec07d6d4c74fa6decf766c041424b3e2714151bea061e075",
+    "HNF1A_PENETRANCE_DENSITY_BY_RESIDUE.png": "7e4e18791d3cb42e861558802617fa088b68cb7b63d89199edc3d5e672a9fd27",
+    "KCNQ1_PENETRANCE_DENSITY_BY_RESIDUE.pdf": "fa16f5bd9bfc064ab664c4c6e7724387f3f631a1f4007173c3e70d4a3be29577",
+    "KCNQ1_PENETRANCE_DENSITY_BY_RESIDUE.png": "4b5bc6583b3fa9b276f700daf0a7215d9fbcae77df38566e320c8cfffd5a9505",
+    "LDLR_PENETRANCE_DENSITY_BY_RESIDUE.pdf": "5008e36a9d3a3ccf7a97de70549a63c752c8a1d2bacc593eb96e8c00404b2959",
+    "LDLR_PENETRANCE_DENSITY_BY_RESIDUE.png": "13a4a01c7b2c6df4a0e5d848fb1a4b537497becbfab83cf3d492cb4789a4e80f",
+    "README.md": "7ffacb13a4bc5c07df9af00f9cfcc62a1ab96de4a14cb1dc440f4be231f76236",
+    "audit.json": "9b3a70c1718657da448c8cd2b093e16f12620afea2cef3e4a26ef167a5cc91cb",
+    "audit_plots.py": "5a93af47a55633c05b7a2ee6439cd64f61d01779b84baf901241448bbe9f00c0",
+    "inputs.json": "9bd808703df2bd208f6794e600b4505f220b86ed944243fd258b60896a0d1554",
+    "plot_residue_density.py": "5e49b5820ef51b6ddc899ca4e5e7f19bb58e7a1b8981f5125b5f6144293ba0ad",
+    "tables/BRCA2_residue_density.csv": "f7751ed9c8794c1d991a12308eee6af462c16ef4f4f0f76e4a210ca26894a9a7",
+    "tables/GCK_residue_density.csv": "9d3a9f67e89289ac56bf259b34e198d7b382322e171a31ffeb0954924ca44336",
+    "tables/HNF1A_residue_density.csv": "379007dc49bfeadbe2cb7977cce7f39f648bbf2f45e2bd483d3f52147e929a28",
+    "tables/KCNQ1_residue_density.csv": "5c77c049c09caa05e33cce0703b28a685e7e38139973ecd5a544400b6339f6f5",
+    "tables/LDLR_residue_density.csv": "3ff6bf750b35942d922252d96e1c562f1c238dae59e706df4f81e440804ff55e",
+    "tables/coverage.csv": "dc78690f61f364652e172ab45f0dae68aaa63fba60dc867d9de8d191365746ce"
+  }
+}

@@ -1,0 +1,6 @@
+gene,intended_disease,canonical_residues,variant_units,supported_variants,supported_residues,structured_residues,polymer_residues,mixed_residues,observed_without_density,no_observed_variant,prior_mean
+HNF1A,MODY3,631,785,726,427,116,309,2,35,169,0.1036769909860337
+GCK,GCK-MODY (MODY2),465,634,614,346,346,0,0,14,105,0.3704179222682078
+LDLR,Familial hypercholesterolemia,860,1376,1206,640,535,105,0,94,126,0.1537761078600645
+BRCA2,Hereditary breast/ovarian cancer susceptibility,3418,6656,6326,2895,867,2028,0,153,370,0.1485981658574783
+KCNQ1,Long QT syndrome type 1,676,1061,975,508,292,216,0,50,118,0.2947603080755296

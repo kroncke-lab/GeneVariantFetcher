@@ -1,0 +1,202 @@
+{
+  "passed": true,
+  "genes": [
+    {
+      "gene": "HNF1A",
+      "intended_disease": "MODY3",
+      "canonical_length": 631,
+      "variants": 785,
+      "supported_variants": 726,
+      "observed_positions": 462,
+      "residue_status_counts": {
+        "supported": 427,
+        "no_observed_variant": 169,
+        "observed_without_density": 35
+      },
+      "supported_residue_sources": {
+        "polymer": 309,
+        "structured": 116,
+        "mixed": 2
+      },
+      "residue_mean_of_density": 0.10758834262366226,
+      "maximum_absolute_errors": {
+        "density_mean": 9.71445146547012e-17,
+        "density_min": 0.0,
+        "density_max": 0.0,
+        "prior_mean": 1.1102230246251565e-16,
+        "own_posterior_mean": 9.71445146547012e-17,
+        "affected": 0.0,
+        "unaffected": 0.0,
+        "gnomad_carriers": 0.0
+      },
+      "sha256": {
+        "docs/evidence/population_inclusive_penetrance_20260912/population/HNF1A_canonical.fasta": "781c03ceaff86da4e22938166275321287c81570ea928cfbecdff0a3189a6241",
+        "docs/evidence/missense_structural_extension_20260912/analysis/HNF1A/input_variants.part001.csv.gz": "e141ba945414cad28b8c7d918dfdd0bae8b21d43b3cbd4deb8361f4e3918c79f",
+        "docs/evidence/missense_structural_extension_20260912/analysis/HNF1A/primary_density.part001.csv.gz": "14f3459f0b61324715a90596010f59826d0127b632d2b1b38c876a99cc672a8d",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/HNF1A.part001.csv.gz": "2c490e22f8e0bb72ec82b5caf96cadff0d23dc5e006f85fd8fc8e1b3833ad7a2",
+        "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+        "docs/evidence/residue_density_plots_20260913/tables/HNF1A_residue_density.csv": "379007dc49bfeadbe2cb7977cce7f39f648bbf2f45e2bd483d3f52147e929a28"
+      }
+    },
+    {
+      "gene": "GCK",
+      "intended_disease": "GCK-MODY (MODY2)",
+      "canonical_length": 465,
+      "variants": 634,
+      "supported_variants": 614,
+      "observed_positions": 360,
+      "residue_status_counts": {
+        "supported": 346,
+        "no_observed_variant": 105,
+        "observed_without_density": 14
+      },
+      "supported_residue_sources": {
+        "structured": 346
+      },
+      "residue_mean_of_density": 0.3706169152571207,
+      "maximum_absolute_errors": {
+        "density_mean": 5.551115123125783e-17,
+        "density_min": 0.0,
+        "density_max": 0.0,
+        "prior_mean": 0.0,
+        "own_posterior_mean": 8.326672684688674e-17,
+        "affected": 0.0,
+        "unaffected": 0.0,
+        "gnomad_carriers": 0.0
+      },
+      "sha256": {
+        "docs/evidence/population_inclusive_penetrance_20260912/population/GCK_canonical.fasta": "c2663b2415a3b4dc3ef10dd5b12fb93aa72035f5918ec54e605ef9d3d5e872a6",
+        "docs/evidence/class_matched_penetrance_20260912/structural/GCK_structural_input_variants.csv.gz": "e2b4241a051e212c9de83d84de7356433859d37ddf995141b3bde5531dc73334",
+        "docs/evidence/class_matched_penetrance_20260912/structural/GCK_primary_variant_density.csv": "0798cd45c19e01e98bc9a56958bfbc8abc467c9633154961996738fd6935d3cd",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/GCK.part001.csv.gz": "04372931592972d10db9bf6671fb3208f0f6ad5bf15ef1abcc39432f6e2c004a",
+        "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+        "docs/evidence/residue_density_plots_20260913/tables/GCK_residue_density.csv": "9d3a9f67e89289ac56bf259b34e198d7b382322e171a31ffeb0954924ca44336"
+      }
+    },
+    {
+      "gene": "LDLR",
+      "intended_disease": "Familial hypercholesterolemia",
+      "canonical_length": 860,
+      "variants": 1376,
+      "supported_variants": 1206,
+      "observed_positions": 734,
+      "residue_status_counts": {
+        "supported": 640,
+        "no_observed_variant": 126,
+        "observed_without_density": 94
+      },
+      "supported_residue_sources": {
+        "structured": 535,
+        "polymer": 105
+      },
+      "residue_mean_of_density": 0.1617000609092654,
+      "maximum_absolute_errors": {
+        "density_mean": 9.71445146547012e-17,
+        "density_min": 0.0,
+        "density_max": 0.0,
+        "prior_mean": 0.0,
+        "own_posterior_mean": 9.71445146547012e-17,
+        "affected": 0.0,
+        "unaffected": 0.0,
+        "gnomad_carriers": 0.0
+      },
+      "sha256": {
+        "docs/evidence/population_inclusive_penetrance_20260912/population/LDLR_canonical.fasta": "3f9d0ce77d6b1fb3e2623af2507046a8db201c03496a9d84df57ae2ee804fe97",
+        "docs/evidence/missense_structural_extension_20260912/analysis/LDLR/input_variants.part001.csv.gz": "9e7de74fcb0ef3391f95165acae540bf24cedc26b3f42cc001808db299b9844c",
+        "docs/evidence/missense_structural_extension_20260912/analysis/LDLR/primary_density.part001.csv.gz": "8ee15b6252ff6d9f94b35b80e279ef84c18fd87bcdc6ec3cf5568a489354a501",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/LDLR.part001.csv.gz": "206cd751f8b621ff30b357a15de21c55cd82b475f11f38cabdbc76e790fd901a",
+        "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+        "docs/evidence/residue_density_plots_20260913/tables/LDLR_residue_density.csv": "3ff6bf750b35942d922252d96e1c562f1c238dae59e706df4f81e440804ff55e"
+      }
+    },
+    {
+      "gene": "BRCA2",
+      "intended_disease": "Hereditary breast/ovarian cancer susceptibility",
+      "canonical_length": 3418,
+      "variants": 6656,
+      "supported_variants": 6326,
+      "observed_positions": 3048,
+      "residue_status_counts": {
+        "supported": 2895,
+        "no_observed_variant": 370,
+        "observed_without_density": 153
+      },
+      "supported_residue_sources": {
+        "polymer": 2028,
+        "structured": 867
+      },
+      "residue_mean_of_density": 0.17812257005369783,
+      "maximum_absolute_errors": {
+        "density_mean": 9.71445146547012e-17,
+        "density_min": 0.0,
+        "density_max": 0.0,
+        "prior_mean": 0.0,
+        "own_posterior_mean": 9.71445146547012e-17,
+        "affected": 0.0,
+        "unaffected": 0.0,
+        "gnomad_carriers": 0.0
+      },
+      "sha256": {
+        "docs/evidence/population_inclusive_penetrance_20260912/population/BRCA2_canonical.fasta": "14bbdf78e1cf479690f95327d1256f128bdc651240bfb83e11dcaef88e1d8d80",
+        "docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/input_variants.part001.csv.gz": "a74af7ece1b1ac81baca79720d5d64a1a0679604832c1ba69353377b56c2b538",
+        "docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/input_variants.part002.csv.gz": "24beef86c34c59df8d594b452c9186418909a7cc702eec62ca509cab03615008",
+        "docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/input_variants.part003.csv.gz": "c45fdb3d8c79794b8b5a408ae1771aba502caa649ffa3fd7b13819c5356d6af5",
+        "docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/input_variants.part004.csv.gz": "073f07a5d1dfd5e5d48a4841b3987b3b2fdc49f6777a94a1a5f8bc7498a0ee13",
+        "docs/evidence/missense_structural_extension_20260912/analysis/BRCA2/input_variants.part005.csv.gz": "b411139313df6b93c6d63afe823c39aff1b074824ba5f5b52f5cf7c8faf7909a",
+        "docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part001.csv.gz": "009d3e5b3198576f5c6ccaacb2358b5b428325f8ad5a0754e47e60cf05dbc446",
+        "docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part002.csv.gz": "7dc10354c8cad3b00b9db21f72a5add1e3bd19d889480137c472786d805ce0b2",
+        "docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part003.csv.gz": "23fe4288bc9694aa2a4b965d3e6997fdcc48b236e30fe41305dfaeac96b970ac",
+        "docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part004.csv.gz": "e777d4d82e5f0fbb98f74d1e444f456b449e59f4350b8029e1ec959c7bb1867d",
+        "docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part005.csv.gz": "4c542259ddf4065e384ba4c91830ccf2c9ed83722739c528fa07b8dfa20e9963",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part001.csv.gz": "1003baff14a9c01e2fa1f3c0a656b57031d3be537a24d02f3813dd0be7e1fd96",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part002.csv.gz": "78ea6bd0208a2820087c2163419e279e14ab02c421f2383edf445f089affe95e",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part003.csv.gz": "74d02e66b12a3f7f3ad3c4edd0839a197fbb255e0bdb336f9a182bf5774bc433",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part004.csv.gz": "5176467e6b02cd0dcb65975094e779f7edea88f457f924af7e3890b33ad8c7a5",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/BRCA2.part005.csv.gz": "4540993c1ff0387c76a41a185a95857823720b82ddd0db0c4d7578fe203c24ac",
+        "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+        "docs/evidence/residue_density_plots_20260913/tables/BRCA2_residue_density.csv": "f7751ed9c8794c1d991a12308eee6af462c16ef4f4f0f76e4a210ca26894a9a7"
+      }
+    },
+    {
+      "gene": "KCNQ1",
+      "intended_disease": "Long QT syndrome type 1",
+      "canonical_length": 676,
+      "variants": 1061,
+      "supported_variants": 975,
+      "observed_positions": 558,
+      "residue_status_counts": {
+        "supported": 508,
+        "no_observed_variant": 118,
+        "observed_without_density": 50
+      },
+      "supported_residue_sources": {
+        "structured": 292,
+        "polymer": 216
+      },
+      "residue_mean_of_density": 0.28090080675748424,
+      "maximum_absolute_errors": {
+        "density_mean": 8.326672684688674e-17,
+        "density_min": 0.0,
+        "density_max": 0.0,
+        "prior_mean": 0.0,
+        "own_posterior_mean": 9.71445146547012e-17,
+        "affected": 0.0,
+        "unaffected": 0.0,
+        "gnomad_carriers": 0.0
+      },
+      "sha256": {
+        "docs/evidence/population_inclusive_penetrance_20260912/population/KCNQ1_canonical.fasta": "2558cba493f6e80673ce87d270b6f0872438a90cb45cbd8d78816e16c4819964",
+        "docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/input_variants.part001.csv.gz": "601e787f0b5868539cda108a6b7203aa01b923964ecd2c373a263c6f93a1aa4d",
+        "docs/evidence/missense_structural_extension_20260912/analysis/KCNQ1/primary_density.part001.csv.gz": "6607bdd7f5e5a451b3d68f6fe3618ecee695e0034f7f9d10eeb5bb8a2fb54227",
+        "docs/evidence/structural_sanity_20260913/analysis/variant_diagnostics/KCNQ1.part001.csv.gz": "36813c49f128be7b641232be25194f7ccd3fcd98c67faf101ab1619d8ba961a2",
+        "docs/evidence/class_matched_penetrance_20260912/analysis/empirical_prior_comparison.csv": "297c93f6909d2ebdcdda803beba8820aac84d1ad3d06965526b3cf1a69c3669b",
+        "docs/evidence/residue_density_plots_20260913/tables/KCNQ1_residue_density.csv": "5c77c049c09caa05e33cce0703b28a685e7e38139973ecd5a544400b6339f6f5"
+      }
+    }
+  ],
+  "method": "Independent complete-residue reconstruction from frozen variant inputs and latest primary density files; plot builder is not imported.",
+  "aggregation": "Equal mean of supported variant-unit LOO density values; min/max is between-variant spread, not a confidence interval. No new fit or exclusions.",
+  "labels": "Intended gene-disease pair labels do not imply the pooled counts have been endpoint-adjudicated or that these scores are calibrated disease risks.",
+  "hnf1a_mixed": "Residues181 and200 retain the internally mixed 3D/polymer classification of all seven frozen variant scores; no source category is averaged twice or reassigned.",
+  "missingness": "Every canonical residue present; observed-but-unsupported and no-observed-variant are distinct. Neither has a fabricated zero density."
+}
