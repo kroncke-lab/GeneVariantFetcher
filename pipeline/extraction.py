@@ -8915,6 +8915,9 @@ Return strict JSON with this schema:
             scanner_text,
             gene_symbol=paper.gene_symbol or "UNKNOWN",
             source=f"PMID_{paper.pmid}",
+            audit_dir=Path(self.fulltext_dir) / "variant_scan_audit"
+            if self.fulltext_dir
+            else None,
         )
         scanner_variant_count = len(scanner_result.variants)
         paper_census = self._estimate_paper_census(
@@ -8924,6 +8927,7 @@ Return strict JSON with this schema:
             scanner_variant_count=scanner_variant_count,
             table_hint_variant_count=len(table_hint_variants),
         )
+        paper_census["scanner_status"] = scanner_result.to_metadata()["status"]
         scanner_merge_enabled = (
             scanner_variant_count <= SCANNER_REGEX_MERGE_MAX_VARIANTS
         )
@@ -9119,6 +9123,10 @@ Return strict JSON with this schema:
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
             extracted_data = self._suppress_repeated_study_wide_context_fields(
                 extracted_data
+            )
+
+            extracted_data.setdefault("extraction_metadata", {})["variant_scan"] = (
+                scanner_result.to_metadata()
             )
 
             num_variants = len(extracted_data.get("variants", []))

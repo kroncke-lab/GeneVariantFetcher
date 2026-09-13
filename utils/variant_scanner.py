@@ -17,10 +17,18 @@ This scanner supplements LLM extraction by:
 CREATED: 2026-02-10
 """
 
+import json
 import logging
+import math
 import re
+import subprocess
+import sys
+import time
+import uuid
+from pathlib import Path
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
+from itertools import islice
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
@@ -98,11 +106,22 @@ class ScanResult:
 
     variants: List[ScannedVariant] = field(default_factory=list)
     unique_normalized: Set[str] = field(default_factory=set)
-    stats: Dict[str, int] = field(default_factory=dict)
+    stats: Dict[str, Any] = field(default_factory=dict)
+    status: str = "complete"
+    reason: Optional[str] = None
+
+    def to_metadata(self) -> Dict[str, Any]:
+        """Small audit payload: never include the document or candidate text."""
+        return {
+            **self.stats,
+            "status": self.status,
+            "reason": self.reason,
+            "unique_variants": len(self.unique_normalized),
+        }
 
     def get_hints_for_prompt(self, max_hints: int = 50) -> str:
         """Format variants as hints for LLM prompt."""
-        if not self.variants:
+        if self.status != "complete" or not self.variants:
             return ""
 
         # Deduplicate and sort by confidence
@@ -220,10 +239,13 @@ class VariantScanner:
     # PROTEIN VARIANT PATTERNS
     # ==========================================================================
 
+    # Possessive suffix digits prevent quadratic failed matches when a
+    # frameshift digit run is followed by another optional digit extension.
+    # Capture groups remain unchanged for the existing normalizers.
     # Full HGVS protein notation: p.Arg534Cys, p.Ala561Val, p.Leu987fs, etc.
     PROTEIN_HGVS_FULL = re.compile(
-        r"\bp\.([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2}|fs\*?\d*|del|dup|ins|Ter|\*)"
-        r"(?:\*?\d*)?(?!\w)",  # Optional extension + complete-token boundary
+        r"\bp\.([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2}|fs\*?\d*+|del|dup|ins|Ter|\*)"
+        r"(?:\*?\d*+)?(?!\w)",  # Optional extension + complete-token boundary
         re.IGNORECASE,
     )
 
@@ -238,8 +260,8 @@ class VariantScanner:
     # unique variants invisible to the scanner.
     PROTEIN_HGVS_PAREN = re.compile(
         r"\bp\.\(([A-Z][a-z]{2})(\d+)"
-        r"([A-Z][a-z]{2}|fs\*?\d*|del|dup|ins|Ter|\*|=)"
-        r"(?:\*?\d*)?\)",
+        r"([A-Z][a-z]{2}|fs\*?\d*+|del|dup|ins|Ter|\*|=)"
+        r"(?:\*?\d*+)?\)",
         re.IGNORECASE,
     )
 
@@ -251,8 +273,8 @@ class VariantScanner:
 
     # Three-letter AA without p. prefix: Arg534Cys, Ala561Val, Leu987fs
     PROTEIN_THREE_LETTER = re.compile(
-        r"\b([A-Z][a-z]{2})(\d{2,4})([A-Z][a-z]{2}|fs\*?\d*|del|dup|ins|Ter|\*)"
-        r"(?:[X\*]?\d*)?(?!\w)",
+        r"\b([A-Z][a-z]{2})(\d{2,4})([A-Z][a-z]{2}|fs\*?\d*+|del|dup|ins|Ter|\*)"
+        r"(?:[X\*]?\d*+)?(?!\w)",
         re.IGNORECASE,
     )
 
@@ -568,7 +590,75 @@ class VariantScanner:
         self.protein_length = PROTEIN_LENGTHS.get(self.gene_symbol, 9999)
         self.normalizer = VariantNormalizer(self.gene_symbol)
 
-    def scan(self, text: str, source: str = "full_text") -> ScanResult:
+    def scan(
+        self,
+        text: str,
+        source: str = "full_text",
+        *,
+        max_chars: Optional[int] = None,
+        budget_seconds: Optional[float] = None,
+        audit_dir: Optional[Path] = None,
+    ) -> ScanResult:
+        """Scan within size and wall-clock limits; incomplete scans emit no hints.
+
+        The worker owns normalization, matching and document attribution. A
+        timeout kills and reaps it, including when stdlib re holds the GIL.
+        This works when extraction itself runs in a thread; no process-global
+        signal handlers or forked copies of the threaded parent are used.
+        """
+        from config.settings import get_settings
+
+        settings = get_settings()
+        max_chars = settings.scanner_max_chars if max_chars is None else max_chars
+        budget_seconds = (
+            settings.scanner_budget_seconds
+            if budget_seconds is None
+            else budget_seconds
+        )
+        if (
+            isinstance(max_chars, bool)
+            or not isinstance(max_chars, int)
+            or max_chars <= 0
+        ):
+            raise ValueError("scanner max_chars must be a positive integer")
+        if (
+            isinstance(budget_seconds, bool)
+            or not math.isfinite(budget_seconds)
+            or budget_seconds <= 0
+        ):
+            raise ValueError("scanner budget_seconds must be positive and finite")
+
+        started = time.monotonic()
+        result = ScanResult()
+        # Check before copying, encoding, normalizing or invoking any matcher.
+        if len(text) > max_chars:
+            result.status = "skipped"
+            result.reason = "input_exceeds_max_chars"
+        else:
+            try:
+                result = _scan_in_subprocess(
+                    text, self.gene_symbol, source, budget_seconds
+                )
+            except subprocess.TimeoutExpired:
+                result.status = "timed_out"
+                result.reason = "wall_clock_budget_exceeded"
+            except (OSError, ValueError, TypeError, KeyError) as exc:
+                # Worker failures are scanner failures, not evidence of no variants.
+                result.status = "failed"
+                result.reason = "worker_failed"
+                logger.warning("Variant scanner worker failed for %s: %s", source, exc)
+        result.stats.update(
+            gene=self.gene_symbol,
+            source=source,
+            input_chars=len(text),
+            max_chars=max_chars,
+            budget_seconds=budget_seconds,
+            elapsed_seconds=time.monotonic() - started,
+        )
+        _record_scan_outcome(result, audit_dir)
+        return result
+
+    def _scan_unbounded(self, text: str, source: str = "full_text") -> ScanResult:
         """
         Scan text for all variants.
 
@@ -1725,8 +1815,110 @@ class VariantScanner:
         return text[ctx_start:ctx_end]
 
 
+# The normal utils initializer eagerly imports LLM/network clients. The
+# scanner worker only needs pure scanner submodules: expose the package path
+# in this isolated interpreter without running that heavyweight initializer.
+# No parent package state is changed, and no source text becomes Python code.
+_SCAN_WORKER_CODE = """
+import sys
+import types
+from pathlib import Path
+package_dir = Path(sys.argv[1])
+sys.path.insert(0, str(package_dir.parent))
+package = types.ModuleType("utils")
+package.__path__ = [str(package_dir)]
+package.__package__ = "utils"
+sys.modules["utils"] = package
+from utils.variant_scanner import _scan_worker
+_scan_worker()
+"""
+
+
+def _scan_in_subprocess(
+    text: str, gene: str, source: str, budget_seconds: float
+) -> ScanResult:
+    payload = json.dumps(
+        {"text": text, "gene": gene, "source": source}, ensure_ascii=False
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", _SCAN_WORKER_CODE, str(Path(__file__).resolve().parent)],
+        input=payload,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        timeout=budget_seconds,
+        check=False,
+    )
+    # subprocess.run kills and waits for a timed-out child before re-raising.
+    if completed.returncode:
+        raise ValueError(f"scanner worker exited with code {completed.returncode}")
+    data = json.loads(completed.stdout)
+    variants = [ScannedVariant(**row) for row in data["variants"]]
+    return ScanResult(
+        variants=variants,
+        unique_normalized={variant.normalized for variant in variants},
+        stats=data["stats"],
+    )
+
+
+def _scan_worker() -> None:
+    """Private stdio worker; never accepts commands or code from source text."""
+    from contextlib import redirect_stdout
+
+    data = json.load(sys.stdin)
+    with redirect_stdout(sys.stderr):
+        result = VariantScanner(data["gene"])._scan_unbounded(
+            data["text"], data["source"]
+        )
+    json.dump(
+        {
+            "variants": [asdict(variant) for variant in result.variants],
+            "stats": result.stats,
+        },
+        sys.stdout,
+        ensure_ascii=False,
+    )
+
+
+def _record_scan_outcome(result: ScanResult, audit_dir: Optional[Path]) -> None:
+    """Persist a skip before any later LLM failure can erase its evidence."""
+    metadata = result.to_metadata()
+    if result.status != "complete":
+        logger.warning(
+            "Variant scan incomplete: %s", json.dumps(metadata, sort_keys=True)
+        )
+        if audit_dir is not None:
+            path = Path(audit_dir) / f"{uuid.uuid4().hex}.json"
+            temporary = path.with_suffix(".tmp")
+            try:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                temporary.write_text(
+                    json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
+                )
+                temporary.replace(path)
+            except OSError as exc:
+                logger.error(
+                    "Could not persist variant scan audit in %s: %s", audit_dir, exc
+                )
+                result.stats["audit_write_error"] = str(exc)
+            finally:
+                try:
+                    temporary.unlink(missing_ok=True)
+                except OSError:
+                    pass
+    from utils.llm_trace import record_trace_event
+
+    record_trace_event(
+        "variant_scan", result.to_metadata(), gene=result.stats.get("gene")
+    )
+
+
 def scan_document_for_variants(
-    text: str, gene_symbol: str = "KCNH2", source: str = "full_text"
+    text: str,
+    gene_symbol: str = "KCNH2",
+    source: str = "full_text",
+    *,
+    audit_dir: Optional[Path] = None,
 ) -> ScanResult:
     """
     Convenience function to scan a document for variants.
@@ -1740,7 +1932,7 @@ def scan_document_for_variants(
         ScanResult with found variants
     """
     scanner = VariantScanner(gene_symbol)
-    return scanner.scan(text, source)
+    return scanner.scan(text, source, audit_dir=audit_dir)
 
 
 def merge_scanner_results(
@@ -1922,7 +2114,7 @@ def merge_scanner_results(
             return [(context, context, "")] if context else []
         pattern = re.compile(re.escape(sv.raw_text), re.IGNORECASE)
         contexts: List[Tuple[str, str, str]] = []
-        for match in list(pattern.finditer(source_text))[:100]:
+        for match in islice(pattern.finditer(source_text), 100):
             line_start = source_text.rfind("\n", 0, match.start()) + 1
             line_end = source_text.find("\n", match.end())
             if line_end == -1:

@@ -1521,7 +1521,7 @@ class TestDocumentGeneAttribution:
             return {"KCNQ1"}
 
         monkeypatch.setattr(scanner, "_document_gene_attribution", attributed_elsewhere)
-        result = scanner.scan("L187P was found. Later L187P was confirmed.")
+        result = scanner._scan_unbounded("L187P was found. Later L187P was confirmed.")
 
         assert calls == 1
         assert "L187P" not in {variant.normalized for variant in result.variants}
@@ -1538,7 +1538,7 @@ class TestDocumentGeneAttribution:
             return set()
 
         monkeypatch.setattr(scanner, "_document_gene_attribution", target_or_unassigned)
-        result = scanner.scan("p.Arg534Cys was confirmed as R534C.")
+        result = scanner._scan_unbounded("p.Arg534Cys was confirmed as R534C.")
 
         assert calls == 1
         assert [

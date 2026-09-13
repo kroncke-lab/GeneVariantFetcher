@@ -1375,6 +1375,9 @@ def _stub_full_text_extraction(monkeypatch, extractor):
     """Make the full-text Tier 3 path offline and deterministic."""
 
     class EmptyScanner:
+        def to_metadata(self):
+            return {"status": "complete"}
+
         variants = []
 
         def get_hints_for_prompt(self, max_hints):

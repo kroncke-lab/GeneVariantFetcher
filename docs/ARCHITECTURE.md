@@ -277,7 +277,7 @@ auditability. Runtime alias and reference assets are loaded from the owned
 | Module | Location | Responsibility |
 |--------|----------|----------------|
 | **Variant Normalizer** | `utils/variant_normalizer.py` | HGVS standardization |
-| **Variant Scanner** | `utils/variant_scanner.py` | Regex-based variant detection (runs on full text, not condensed) |
+| **Variant Scanner** | `utils/variant_scanner.py` | Regex pre-scan of full text, limited by `SCANNER_MAX_CHARS` (2,000,000 raw characters) and `SCANNER_BUDGET_SECONDS` (30 seconds in a killable worker). Oversized/timed-out/failed scans supply no hints; status and limits persist in extraction metadata, decision traces, and immediate `pmc_fulltext/variant_scan_audit/*.json` skip records. |
 | **LLM Utils** | `utils/llm_utils.py` | OpenAI/LiteLLM interface |
 | **SQLite Migration** | `harvesting/migrate_to_sqlite.py` | JSON → SQLite conversion |
 

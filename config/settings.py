@@ -766,6 +766,22 @@ class Settings(BaseSettings):
         ),
     )
 
+    # Scanner limits cannot be disabled: a small adversarial token can stall
+    # re regardless of the document size. Both are recorded in scan artifacts.
+    scanner_max_chars: int = Field(
+        default=2_000_000,
+        gt=0,
+        validation_alias="SCANNER_MAX_CHARS",
+        description="Maximum raw characters accepted by the variant pre-scan; larger documents are explicitly skipped",
+    )
+    scanner_budget_seconds: float = Field(
+        default=30.0,
+        gt=0,
+        allow_inf_nan=False,
+        validation_alias="SCANNER_BUDGET_SECONDS",
+        description="Wall-clock budget for the isolated variant scanner worker, including normalization and attribution",
+    )
+
     # Extraction Tuning
     extraction_max_chars: int = Field(
         default=60_000,

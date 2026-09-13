@@ -2171,6 +2171,7 @@ Nucleotide Change              Coding Effect            Region
 
 def test_secondary_study_fixed_width_table_cannot_short_circuit(monkeypatch):
     extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
+    extractor.enable_ensemble_qa = False  # parser-only test; never call an adjudicator
     rows = "\n".join(
         f"{100 + idx}A>G                         A{idx + 1}G                    Author {idx}, 2000"
         for idx in range(20)
@@ -2182,6 +2183,9 @@ Nucleotide Change              Coding Effect            Authors, year
 """
 
     class EmptyScanner:
+        def to_metadata(self):
+            return {"status": "complete"}
+
         variants = []
 
         def get_hints_for_prompt(self, max_hints):
@@ -2598,6 +2602,7 @@ def test_artifact_filter_keeps_structural_row_despite_malformed_protein():
 
 def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
     extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
+    extractor.enable_ensemble_qa = False  # parser-only test; never call an adjudicator
     paper = Paper(
         pmid="23098067",
         title="Large cohort",
@@ -2624,6 +2629,9 @@ def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
         )
 
     class EmptyScanner:
+        def to_metadata(self):
+            return {"status": "complete"}
+
         variants = []
 
         def get_hints_for_prompt(self, max_hints):
@@ -2669,6 +2677,7 @@ def test_large_scanner_result_keeps_bounded_hints_but_skips_merge(monkeypatch):
     import pipeline.extraction as extraction
 
     extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
+    extractor.enable_ensemble_qa = False  # parser-only test; never call an adjudicator
     paper = Paper(
         pmid="26669661",
         title="Multi-gene supplemental table",
@@ -2683,6 +2692,9 @@ def test_large_scanner_result_keeps_bounded_hints_but_skips_merge(monkeypatch):
     }
 
     class LargeScanner:
+        def to_metadata(self):
+            return {"status": "complete"}
+
         def __init__(self):
             self.variants = [
                 SimpleNamespace(

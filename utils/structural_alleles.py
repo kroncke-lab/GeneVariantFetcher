@@ -51,7 +51,7 @@ _EXON_EVENT_RE = re.compile(
     re.IGNORECASE,
 )
 _DELTA_RE = re.compile(
-    r"(?:Δ|delta)\s*-?\s*([A-Z]{2,}|[A-Z][a-z]{2}(?:[A-Z][a-z]{2})+)",
+    r"(?:Δ|delta)\s*+-?\s*+([A-Z]{2,}|[A-Z][a-z]{2}(?:[A-Z][a-z]{2})+)",
     re.IGNORECASE,
 )
 # Public aliases: the variant scanner must iterate matches over free text; the
