@@ -1,0 +1,6 @@
+unit_id,protein_key,pmid,source_table,sample_id,endpoint,source_cdna,source_protein,A_to_restore,U_to_restore,canonical_wt_status,source_url
+BRCA2|g:13-32325112-G-A,R118H,40664060,Primary_Table_2,Sample 6,BC,c.353G>A,p.R118H,1,0,match,https://pmc.ncbi.nlm.nih.gov/articles/PMC12281534/#tbl0002
+BRCA2|lit:P2276T,P2276T,40664060,Primary_Table_2,Sample 27,BC,c.6826C>A,p.P2276T,1,0,match,https://pmc.ncbi.nlm.nih.gov/articles/PMC12281534/#tbl0002
+BRCA2|lit:V2076I,V2076I,40664060,Primary_Table_2,Sample 58,BC,c.6226G>A,p.V2076I,1,0,match,https://pmc.ncbi.nlm.nih.gov/articles/PMC12281534/#tbl0002
+BRCA2|g:13-32319092-G-A,S28N,40664060,Primary_Table_2,Sample 59,BC,c.83G>A,p.S28N,1,0,match,https://pmc.ncbi.nlm.nih.gov/articles/PMC12281534/#tbl0002
+BRCA2|lit:W2619C,W2619C,40664060,Primary_Table_2,Sample 63,BC,c.7857G>C,p.W2619C,1,0,match,https://pmc.ncbi.nlm.nih.gov/articles/PMC12281534/#tbl0002

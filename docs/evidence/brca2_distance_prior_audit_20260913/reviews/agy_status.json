@@ -1,0 +1,27 @@
+{
+  "cli": "/Users/kronckbm/.local/bin/agy",
+  "requested_model": "gemini-3.1-pro-high",
+  "requested_effort": "high",
+  "started_utc": "2026-09-13T14:09:20.320099+00:00",
+  "prompt": "agy_prompt.txt",
+  "scope": "Generic mathematical consultation with synthetic examples only; no internal empirical data or source-provenance findings transmitted.",
+  "timeout_seconds": 270,
+  "exit_code": 0,
+  "status": "returned",
+  "elapsed_seconds": 50.92,
+  "completed_utc": "2026-09-13T14:10:11.239647+00:00",
+  "response_status": "SUCCESS",
+  "actual_model": "not echoed in CLI response",
+  "usage": {
+    "input_tokens": 15028,
+    "output_tokens": 5009,
+    "thinking_tokens": 3653,
+    "cache_read_tokens": 0,
+    "total_tokens": 20037
+  },
+  "cost_usd": null,
+  "cost_note": "CLI response did not provide dollar cost",
+  "provider_duration_seconds": 48.79389,
+  "num_turns": 1,
+  "response_scope": "Conceptual mathematics and synthetic examples only; not a data or source review."
+}

@@ -1,0 +1,485 @@
+{
+  "schema": 1,
+  "artifacts": {
+    "README.md": {
+      "bytes": 12403,
+      "sha256": "c92c31d63222febe5990001b97281c0c8e38f89dfe3d84188fff42c6d6c9cfe6"
+    },
+    "corrected/BRCA2_CORRECTED_RESIDUE_DENSITY.pdf": {
+      "bytes": 203184,
+      "sha256": "49fb8eeb5033d57e75ba0508556d1e2f9d735f56d161028825e02acdae8481c9"
+    },
+    "corrected/BRCA2_CORRECTED_RESIDUE_DENSITY.png": {
+      "bytes": 642439,
+      "sha256": "0dd3f9bcd1d84c3d556171d72cb721bb111e52723f3682d848b81113ee7f413f"
+    },
+    "corrected/BRCA2_residue_density.csv": {
+      "bytes": 379345,
+      "sha256": "9a6975ebe54fa0b1c003964fb9d9dcd245a808b6b5b6f0b6941decd29fe3ce18"
+    },
+    "corrected/clinical_join_ledger.part001.csv.gz": {
+      "bytes": 71297,
+      "sha256": "7f020b92d4999c3ef884a8af020eff13ec58f197012e53addf76abd7f1565457"
+    },
+    "corrected/clinical_join_ledger.part002.csv.gz": {
+      "bytes": 12819,
+      "sha256": "8256593f6ef48fe5ce531a0967f752c1e5b208b225e1fb153a4e1bf4445350bb"
+    },
+    "corrected/clinical_key_counts_before_zero_filter.csv.gz": {
+      "bytes": 123183,
+      "sha256": "3aa336d787066948bda8292bfb620bde9ee7d37053fc5daf72d7fda9e95899ce"
+    },
+    "corrected/complete_union.part001.csv.gz": {
+      "bytes": 128424,
+      "sha256": "db1b8e04e09d72409115f3b98f73185564622ee96244712c4ba2944b44729ffd"
+    },
+    "corrected/complete_union.part002.csv.gz": {
+      "bytes": 127238,
+      "sha256": "26ecbcb4f808d201952dfaf6fb9524c25dad7e2f51d7fd405dc0f3828ada05df"
+    },
+    "corrected/complete_union.part003.csv.gz": {
+      "bytes": 109217,
+      "sha256": "36d51a3404421dacf89afdf88d90a008fda8d7ccf7cd4f9483aecefbbb2c8007"
+    },
+    "corrected/complete_union.part004.csv.gz": {
+      "bytes": 34499,
+      "sha256": "0853399ed007ca5a540321c7734694ed4a341fbb35ac0bcb99fbd784f32b204e"
+    },
+    "corrected/density_comparison.csv": {
+      "bytes": 872,
+      "sha256": "0f03fbc1a346ed809e11307e9db7f72a49fa36e34f730c1c4a0967fb5b6b0dd0"
+    },
+    "corrected/idr_segment_counts.csv": {
+      "bytes": 4860,
+      "sha256": "dc4d364d8aba8439822d708d490d3e98bb453d67b4bc7c2547d2b43ce9d6642c"
+    },
+    "corrected/input_hashes.json": {
+      "bytes": 2683,
+      "sha256": "0678342f979e54671a2ced9682dadf10b0fc4379310cfd23fb2eaed102443af1"
+    },
+    "corrected/missense_posteriors.part001.csv.gz": {
+      "bytes": 68160,
+      "sha256": "cb06ac72fd6b7dc8992fd79baa9f196d17c92956a93142676f6fa252da693a0f"
+    },
+    "corrected/missense_posteriors.part002.csv.gz": {
+      "bytes": 52154,
+      "sha256": "7a7453d8365eb79a0c261aa8e1f78125598bf17db5c712aec9e27681c21708cf"
+    },
+    "corrected/missense_posteriors.part003.csv.gz": {
+      "bytes": 16776,
+      "sha256": "24d0127926fb5ff08102b53464b998ac7dfe82b8102ec7aa13ef2e84cc8a549a"
+    },
+    "corrected/nonsense_posteriors.part001.csv.gz": {
+      "bytes": 13727,
+      "sha256": "562811abb225856a4072bab664dcff99d1ca3be33f5e176dd0582fd0f1481a42"
+    },
+    "corrected/population_membership_crosswalk.part001.csv.gz": {
+      "bytes": 49589,
+      "sha256": "6fe99a2184dadcaa2d3fb70e4712ab5c296f1e1e3a1d7e5c83c59dd11c38dde4"
+    },
+    "corrected/population_membership_crosswalk.part002.csv.gz": {
+      "bytes": 49822,
+      "sha256": "2de3482b8d56ebae9c2ec89924ee4af03e5abac3f1844ff7144e636970684efb"
+    },
+    "corrected/population_membership_crosswalk.part003.csv.gz": {
+      "bytes": 47323,
+      "sha256": "b2900e5343cf3c5fba234457b385df7acc89928700315ac74795a938d80a0b2f"
+    },
+    "corrected/population_membership_crosswalk.part004.csv.gz": {
+      "bytes": 5573,
+      "sha256": "99f55dd8b9937b31b49634fe7d28b4b8fa55ac231c4c1196d0d869c1f53f6f8f"
+    },
+    "corrected/primary_density.part001.csv.gz": {
+      "bytes": 278520,
+      "sha256": "7becdc2f1f2a29312c68fadf18eebc107a6f74d6227b08bb8e8dbe954ac20968"
+    },
+    "corrected/primary_density.part002.csv.gz": {
+      "bytes": 235376,
+      "sha256": "f892a96e2ced471481dd5748c9ee3c2187b3e40783e30b9a200f1848874d4895"
+    },
+    "corrected/primary_density.part003.csv.gz": {
+      "bytes": 218115,
+      "sha256": "06df52fbaf56ea493a87c2c3e43db5d5aeb38f14c072a8ee444f8226b12dbfed"
+    },
+    "corrected/prior_comparison.csv": {
+      "bytes": 1306,
+      "sha256": "6dd8e0e38996ef1232239526049661f08c42a3c6c09158376b7e8460ff41b585"
+    },
+    "corrected/quarantine_keys_outside_clinical_input.csv": {
+      "bytes": 37,
+      "sha256": "3b778fd69273cd66caa7ae81810fab613c425c00f89b96cb162a22fbacdd5cb7"
+    },
+    "corrected/targets_without_affected_donors.csv.gz": {
+      "bytes": 3633,
+      "sha256": "0e0abe8215eddd7a70266feac9016c23c7dc0ce2ff6e3c9fff0abbbbdb45f99c"
+    },
+    "corrected/union_checks.json": {
+      "bytes": 481,
+      "sha256": "367fb5158264a666a73ed9f90e7507e72818ca0547fb5a395d5596cbe6d45c5c"
+    },
+    "corrected/zero_clinical_evidence_keys.csv.gz": {
+      "bytes": 54380,
+      "sha256": "6b4a6450ebaa6500275fa8b9670be79a9f082f02ddfba0fefb757693df1b2853"
+    },
+    "corrected_audit/README.md": {
+      "bytes": 4758,
+      "sha256": "b607d6529b06c985920a08301ddb700f64d1935d175303312f7752f4d4ed42f7"
+    },
+    "corrected_audit/audit.json": {
+      "bytes": 2452,
+      "sha256": "4c95f55fb0b9d049bee9a01a9b564f1b1e7925f2ba30d68b5997caa29753a220"
+    },
+    "corrected_audit/audit_corrected.py": {
+      "bytes": 18228,
+      "sha256": "ef8f06f632eeebd54c4492533c35da81ad36ab2ddbdd0540c493292ebd06032f"
+    },
+    "corrected_audit/released_frameshift_alleles.csv": {
+      "bytes": 830,
+      "sha256": "9e53e7fd34578f7ecd67495b8f4cb8b957f9ac19cb74d6647924902a47342fc5"
+    },
+    "corrected_audit/selected_context_formula_checks.csv": {
+      "bytes": 6902,
+      "sha256": "3bf366dcd18937db2226ba6b7768dbaf1d71bed8f0a206f483994756a47ab35d"
+    },
+    "corrected_audit/selected_target_formula_checks.csv": {
+      "bytes": 1822,
+      "sha256": "32fcb35334f13d582162fc806a3d68f4f83822ef891b4661c27bbdcb3f004bae"
+    },
+    "distance/DISTANCE_AUDIT.png": {
+      "bytes": 174045,
+      "sha256": "5c829217c92f80b3453b5acaf0014f0d49f725a2b8baff49ffca7187ca95f325"
+    },
+    "distance/README.md": {
+      "bytes": 3485,
+      "sha256": "28bef51389f293eb1c4fde33dcf74f55a0201f2f03b3636c385040afeae4af56"
+    },
+    "distance/bandwidth_sensitivity.csv": {
+      "bytes": 998,
+      "sha256": "80df981fd1d0298f0655f17b111ff3bada3b79fbf20f484d9ec84e8f455a078d"
+    },
+    "distance/checks.json": {
+      "bytes": 2292,
+      "sha256": "f3dde54eb558d68b0e9531019b5f9968abf091aab2a3c275a166c498c6ddebe7"
+    },
+    "distance/concrete_examples.csv": {
+      "bytes": 5372,
+      "sha256": "8be3842df6a41e7d1aa607f552c6ed908a9e33acdfbf8407d15a17b58a11eab8"
+    },
+    "distance/context_distance.part001.csv.gz": {
+      "bytes": 278981,
+      "sha256": "b954f93d2f8b271a556ca1f666a3d172ddafc7208196204dcca79b33f597ad9d"
+    },
+    "distance/context_distance.part002.csv.gz": {
+      "bytes": 253561,
+      "sha256": "1e62aa2ff0fa90e27fffe2599d1753a8fbb82c39374d9332ef68a984223db3e3"
+    },
+    "distance/context_distance.part003.csv.gz": {
+      "bytes": 246656,
+      "sha256": "2e51a842ce93c15d4aa8fd9d930433f8f116278d326587a1353ff4d538ee07c1"
+    },
+    "distance/context_distance.part004.csv.gz": {
+      "bytes": 258755,
+      "sha256": "186d83f10dbc335307561a270437ab065bb58845434556da8569043e74b15b38"
+    },
+    "distance/context_distance.part005.csv.gz": {
+      "bytes": 256639,
+      "sha256": "cf4e52d6aa75d1a96844ccebb9e202f35737af52bf169690b7e6e48eb3e72e10"
+    },
+    "distance/context_distance.part006.csv.gz": {
+      "bytes": 272598,
+      "sha256": "bf27fb147600a20c7f2122bfc8da856efe2507cfe0d27c28647dd2165f18bf42"
+    },
+    "distance/context_distance.part007.csv.gz": {
+      "bytes": 113818,
+      "sha256": "54e81554259965807d37a405a87c93d024de00a092cbb3a5f70c5e7c4d1937fc"
+    },
+    "distance/distance_summary.csv": {
+      "bytes": 4412,
+      "sha256": "352d885570c764d905a3905eb5db64654dead7bc69a45a1b5eafd520ef4f9110"
+    },
+    "distance/example_top_donors.part001.csv.gz": {
+      "bytes": 15499,
+      "sha256": "34ec4b0edcfcf55a677d293333c045982e54c477a867d26e75b6eb04489a626a"
+    },
+    "distance/idr_segment_counts.csv": {
+      "bytes": 4470,
+      "sha256": "11703ab4bf70ff4b07d8ad334064ff0dff4253415153bad7a458ecef8623b98d"
+    },
+    "distance/independent_context_checks.csv": {
+      "bytes": 2003,
+      "sha256": "7379259481e5aa7b920fd20a9e1082d4add118aea3bd9ea0c25b2515334597a3"
+    },
+    "distance/run_distance_audit.py": {
+      "bytes": 20813,
+      "sha256": "6427d9baf154840aa30e7b603b6b78b84a5601ccae4effb9226b0a3cf36a33f7"
+    },
+    "distance/variant_distance.part001.csv.gz": {
+      "bytes": 331008,
+      "sha256": "b1a2e7ec850c757d833376d27bbe08550afca8ca78f32892a71e5e64e44edf75"
+    },
+    "distance/variant_distance.part002.csv.gz": {
+      "bytes": 316597,
+      "sha256": "d856082c3dd02394896e1fe77f47f35595ac564d1ba04ac77d43a1ab5adb6152"
+    },
+    "distance/variant_distance.part003.csv.gz": {
+      "bytes": 325391,
+      "sha256": "7dd4c464098a5c412ab26df61b111c68672f2646a5d25bb393d4866798365943"
+    },
+    "distance/variant_distance.part004.csv.gz": {
+      "bytes": 115037,
+      "sha256": "244b8a06c477b184e66bc2c7add2b54903001acef2f627dac908da7c0fffb392"
+    },
+    "freeze.py": {
+      "bytes": 3934,
+      "sha256": "c87541286242f502d6f3e3aa42321920d37cea795fe066880338aa15d39e9f7d"
+    },
+    "parser/FIX.md": {
+      "bytes": 2032,
+      "sha256": "df7a71a8fade56be40b5910012d812eee9f92de525113deac2978b1fadd8e042"
+    },
+    "parser/README.md": {
+      "bytes": 1954,
+      "sha256": "083f395a0074d596fbe7b51d733f274e998bae8ca992fa1d3ec09bfeb9d19e34"
+    },
+    "parser/fix_validation.json": {
+      "bytes": 4454,
+      "sha256": "cede3043ad4b1459bd4817ad8e33fb1bc48b8df01d0548ea1432070907600a13"
+    },
+    "parser/reproduce_catalog_row.py": {
+      "bytes": 6682,
+      "sha256": "a05f77249cb4b4ce53f0538a47bdbe4a3fcbb58d43c3e0bd6fb843ae6d15f879"
+    },
+    "parser/reproduction.json": {
+      "bytes": 6312,
+      "sha256": "7df23211de3ec95eea7b567b75699585e859da5442e9f7f37c32594fbb494b7e"
+    },
+    "parser/source_excerpt.md": {
+      "bytes": 26677,
+      "sha256": "2c77312780cf2c40c694d31c515447a429969e5b6ef1a5d6ce7ccef7f1e20828"
+    },
+    "recompute_brca2.py": {
+      "bytes": 22064,
+      "sha256": "d6fccca9ae904a3be2357d637d6924cadfdd7a1601e9f80b661d95e586793ff4"
+    },
+    "reviews/REVIEW_DISPOSITION.md": {
+      "bytes": 5150,
+      "sha256": "74a4b52323f9547e5c5406df12c56366f238bd7f0743e41555a275525b22ed18"
+    },
+    "reviews/agy_prompt.txt": {
+      "bytes": 4426,
+      "sha256": "67842f0102716ac366971480f8452398c386f05fb99a88c66611ac5023e47fe8"
+    },
+    "reviews/agy_raw.json": {
+      "bytes": 6387,
+      "sha256": "024cad418d6226e8c343d0e1d5fabd3452fa5a3efe61d82c227d4120e66725fc"
+    },
+    "reviews/agy_review.md": {
+      "bytes": 6005,
+      "sha256": "8436f485deb202272aa83aba18666a233327356a4573f9eec2fd9f5a8e31017f"
+    },
+    "reviews/agy_status.json": {
+      "bytes": 979,
+      "sha256": "6c88d01e6e87b7d0d47b62822440a8cd901a0925540d93583aee5cbf4c252000"
+    },
+    "reviews/agy_stderr.log": {
+      "bytes": 78,
+      "sha256": "3a7f8550106d86abb322e8ed0fb30a0296c0e97c6be03d5a8033b99d16737459"
+    },
+    "reviews/approval_scope.json": {
+      "bytes": 1722,
+      "sha256": "94d0ed6ff1c4edee5083d88878decdebf488ff4d05b82f064b58bbf7727c1829"
+    },
+    "reviews/cli_identity.json": {
+      "bytes": 1033,
+      "sha256": "c47f3856ee525dca8b60816feeed3eb65b17470907721b7e280dced9a1e70629"
+    },
+    "reviews/consultation_summary.json": {
+      "bytes": 2608,
+      "sha256": "8f4e3d3bfa3f49566578f8d60371f4d131bab95a56df270a30d51a67809e2d6a"
+    },
+    "reviews/grok_prompt.txt": {
+      "bytes": 4426,
+      "sha256": "67842f0102716ac366971480f8452398c386f05fb99a88c66611ac5023e47fe8"
+    },
+    "reviews/grok_raw.json": {
+      "bytes": 8820,
+      "sha256": "2955f97d2c12d59bbb925046e7c8aca9004e9ab8e1420b561e082dd86a1737e2"
+    },
+    "reviews/grok_review.md": {
+      "bytes": 5761,
+      "sha256": "b91619fba92f68b28458af763c388f6c7e24c0dd20a7cf9c06fc6e7f48ed9f4c"
+    },
+    "reviews/grok_status.json": {
+      "bytes": 921,
+      "sha256": "dc4424d8b784c8753e40dddfbc1ef005bd03b5df892d37c9c461502f509e0c68"
+    },
+    "reviews/grok_stderr.log": {
+      "bytes": 296,
+      "sha256": "7473611ba47f1468991688d8dec9a6c6d5bb188c5bf62cf7ca7e406452115ba6"
+    },
+    "reviews/local_math_checks.json": {
+      "bytes": 1165,
+      "sha256": "a3f4d752e2e3757bd9e178a5aaf6e2010ea9d004f00dd800df70508de872570c"
+    },
+    "reviews/run_cli_reviews.py": {
+      "bytes": 3483,
+      "sha256": "d8746e9cf2854e2a4e2cd9375b6ccec31924b93dfe212f0de14f78f69ed75b9c"
+    },
+    "reviews/shared_prompt.txt": {
+      "bytes": 4426,
+      "sha256": "67842f0102716ac366971480f8452398c386f05fb99a88c66611ac5023e47fe8"
+    },
+    "reviews/unsent_detailed_prompt.txt": {
+      "bytes": 7269,
+      "sha256": "f8a4eb806f59d28e7393ecb2b45344d893736c9dc385eaad70fb3efe272a455c"
+    },
+    "source/BRCA2_catalog_quarantine_observations.csv": {
+      "bytes": 465309,
+      "sha256": "54215703f4fe142b0fd5bd6eee8affa322ba2b6f28400bc7e2c862ecbdd07c81"
+    },
+    "source/BRCA2_clinical_key_corrections.csv.gz": {
+      "bytes": 72958,
+      "sha256": "726406d9dec29aaf284236bdbd12be4ae327603e45d64365a9adbd65520e7c70"
+    },
+    "source/BRCA2_clinical_restoration_observations.csv": {
+      "bytes": 895,
+      "sha256": "a0cea5f9c35709fb0decfb3b4655890ce3e7e5e9f16853874628793b9c4a4b19"
+    },
+    "source/BRCA2_count_corrections.csv": {
+      "bytes": 1135586,
+      "sha256": "9ee5b2c3c0bef3d805ef37e8f8add92e66d523f6c7d1f2ab288d8050c5d3371e"
+    },
+    "source/BRCA2_literature_identity_corrected.csv.gz": {
+      "bytes": 119113,
+      "sha256": "8202b4021bb0466f00c31fbcdc1a50bbd6474c1831eb1f06d4ee80fb13722cf6"
+    },
+    "source/README.md": {
+      "bytes": 10745,
+      "sha256": "dc79603798fe56fd333ea2e7795ced9b43e5ce8c2ae686086d17733a34a00b5a"
+    },
+    "source/audit_source.py": {
+      "bytes": 13371,
+      "sha256": "0dc60f913355e63b7c3ab54f7b6734f1a40b3abb741de01432096f01d30e7b27"
+    },
+    "source/checks.json": {
+      "bytes": 2630,
+      "sha256": "228236ec1ea680552d2a56ac953afb8a5947dbba90993c3a80ebab6312c216a7"
+    },
+    "source/cross_gene_checks.json": {
+      "bytes": 829,
+      "sha256": "0e3223cd60d2431a2a3ab46dcdcd9f64e265dcf8c979e32d1d6ab1977621ff9c"
+    },
+    "source/cross_gene_db_provenance.csv": {
+      "bytes": 5525,
+      "sha256": "ec6fcc656b3cd03d791af6cc5e2edc59382b3016f1a722992b814d470451f677"
+    },
+    "source/cross_gene_scan.py": {
+      "bytes": 5336,
+      "sha256": "1523068be1f7e6adf59dd70a3188759384332d1c6d9796240b2bb2b10c100a75"
+    },
+    "source/cross_gene_selected_source_signature.csv.gz": {
+      "bytes": 208056,
+      "sha256": "ea1ba7ad0a867d705e4e5fe8f2e92fca6d83c3095e5a593760d4a82b8de7b60a"
+    },
+    "source/cross_gene_signature_summary.csv": {
+      "bytes": 296,
+      "sha256": "377a4ffad2acee67717d219620dac938802b87962bdb93225b9d8d1044fc59d4"
+    },
+    "source/final_source_receipt.json": {
+      "bytes": 3820,
+      "sha256": "56fc3f67c5af72bbdeb0ae2f8e36114e8811c2dcf5e8136a9dd8524f219d0c28"
+    },
+    "source/largest_population_denominators.csv": {
+      "bytes": 1537,
+      "sha256": "945e99bfd3031d0e7f5f9d0bc0dd7ff2b407a3615e0ddc864c5721714209a95a"
+    },
+    "source/missense_count_weight_groups.csv": {
+      "bytes": 839,
+      "sha256": "e5d06a31518be03c2c516ac78097170fc621f72a122660ba8b4a0f59e01c9b05"
+    },
+    "source/missense_observations_by_pmid.csv": {
+      "bytes": 4497,
+      "sha256": "66c5862d73b48c338f1c53d5385751afe4b1f6096e11d49dad1519eb97c90b77"
+    },
+    "source/original_observations.csv.gz": {
+      "bytes": 179564,
+      "sha256": "8f0fefe2f8943c9a2977c527da1639018ef81bfb77a1b1cded011ed87da1263f"
+    },
+    "source/paper_primary_table2_BRCA2.csv": {
+      "bytes": 882,
+      "sha256": "4529bdadea99c7e7f9525ebce38500b2e47f2541486e34ec675b69fb152f12a3"
+    },
+    "source/paper_source_db_records.csv.gz": {
+      "bytes": 507129,
+      "sha256": "01be05eb3fe254c5117ab479c8511f002fc15bf61bcad08158482a4ecd35ae9b"
+    },
+    "source/pending_observation.csv": {
+      "bytes": 519,
+      "sha256": "f43e8c6688e759ee9628b8a9cf0e8da841c288b9246bb55fdaccd001ceca2d00"
+    },
+    "source/quarantined_frozen_observation_rows.csv.gz": {
+      "bytes": 114211,
+      "sha256": "4570810712c8801a7d8a65dc4659968616ba28f33c98dac63122430501b2d5cf"
+    },
+    "source/remaining_BRCA2_source_queue.csv.gz": {
+      "bytes": 4855,
+      "sha256": "2bb0c279dd7d5eee538d2198be991a0f3d93aa5574760036c2670912085528ed"
+    },
+    "source/source_provenance.json": {
+      "bytes": 1715,
+      "sha256": "9c7bdcdbf142442aef104a2ab9c60f91e498d06777c82ad26b5cdb0842264f9d"
+    },
+    "source/zero_affected_population_units.csv.gz": {
+      "bytes": 25453,
+      "sha256": "9b22e351a49a767be68d2e4c4abfac505714f618498d4fda6b99c390cb3c975d"
+    }
+  },
+  "implementation": {
+    "pipeline/extraction.py": "5eb59ea322397cc49a80854b6539f07a2dbcb9034f5f6725c7e33eae05426f50",
+    "tests/unit/test_catalog_table_safety.py": "f2f0643576c3a6ef970fdccad6012330ed52f73ad51f86a40de6d7c11e86c248",
+    "docs/ARCHITECTURE.md": "00bcb0a0d44179751000d9555a3b6e8b79b7861f3e703c928daaf34a1df33bc8",
+    "docs/PROTOCOL_CHANGELOG.md": "6224f39102946f6d62ed6aa1e2513106eac547271e4b42a3ed427451998d5fbc",
+    "TASKS.md": "f33c075da7b56de071b7428edb0f853740b7fee17aaa2d9a73a09b00d705911f"
+  },
+  "external_sources": {
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/population_inclusive_penetrance_20260912/population/population_variants.csv.gz": "6915110c42954f04da4155d00053883de38e7f518aee3f95c34f125843e5f5cf",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/population_inclusive_penetrance_20260912/population/full_locus/BRCA2_provenance.json": "98ff0baa46a72a22f81216a5453becbf8b42a71e62459df03b45c8f7b816055c",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/population_inclusive_penetrance_20260912/population/full_locus/BRCA2_population_variants.csv.gz": "1d70f8bdac7679bd70e7eccd302d88cccae9e734244e0bb04092e7ea7cbf9f10",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/population_inclusive_penetrance_20260912/audit/literature_identity_flags.csv.gz": "240fe0af9cf5d392108c3f1371dffc7f3e5eb3b69554592110fb9648712e721c",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part001.csv.gz": "447803cfabb8a9124ed97a2a9bfad7e534e0658e5cfcc543fe24282f2e980422",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part002.csv.gz": "89d0e23f66e6b6097ec4276815a2976b31407546f79d4f7a2103701e9c7f7b5d",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/structural_sanity_20260913/geometry/BRCA2/primary_geometry.csv.gz": "0b2b7db68d9d63a7ecf20397f11cf6e1da46fd6c34eb797b40e5484628c9902d",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part001.csv.gz": "009d3e5b3198576f5c6ccaacb2358b5b428325f8ad5a0754e47e60cf05dbc446",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part002.csv.gz": "7dc10354c8cad3b00b9db21f72a5add1e3bd19d889480137c472786d805ce0b2",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part003.csv.gz": "23fe4288bc9694aa2a4b965d3e6997fdcc48b236e30fe41305dfaeac96b970ac",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part004.csv.gz": "e777d4d82e5f0fbb98f74d1e444f456b449e59f4350b8029e1ec959c7bb1867d",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/structural_sanity_20260913/analysis/BRCA2/primary_density.part005.csv.gz": "4c542259ddf4065e384ba4c91830ccf2c9ed83722739c528fa07b8dfa20e9963",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/population_inclusive_penetrance_20260912/rebuild_union.py": "8daf950f772ce40110b93b4909808994a15ae7edd5835febffc4ba4531ab83c8",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/class_matched_penetrance_20260912/fit_class_priors.py": "37799f60f99f5f48cede4a648ab1434b1a3b4b298d4775f71163d59de66280ac",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/__init__.py": "e2d8246e776278ac5a38e1f85bbee6ccc7ef1aba35a5bc9948084f5f40e09192",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/alignment.py": "89057b652071d4faf7f719a585e6b79b68f68f9e42326168dc29984b098beba3",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/assembly.py": "345e2636fc022bd4f3a1e50291006d86309b5a2d11a2de04b5a7ab163b0a66f6",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/batch.py": "7383e0f0df15fecf9339b1fe9cac5cc6763bf6fce8ed91a72a1b4a6f3182728a",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/biounit.py": "acf255a7e4a846ea396592a6bd23f06f711088a4e4a970317d7d4f931f73fcf6",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/centrality.py": "117ccec63aad5834c192f9250cd8d6c2629cb4e03492a1cb1703896afb8327f3",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/cli.py": "1b7b93f9a146a955e5e189c33e35d00569de679f45c4d2c269b8ad064752ba06",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/contacts.py": "01e97ca55d28eaadb9f2ee7ca9c3919a1a2b28c13a9e5e6a35bef6cac31513bb",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/disorder.py": "e11a529815f8c519893cc49f2dc17eb1543489a627901c5ef930e892af485018",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/distances.py": "5b6eedf244a4e8214cca0cc4feda2838a456f4026a1f504c36abd209764ac8a5",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/download.py": "6b134b482be8f4842c200e8618d2de59ee1321a8fe9158a068c08896db85f2e1",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/dynamics.py": "46d5a37d7670d00ed14243506e88152317a9900e8180d1bdbd3d59e43f12a604",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/empirical_context.py": "99086331d36d276e8fd71d629d5210933228165b3ba9017e9d5f402c7eb7c111",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/empirical_density.py": "48d3e655bd925d31e68bb7319c100f713e94a3039ba85edf4d7cb85349445589",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/fragments.py": "6c14e359470918800b050ac5f8b9a74d277f4480bf4cc3683cb585b838bfa3b1",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/mechanism.py": "647acb36b002b59f132071687906b51ea293a26a99a0f6b89b4f01ef40ae3b62",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/multimer.py": "7e91931f1cb5c102c721d0ab2e5f284fae17d9ae02f34adb76d7dd42265e216a",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/oligomer.py": "4183fe3b330da998627515b902c1a7f29d74caa38bd158c78a61de8bc87783c5",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/pae.py": "c66d7daecae659bfcaae94885301c75a5bd5af189f86cba3ee6348fdb3875c92",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/penetrance_density.py": "81c87cef3cb5b67a093e2a58051c687d843eb536585dd4be5a8deeba586297e3",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/pipeline.py": "5a930e874dabb1993e9662a0ec9e9e9c2bca9b2bb4df516cc9b7dbfa9fc64406",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/rin.py": "7d503c95955524ea5ce47852263c6a7a26cd9a76fc7f1b6abbf38727454477ba",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/sifts.py": "bde9b775a353cadb33248ec2f03b5a77e053f95be8424141049ac30eed4ff38a",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/structure.py": "7b79a9f8f0b1bfe56276fe9f962f50d882e0a11a39336aa62f19fa7805acb9a5",
+    "/Users/kronckbm/GitRepos/ProteinProximityAnalysis/src/alphafold_rin/utils.py": "067f3a31031a5966ab47ebb9476803928eb3aae74bc6e9889ba6834fc84488c2"
+  }
+}

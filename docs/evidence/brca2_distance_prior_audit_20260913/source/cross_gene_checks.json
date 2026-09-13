@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "scope": "Selected frozen observation source metadata; exact known catalog header plus implicit carrier inference only.",
+  "limitation": "A negative signature is not validation. Empty/truncated quotes can hide catalog context; implicit clinical rows can also be legitimate patients. No source counts changed by this screen.",
+  "original_observation_hashes": {
+    "HNF1A": "038939f1c52e7ca4c2801e7c07ca8adeb074fd09047ad5d978a241ac45a09d06",
+    "GCK": "2feee25af4eb4ed3c4700ebd91a0d3f1024c50a31dd2334a86bb7b8715da3a14",
+    "LDLR": "07a8afdafc3e9a7d35ce6a43086ebcc3227fc4bb11c2b4f9310bd54c4081e843",
+    "KCNQ1": "0fa3a0a92fa3007b1650c821522979c6c35041643866119e88152c1946a7d421",
+    "BRCA2": "4d73bfc49cc64d6a073f0f6f53ae199d0cdd83a4e9be066341af8b33fce603ba"
+  },
+  "all_db_hashes_match_frozen": true
+}

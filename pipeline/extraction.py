@@ -3462,6 +3462,17 @@ class ExpertExtractor(BaseLLMCaller):
         "treatment",
         "schwartz score",
     }
+    VARIANT_CLASSIFICATION_HEADERS = {
+        "clinicalsignificance",
+        "clinicalsignificanceclinvar",
+        "clinvarclassification",
+        "germlineclassification",
+        "acmgclassification",
+        "acmgclass",
+        "pathogenicityclassification",
+        "pathogenicity",
+        "classification",
+    }
     GWAS_ASSOCIATION_HEADERS = {
         "locus",
         "snv",
@@ -3683,6 +3694,32 @@ class ExpertExtractor(BaseLLMCaller):
         )
         return marker_count >= 4 and clinical_count == 0
 
+    def _is_variant_annotation_header(self, header: str) -> bool:
+        """Separate variant annotations from a carrier's clinical phenotype."""
+        from pipeline.table_router import (
+            _is_variant_annotation_header,
+            _normalize_header,
+        )
+
+        normalized = _normalize_header(header)
+        return (
+            _is_variant_annotation_header(normalized)
+            or normalized in self.VARIANT_CLASSIFICATION_HEADERS
+            or any(
+                token in normalized
+                for token in (
+                    "clinicalsignificance",
+                    "clinicalimpact",
+                    "germlineclassification",
+                    "oncogenicity",
+                    "reviewstatus",
+                    "datelastevaluated",
+                    "variationid",
+                    "alleleid",
+                )
+            )
+        )
+
     def _looks_like_row_level_clinical_header(self, cells: list[str]) -> bool:
         """Detect patient/proband-level mutation lists without count columns."""
         normalized_cells = [
@@ -3692,6 +3729,13 @@ class ExpertExtractor(BaseLLMCaller):
             any(term in cell for term in self.VARIANT_ROW_LEVEL_HEADERS)
             for cell in normalized_cells
         )
+        # Match the router's annotation-without-subject refusal. A ClinVar
+        # export's "Somatic clinical impact" is variant metadata, not a
+        # phenotyped person; neither it nor a prediction score mints a carrier.
+        if not has_row_subject and any(
+            self._is_variant_annotation_header(cell) for cell in cells
+        ):
+            return False
         has_clinical_context = any(
             any(term in cell for term in self.VARIANT_CLINICAL_CONTEXT_HEADERS)
             for cell in normalized_cells
@@ -5273,6 +5317,7 @@ class ExpertExtractor(BaseLLMCaller):
         active_headers = []
         table_row_ordinal = 0
         row_level_clinical_table = False
+        annotation_only_table = False
         current_table_label = ""
         current_table_label_line: Optional[int] = None
         active_table_label = ""
@@ -5410,6 +5455,9 @@ class ExpertExtractor(BaseLLMCaller):
                     row_level_clinical_table = (
                         self._looks_like_row_level_clinical_header(parts)
                     )
+                    annotation_only_table = not row_level_clinical_table and any(
+                        self._is_variant_annotation_header(part) for part in parts
+                    )
                     queued_table_label = (
                         table_caption_queue[table_block_index]
                         if table_block_index < len(table_caption_queue)
@@ -5461,6 +5509,11 @@ class ExpertExtractor(BaseLLMCaller):
                             header_mapping["protein"] = idx
                         if self._header_matches(name, self.VARIANT_GENE_HEADERS):
                             header_mapping["gene"] = idx
+                        if (
+                            _normalize_header(name)
+                            in self.VARIANT_CLASSIFICATION_HEADERS
+                        ):
+                            header_mapping["clinical_significance"] = idx
                         if self._header_matches(name, self.VARIANT_COUNT_HEADERS):
                             header_mapping["count"] = idx
                             header_multi["count"].append(idx)
@@ -5506,6 +5559,7 @@ class ExpertExtractor(BaseLLMCaller):
                 normalized_active_headers = []
                 table_row_ordinal = 0
                 row_level_clinical_table = False
+                annotation_only_table = False
                 active_table_label = ""
                 active_header_line = ""
                 active_row_gene_cell = ""
@@ -5735,6 +5789,7 @@ class ExpertExtractor(BaseLLMCaller):
                 and unaffected_count is None
                 and patient_count_raw is None
                 and row_subject_raw is None
+                and not annotation_only_table
                 and cells
             ):
                 tail = cells[-1]
@@ -5749,33 +5804,30 @@ class ExpertExtractor(BaseLLMCaller):
             ):
                 patient_count = 1
                 inferred_one_carrier = True
-                row_text = " ".join(cells)
+                # A variant classification or assay annotation is not the
+                # patient's phenotype, even when it says "normal" or "clinical".
+                phenotype_cells = [
+                    cells[idx]
+                    for idx, header in enumerate(normalized_active_headers)
+                    if idx < len(cells)
+                    and not self._is_variant_annotation_header(active_headers[idx])
+                    and any(
+                        token in header
+                        for token in ("phenotype", "diagnosis", "clinical", "symptom")
+                    )
+                    and re.search(r"[A-Za-z]", cells[idx])
+                ]
+                phenotype_text = " ".join(phenotype_cells)
                 if re.search(
                     r"\b(unaffected|asymptomatic|control|healthy|normal|no symptoms?)\b",
-                    row_text,
+                    phenotype_text,
                     re.IGNORECASE,
                 ):
                     affected_count = 0
                     unaffected_count = 1
                 else:
-                    phenotype_cells = [
-                        cells[idx]
-                        for idx, header in enumerate(normalized_active_headers)
-                        if idx < len(cells)
-                        and any(
-                            token in header
-                            for token in (
-                                "phenotype",
-                                "diagnosis",
-                                "clinical",
-                                "symptom",
-                            )
-                        )
-                        and re.search(r"[A-Za-z]", cells[idx])
-                    ]
-                    phenotype_text = " ".join(phenotype_cells)
                     if phenotype_text and not re.search(
-                        r"\b(unknown|uncertain|not reported|n/?a)\b",
+                        r"\b(unknown|uncertain|not reported|n/?a|nan|null|none)\b",
                         phenotype_text,
                         re.IGNORECASE,
                     ):
@@ -5835,13 +5887,35 @@ class ExpertExtractor(BaseLLMCaller):
                     "grouped_count_subheaders": active_grouped_count_subheaders,
                 },
             }
+            # Keep the actual classification cell intact: "conflicting
+            # classifications of pathogenicity" is not a pathogenic call.
+            # Misaligned or missing cells cannot justify a default P label.
+            classification = (
+                get_col("clinical_significance")
+                if len(cells) == len(active_headers)
+                else None
+            )
+            if classification and classification.strip().casefold() not in {
+                "nan",
+                "null",
+                "none",
+                "n/a",
+                "na",
+                "-",
+                ".",
+            }:
+                clinical_significance = classification.strip().lower()
+            elif annotation_only_table or "clinical_significance" in header_mapping:
+                clinical_significance = "uncertain"
+            else:
+                clinical_significance = "benign" if row_control_like else "pathogenic"
             variant = {
                 "gene_symbol": gene_symbol,
                 "cdna_notation": cdna,
                 "legacy_notation": legacy,
                 "source_notation": source_notation,
                 "protein_notation": protein,
-                "clinical_significance": "benign" if row_control_like else "pathogenic",
+                "clinical_significance": clinical_significance,
                 "patients": {
                     "count": patient_count,
                     "phenotype": "unaffected control"

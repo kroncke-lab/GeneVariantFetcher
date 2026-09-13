@@ -1,0 +1,23 @@
+{
+  "original_observations_path": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/BRCA2_protocol/observations.csv",
+  "original_observations_sha256": "4d73bfc49cc64d6a073f0f6f53ae199d0cdd83a4e9be066341af8b33fce603ba",
+  "original_summary_path": "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/BRCA2_protocol/observation_summary.json",
+  "original_summary_sha256": "8f5b820e2fd23ad2241178ab4949145a885ee8d17201d45927c6ebba380c8b09",
+  "db_index0_path": "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/BRCA2_0/BRCA2/20260909_115038/BRCA2.db",
+  "db_index0_sha256": "f5ef4e0101a88c0b7e9705cc3a8572ae4db43ebdc1f5b2151decadf73fb7f7bb",
+  "db_index0_expected_frozen_sha256": "f5ef4e0101a88c0b7e9705cc3a8572ae4db43ebdc1f5b2151decadf73fb7f7bb",
+  "db_index0_hash_matches_freeze": true,
+  "source_primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12281534/",
+  "source_pmid": 40664060,
+  "source_doi": "10.1016/j.tranon.2025.102471",
+  "primary_xml_sha256": "5caea5f09d1e5df470c914efb95fbd87354735fe846a16da0751fc7e0cfb3cbb",
+  "primary_xml_path": "results/brca2_distance_prior_audit_20260913/raw/PMC12281534.xml",
+  "clinical_source": "Primary Table2 (15 BRCA2 sample rows; five missense BC carriers)",
+  "catalog_source": "Methods Genetic variants classification and SupplementaryTable4; ClinVar catalogue distinct from clinical cohort",
+  "selected_observation_identity": [
+    "key",
+    "pmid",
+    "variant_id"
+  ],
+  "source_note": "Snapshot original records unchanged; hypothetical zero/unknown denominators are not created. Read-only provenance records exported from verified frozen DB."
+}

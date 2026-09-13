@@ -216,6 +216,19 @@ the ordinary guard would retain without this projection. Strip-mode replay
 restores these audited prior values, preserving pre-existing control counts;
 legacy stamps without this audit refuse reconstruction.
 
+The deterministic Markdown parser separates variant annotations from patient
+observations before inferring a one-person row. Population/prediction annotations
+or clinical-classification metadata without a subject header cannot establish
+that row grain; an unlabelled trailing numeric annotation cannot become a carrier
+count. Explicit carrier/phenotype count columns remain eligible, and patient rows
+can retain their carrier total alongside annotations. Only patient phenotype
+columns can supply an implicit affected/unaffected partition; clinical significance,
+somatic impact, and missing placeholders such as `nan` do not phenotype the person.
+Recognized classification columns preserve their source value (including conflicting
+classifications); missing or misaligned classification cells remain uncertain.
+This guard changes future regex extraction only; archived observations require
+separate source-reviewed refresh and are not silently rewritten.
+
 Variant-paper provenance separates origin from corroboration:
 `variant_papers.source_layer` is one primary enum, while
 `observed_source_layers` is the ordered, de-duplicated set of every lane that

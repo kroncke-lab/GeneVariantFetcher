@@ -1,0 +1,28 @@
+{
+  "cli": "/Users/kronckbm/.local/bin/grok",
+  "requested_model": "grok-4.6",
+  "requested_effort": "high",
+  "started_utc": "2026-09-13T14:09:20.319979+00:00",
+  "prompt": "grok_prompt.txt",
+  "scope": "Generic mathematical consultation with synthetic examples only; no internal empirical data or source-provenance findings transmitted.",
+  "timeout_seconds": 270,
+  "exit_code": 0,
+  "status": "returned",
+  "elapsed_seconds": 76.596,
+  "completed_utc": "2026-09-13T14:10:36.916159+00:00",
+  "response_status": "end_turn",
+  "actual_model": [
+    "grok-4.6-build"
+  ],
+  "usage": {
+    "input_tokens": 13813,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0,
+    "output_tokens": 3775,
+    "reasoning_tokens": 2346,
+    "total_tokens": 17588
+  },
+  "cost_usd": 0.01709384,
+  "num_turns": 1,
+  "response_scope": "Conceptual mathematics and synthetic examples only; not a data or source review."
+}

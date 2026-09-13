@@ -1,0 +1,2 @@
+key,vclass,is_truncating,aa_pos,aa_ref,aa_alt,cdna,protein_notation,variant_id,pmid,source,denominator_source,affected,unaffected,n,uncertain_count,total_carriers_observed,trust_tier,paper_class,study_design,ascertainment,study_type,abstract_only,single_proband_row,merged_duplicate_ids,reason
+A938fs,frameshift,True,938.0,A,,,p.Ala938fs*21,10000929,40664060,cohort,total_derived,1.0,0.0,1.0,,1.0,trusted,none,,,,0,True,,truncated_catalog_header_requires_direct_row_recovery; frameshift outside missense/nonsense rerun

@@ -1,0 +1,13 @@
+{
+  "uncorrected_union_matches_frozen_classes": true,
+  "catalog_observations_quarantined": 4070,
+  "catalog_keys_absent_from_prior_clinical_input": 0,
+  "clinical_observations_restored": 5,
+  "zero_evidence_clinical_keys_removed": 3644,
+  "population_alleles_preserved": 24851,
+  "population_alleles_reassigned": 784,
+  "gnomad_carriers_all_consequences_before_and_after": 15877471,
+  "old_clinical_keys": 6106,
+  "corrected_clinical_keys": 2466,
+  "zero_observation_donors": 0
+}

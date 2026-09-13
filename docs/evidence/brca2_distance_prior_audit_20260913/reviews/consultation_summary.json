@@ -1,0 +1,64 @@
+{
+  "review_scope": "Fresh conceptual mathematical reviews of an identical synthetic brief; neither CLI reviewed real BRCA2 data, priors, audit measurements, source records or code.",
+  "prompts_byte_identical": true,
+  "prompt_sha256": "67842f0102716ac366971480f8452398c386f05fb99a88c66611ac5023e47fe8",
+  "unsent_detailed_prompt_sha256": "f8a4eb806f59d28e7393ecb2b45344d893736c9dc385eaad70fb3efe272a455c",
+  "approval_record": "approval_scope.json",
+  "disposition": "REVIEW_DISPOSITION.md",
+  "agy_status": {
+    "cli": "/Users/kronckbm/.local/bin/agy",
+    "requested_model": "gemini-3.1-pro-high",
+    "requested_effort": "high",
+    "started_utc": "2026-09-13T14:09:20.320099+00:00",
+    "prompt": "agy_prompt.txt",
+    "scope": "Generic mathematical consultation with synthetic examples only; no internal empirical data or source-provenance findings transmitted.",
+    "timeout_seconds": 270,
+    "exit_code": 0,
+    "status": "returned",
+    "elapsed_seconds": 50.92,
+    "completed_utc": "2026-09-13T14:10:11.239647+00:00",
+    "response_status": "SUCCESS",
+    "actual_model": "not echoed in CLI response",
+    "usage": {
+      "input_tokens": 15028,
+      "output_tokens": 5009,
+      "thinking_tokens": 3653,
+      "cache_read_tokens": 0,
+      "total_tokens": 20037
+    },
+    "cost_usd": null,
+    "cost_note": "CLI response did not provide dollar cost",
+    "provider_duration_seconds": 48.79389,
+    "num_turns": 1,
+    "response_scope": "Conceptual mathematics and synthetic examples only; not a data or source review."
+  },
+  "grok_status": {
+    "cli": "/Users/kronckbm/.local/bin/grok",
+    "requested_model": "grok-4.6",
+    "requested_effort": "high",
+    "started_utc": "2026-09-13T14:09:20.319979+00:00",
+    "prompt": "grok_prompt.txt",
+    "scope": "Generic mathematical consultation with synthetic examples only; no internal empirical data or source-provenance findings transmitted.",
+    "timeout_seconds": 270,
+    "exit_code": 0,
+    "status": "returned",
+    "elapsed_seconds": 76.596,
+    "completed_utc": "2026-09-13T14:10:36.916159+00:00",
+    "response_status": "end_turn",
+    "actual_model": [
+      "grok-4.6-build"
+    ],
+    "usage": {
+      "input_tokens": 13813,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "output_tokens": 3775,
+      "reasoning_tokens": 2346,
+      "total_tokens": 17588
+    },
+    "cost_usd": 0.01709384,
+    "num_turns": 1,
+    "response_scope": "Conceptual mathematics and synthetic examples only; not a data or source review."
+  },
+  "actual_prompt_excludes_internal_audit_identifiers_and_values": true
+}

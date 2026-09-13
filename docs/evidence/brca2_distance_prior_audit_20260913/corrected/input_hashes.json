@@ -1,0 +1,20 @@
+{
+  "population_inclusive_penetrance_20260912/population/population_variants.csv.gz": "6915110c42954f04da4155d00053883de38e7f518aee3f95c34f125843e5f5cf",
+  "population_inclusive_penetrance_20260912/population/full_locus/BRCA2_provenance.json": "98ff0baa46a72a22f81216a5453becbf8b42a71e62459df03b45c8f7b816055c",
+  "population_inclusive_penetrance_20260912/population/full_locus/BRCA2_population_variants.csv.gz": "1d70f8bdac7679bd70e7eccd302d88cccae9e734244e0bb04092e7ea7cbf9f10",
+  "population_inclusive_penetrance_20260912/audit/literature_identity_flags.csv.gz": "240fe0af9cf5d392108c3f1371dffc7f3e5eb3b69554592110fb9648712e721c",
+  "brca2_distance_prior_audit_20260913/source/BRCA2_catalog_quarantine_observations.csv": "54215703f4fe142b0fd5bd6eee8affa322ba2b6f28400bc7e2c862ecbdd07c81",
+  "brca2_distance_prior_audit_20260913/source/BRCA2_clinical_restoration_observations.csv": "a0cea5f9c35709fb0decfb3b4655890ce3e7e5e9f16853874628793b9c4a4b19",
+  "brca2_distance_prior_audit_20260913/source/BRCA2_literature_identity_corrected.csv.gz": "8202b4021bb0466f00c31fbcdc1a50bbd6474c1831eb1f06d4ee80fb13722cf6",
+  "class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part001.csv.gz": "447803cfabb8a9124ed97a2a9bfad7e534e0658e5cfcc543fe24282f2e980422",
+  "class_matched_penetrance_20260912/analysis/empirical_posteriors/BRCA2.part002.csv.gz": "89d0e23f66e6b6097ec4276815a2976b31407546f79d4f7a2103701e9c7f7b5d",
+  "structural_sanity_20260913/geometry/BRCA2/primary_geometry.csv.gz": "0b2b7db68d9d63a7ecf20397f11cf6e1da46fd6c34eb797b40e5484628c9902d",
+  "structural_sanity_20260913/analysis/BRCA2/primary_density.part001.csv.gz": "009d3e5b3198576f5c6ccaacb2358b5b428325f8ad5a0754e47e60cf05dbc446",
+  "structural_sanity_20260913/analysis/BRCA2/primary_density.part002.csv.gz": "7dc10354c8cad3b00b9db21f72a5add1e3bd19d889480137c472786d805ce0b2",
+  "structural_sanity_20260913/analysis/BRCA2/primary_density.part003.csv.gz": "23fe4288bc9694aa2a4b965d3e6997fdcc48b236e30fe41305dfaeac96b970ac",
+  "structural_sanity_20260913/analysis/BRCA2/primary_density.part004.csv.gz": "e777d4d82e5f0fbb98f74d1e444f456b449e59f4350b8029e1ec959c7bb1867d",
+  "structural_sanity_20260913/analysis/BRCA2/primary_density.part005.csv.gz": "4c542259ddf4065e384ba4c91830ccf2c9ed83722739c528fa07b8dfa20e9963",
+  "brca2_distance_prior_audit_20260913/recompute_brca2.py": "d6fccca9ae904a3be2357d637d6924cadfdd7a1601e9f80b661d95e586793ff4",
+  "population_inclusive_penetrance_20260912/rebuild_union.py": "8daf950f772ce40110b93b4909808994a15ae7edd5835febffc4ba4531ab83c8",
+  "class_matched_penetrance_20260912/fit_class_priors.py": "37799f60f99f5f48cede4a648ab1434b1a3b4b298d4775f71163d59de66280ac"
+}

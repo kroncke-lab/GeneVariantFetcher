@@ -1,0 +1,104 @@
+{
+  "passed": true,
+  "all_files_below_1200000_bytes": true,
+  "LF_text_including_decompressed_gzip": true,
+  "authoritative_correction_ledger_unchanged_by_audit": true,
+  "files": {
+    "BRCA2_catalog_quarantine_observations.csv": {
+      "sha256": "54215703f4fe142b0fd5bd6eee8affa322ba2b6f28400bc7e2c862ecbdd07c81",
+      "bytes": 465309
+    },
+    "BRCA2_clinical_key_corrections.csv.gz": {
+      "sha256": "726406d9dec29aaf284236bdbd12be4ae327603e45d64365a9adbd65520e7c70",
+      "bytes": 72958
+    },
+    "BRCA2_clinical_restoration_observations.csv": {
+      "sha256": "a0cea5f9c35709fb0decfb3b4655890ce3e7e5e9f16853874628793b9c4a4b19",
+      "bytes": 895
+    },
+    "BRCA2_count_corrections.csv": {
+      "sha256": "9ee5b2c3c0bef3d805ef37e8f8add92e66d523f6c7d1f2ab288d8050c5d3371e",
+      "bytes": 1135586
+    },
+    "BRCA2_literature_identity_corrected.csv.gz": {
+      "sha256": "8202b4021bb0466f00c31fbcdc1a50bbd6474c1831eb1f06d4ee80fb13722cf6",
+      "bytes": 119113
+    },
+    "README.md": {
+      "sha256": "dc79603798fe56fd333ea2e7795ced9b43e5ce8c2ae686086d17733a34a00b5a",
+      "bytes": 10745
+    },
+    "audit_source.py": {
+      "sha256": "0dc60f913355e63b7c3ab54f7b6734f1a40b3abb741de01432096f01d30e7b27",
+      "bytes": 13371
+    },
+    "checks.json": {
+      "sha256": "228236ec1ea680552d2a56ac953afb8a5947dbba90993c3a80ebab6312c216a7",
+      "bytes": 2630
+    },
+    "cross_gene_checks.json": {
+      "sha256": "0e3223cd60d2431a2a3ab46dcdcd9f64e265dcf8c979e32d1d6ab1977621ff9c",
+      "bytes": 829
+    },
+    "cross_gene_db_provenance.csv": {
+      "sha256": "ec6fcc656b3cd03d791af6cc5e2edc59382b3016f1a722992b814d470451f677",
+      "bytes": 5525
+    },
+    "cross_gene_scan.py": {
+      "sha256": "1523068be1f7e6adf59dd70a3188759384332d1c6d9796240b2bb2b10c100a75",
+      "bytes": 5336
+    },
+    "cross_gene_selected_source_signature.csv.gz": {
+      "sha256": "ea1ba7ad0a867d705e4e5fe8f2e92fca6d83c3095e5a593760d4a82b8de7b60a",
+      "bytes": 208056
+    },
+    "cross_gene_signature_summary.csv": {
+      "sha256": "377a4ffad2acee67717d219620dac938802b87962bdb93225b9d8d1044fc59d4",
+      "bytes": 296
+    },
+    "largest_population_denominators.csv": {
+      "sha256": "945e99bfd3031d0e7f5f9d0bc0dd7ff2b407a3615e0ddc864c5721714209a95a",
+      "bytes": 1537
+    },
+    "missense_count_weight_groups.csv": {
+      "sha256": "e5d06a31518be03c2c516ac78097170fc621f72a122660ba8b4a0f59e01c9b05",
+      "bytes": 839
+    },
+    "missense_observations_by_pmid.csv": {
+      "sha256": "66c5862d73b48c338f1c53d5385751afe4b1f6096e11d49dad1519eb97c90b77",
+      "bytes": 4497
+    },
+    "original_observations.csv.gz": {
+      "sha256": "8f0fefe2f8943c9a2977c527da1639018ef81bfb77a1b1cded011ed87da1263f",
+      "bytes": 179564
+    },
+    "paper_primary_table2_BRCA2.csv": {
+      "sha256": "4529bdadea99c7e7f9525ebce38500b2e47f2541486e34ec675b69fb152f12a3",
+      "bytes": 882
+    },
+    "paper_source_db_records.csv.gz": {
+      "sha256": "01be05eb3fe254c5117ab479c8511f002fc15bf61bcad08158482a4ecd35ae9b",
+      "bytes": 507129
+    },
+    "pending_observation.csv": {
+      "sha256": "f43e8c6688e759ee9628b8a9cf0e8da841c288b9246bb55fdaccd001ceca2d00",
+      "bytes": 519
+    },
+    "quarantined_frozen_observation_rows.csv.gz": {
+      "sha256": "4570810712c8801a7d8a65dc4659968616ba28f33c98dac63122430501b2d5cf",
+      "bytes": 114211
+    },
+    "remaining_BRCA2_source_queue.csv.gz": {
+      "sha256": "2bb0c279dd7d5eee538d2198be991a0f3d93aa5574760036c2670912085528ed",
+      "bytes": 4855
+    },
+    "source_provenance.json": {
+      "sha256": "9c7bdcdbf142442aef104a2ab9c60f91e498d06777c82ad26b5cdb0842264f9d",
+      "bytes": 1715
+    },
+    "zero_affected_population_units.csv.gz": {
+      "sha256": "9b22e351a49a767be68d2e4c4abfac505714f618498d4fda6b99c390cb3c975d",
+      "bytes": 25453
+    }
+  }
+}

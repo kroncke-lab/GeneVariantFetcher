@@ -1,0 +1,11 @@
+{
+  "detailed_payload_status": "rejected_before_execution",
+  "reason": "Automatic approval review rejected transmitting detailed internal BRCA2 audit information to external Agy and Grok without specific payload authorization.",
+  "safer_scope": "General mathematical consultation using synthetic examples only; no internal empirical priors, measurements, counts, identifiers, paths, or source-provenance findings transmitted.",
+  "detailed_prompt": "unsent_detailed_prompt.txt",
+  "actual_as_sent_prompt": "shared_prompt.txt",
+  "rejected_action": ".venv/bin/python docs/evidence/brca2_distance_prior_audit_20260913/reviews/run_cli_reviews.py with unsent_detailed_prompt.txt as the proposed shared prompt; rejected before execution.",
+  "exact_auto_review_reason": "This action was rejected due to unacceptable risk.\nReason: The action transmits a detailed internal BRCA2 audit brief to external Agy and Grok services; although the user authorized using those CLIs, they did not specifically authorize sending this sensitive payload to those destinations.\nDo not bypass this rejection through a workaround or indirect execution. Continue with a safer alternative, or carry out checks to prove that the action is authorized or low risk before trying again. Complete unaffected work without asking for confirmation. Report anything that remains blocked, clarify why it was blocked by auto-review, inform the user of the risk and ask for approval.",
+  "safer_alternative_execution": "Approved through the same exec escalation path after replacing the detailed payload with a generic mathematical prompt and synthetic examples.",
+  "safer_alternative_status": "Both new conceptual consultations completed successfully."
+}

@@ -1,0 +1,197 @@
+{
+  "pmid": "40664060",
+  "archive_variant_id": 12496,
+  "source_file": "results/grant_e2e_20260909/shards/BRCA2_0/BRCA2/20260909_115038/pmc_fulltext/40664060_CLEANED.md",
+  "source_sha256": "bcb4d941e5438ac133f557f4d4c97e111a6efcdeb640b926910821e95302d1b2",
+  "header_line": 10679,
+  "target_line": 16755,
+  "git_head": "1e366f45d0624983df82a1e97b959157079ba941",
+  "source_files_modified": "",
+  "current_source_hashes": {
+    "pipeline/extraction.py": "42f33c207cb3a6565f8dd13c47fcfc34136bb7a5feb9f6b7302cd4eda776cbe5",
+    "pipeline/table_router.py": "13618dfa92a7104009cb5914b7377cc928997fe46f035f842ecf18495d6293a8"
+  },
+  "reproduction_scope": "Current deterministic markdown parser; no live model or complete extraction pipeline rerun",
+  "current_parser_bug_reproduced": true,
+  "results": {
+    "exact_source": {
+      "header_cells": 24,
+      "row_cells": 25,
+      "has_row_subject_header": false,
+      "clinical_header_triggers": [
+        [
+          "Somatic clinical impact",
+          "clinical"
+        ],
+        [
+          "Somatic clinical impact date last evaluated",
+          "clinical"
+        ],
+        [
+          "Somatic clinical impact review status",
+          "clinical"
+        ]
+      ],
+      "legacy_row_level_clinical_header": true,
+      "legacy_parser_output": [
+        {
+          "protein_notation": "A1043V",
+          "clinical_significance": "pathogenic",
+          "penetrance_data": {
+            "total_carriers_observed": 1,
+            "affected_count": 1,
+            "unaffected_count": null
+          },
+          "count_provenance": {
+            "carriers_column_label": "implicit one carrier per clinical row",
+            "carriers_count_type": "per_variant_carrier",
+            "affected_column_label": null,
+            "affected_count_type": null,
+            "unaffected_column_label": null,
+            "unaffected_count_type": null
+          }
+        }
+      ],
+      "router_deterministic_mapping": null,
+      "router_row_level_test_with_notation_mapping": false
+    },
+    "condition_delimiter_repaired_control": {
+      "header_cells": 24,
+      "row_cells": 24,
+      "has_row_subject_header": false,
+      "clinical_header_triggers": [
+        [
+          "Somatic clinical impact",
+          "clinical"
+        ],
+        [
+          "Somatic clinical impact date last evaluated",
+          "clinical"
+        ],
+        [
+          "Somatic clinical impact review status",
+          "clinical"
+        ]
+      ],
+      "legacy_row_level_clinical_header": true,
+      "legacy_parser_output": [
+        {
+          "protein_notation": "A1043V",
+          "clinical_significance": "pathogenic",
+          "penetrance_data": {
+            "total_carriers_observed": 1,
+            "affected_count": 1,
+            "unaffected_count": null
+          },
+          "count_provenance": {
+            "carriers_column_label": "implicit one carrier per clinical row",
+            "carriers_count_type": "per_variant_carrier",
+            "affected_column_label": null,
+            "affected_count_type": null,
+            "unaffected_column_label": null,
+            "unaffected_count_type": null
+          }
+        }
+      ],
+      "router_deterministic_mapping": null,
+      "router_row_level_test_with_notation_mapping": false
+    },
+    "clinical_nan_to_unknown_control": {
+      "header_cells": 24,
+      "row_cells": 24,
+      "has_row_subject_header": false,
+      "clinical_header_triggers": [
+        [
+          "Somatic clinical impact",
+          "clinical"
+        ],
+        [
+          "Somatic clinical impact date last evaluated",
+          "clinical"
+        ],
+        [
+          "Somatic clinical impact review status",
+          "clinical"
+        ]
+      ],
+      "legacy_row_level_clinical_header": true,
+      "legacy_parser_output": [
+        {
+          "protein_notation": "A1043V",
+          "clinical_significance": "pathogenic",
+          "penetrance_data": {
+            "total_carriers_observed": 1,
+            "affected_count": null,
+            "unaffected_count": null
+          },
+          "count_provenance": {
+            "carriers_column_label": "implicit one carrier per clinical row",
+            "carriers_count_type": "per_variant_carrier",
+            "affected_column_label": null,
+            "affected_count_type": null,
+            "unaffected_column_label": null,
+            "unaffected_count_type": null
+          }
+        }
+      ],
+      "router_deterministic_mapping": null,
+      "router_row_level_test_with_notation_mapping": false
+    },
+    "somatic_clinical_annotation_columns_removed_control": {
+      "header_cells": 21,
+      "row_cells": 21,
+      "has_row_subject_header": false,
+      "clinical_header_triggers": [],
+      "legacy_row_level_clinical_header": false,
+      "legacy_parser_output": [],
+      "router_deterministic_mapping": null,
+      "router_row_level_test_with_notation_mapping": false
+    }
+  },
+  "archived_count_provenance": {
+    "carriers_column_label": "implicit one carrier per clinical row",
+    "carriers_count_type": "per_variant_carrier",
+    "affected_column_label": null,
+    "affected_count_type": null,
+    "unaffected_column_label": null,
+    "unaffected_count_type": null
+  },
+  "archived_facts": [
+    {
+      "fact_type": "affected_count",
+      "fact_value": "1",
+      "count_type": null,
+      "source_layer": "regex_table",
+      "provenance_kind": "synthesized"
+    },
+    {
+      "fact_type": "clinical_significance",
+      "fact_value": "pathogenic",
+      "count_type": null,
+      "source_layer": "regex_table",
+      "provenance_kind": "synthesized"
+    },
+    {
+      "fact_type": "patient_count",
+      "fact_value": "1",
+      "count_type": "per_variant_carrier",
+      "source_layer": "regex_table",
+      "provenance_kind": "synthesized"
+    },
+    {
+      "fact_type": "total_carriers_observed",
+      "fact_value": "1",
+      "count_type": "per_variant_carrier",
+      "source_layer": "regex_table",
+      "provenance_kind": "synthesized"
+    },
+    {
+      "fact_type": "variant_identity",
+      "fact_value": "A1043V",
+      "count_type": null,
+      "source_layer": "regex_table",
+      "provenance_kind": "synthesized"
+    }
+  ],
+  "script_sha256": "a05f77249cb4b4ce53f0538a47bdbe4a3fcbb58d43c3e0bd6fb843ae6d15f879"
+}

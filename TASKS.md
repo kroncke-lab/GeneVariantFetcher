@@ -140,6 +140,38 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       establish a distinct 3D advantage over sequence proximity. Evidence,
       corrected figures and reviewer dispositions:
       [`structural sanity audit`](docs/evidence/structural_sanity_20260913/README.md).
+- [x] **Audit BRCA2 distance weighting and correct catalogue-as-patient evidence
+      (2026-09-13).** The broad floor was driven by contaminated affected counts
+      and averaging individually shrunk posteriors, not predominantly by the
+      >20 Å tail. Quarantined 4,070 proven ClinVar-catalogue observations from
+      PMID 40664060 and restored its five real missense patient observations.
+      Rebuilt clinical/population ownership before refitting: 4,584 missense
+      units, A=2,085, all 1,516,774 missense gnomAD carriers preserved as U;
+      corrected α=0.202612, β=4.219486, prior mean 4.58%. With unchanged h=3
+      geometry, 4,371 targets are supported and the median density is 4.57%.
+      This supersedes prior BRCA2 counts/priors/residue plots and invalidates
+      reuse of their predictive metrics as corrected validation. The live
+      regex parser now refuses catalogue annotations as patient counts and
+      preserves explicit classifications; 15 new regressions and all 3,064
+      offline tests pass. Fresh Agy/Grok consultations used synthetic examples
+      after detailed-data transmission was blocked; real-data checks were local.
+      [`Count, distance and prior audit`](docs/evidence/brca2_distance_prior_audit_20260913/README.md).
+- [ ] **Next BRCA2: compare count evidence separately from prior shrinkage.**
+      First adjudicate 22 retained missense affected observations from the
+      PMID 36385461 variant compilation and 205 from the PMID 33054725
+      pan-tumor study (inventory grain, germline/somatic status and endpoints).
+      These 227 remain in the current 40664060-only correction; do not
+      equate its numerical verification with full source validation.
+      Then keep the corrected posterior-neighborhood baseline and compare raw
+      variant fractions and raw-kernel pooled-count/one-prior features under
+      the same variant-only LOO; retain same-residue alternative alleles and
+      report support. Zero observed cases can yield a zero descriptive fraction,
+      but do not force a ≤0.1% disease probability from sparse observations.
+      Complete source/endpoint and person/family ownership curation before
+      clinical calibration claims. Refresh archived extraction through the
+      source-reviewed workflow and run the registered scored comparison with
+      canonical/companion figures before claiming extraction recall/MAE gains;
+      current source DBs and old scored-arm artifacts were not rewritten.
 - [ ] **Next: curate GCK identity/endpoints and repeat the fixed comparison.**
       Resolve 19 canonical-WT mismatches against source/transcript evidence;
       adjudicate mixed MODY versus activating/hypoglycemia counts and ambiguous

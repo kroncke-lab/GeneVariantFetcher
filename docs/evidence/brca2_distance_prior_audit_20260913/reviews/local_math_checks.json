@@ -1,0 +1,30 @@
+{
+  "alpha": 0.9074554792970309,
+  "beta": 5.199318948641594,
+  "prior_strength": 6.106774427938625,
+  "prior_mean": 0.1485981658574783,
+  "A0_U1": 0.12768879728749818,
+  "A1_U0": 0.2683996092233229,
+  "min_integer_U_for_A0_p_le_001": 902,
+  "kernel_formula": "2 / (1 + exp(log(3) * distance / 3))",
+  "kernel_by_distance": {
+    "0": 1.0,
+    "3": 0.5,
+    "5": 0.2762334994192156,
+    "10": 0.05007418691300719,
+    "15": 0.008196721311475412,
+    "20": 0.001318060433708577,
+    "30": 3.3869602032176136e-05
+  },
+  "source_file": "ProteinProximityAnalysis/src/alphafold_rin/empirical_density.py",
+  "source_sha256": "48d3e655bd925d31e68bb7319c100f713e94a3039ba85edf4d7cb85349445589",
+  "verified_context_normalization": "Normalize every supported context independently and average contexts equally; target variant is excluded; same-residue alternatives remain eligible.",
+  "synthetic_prompt_checks": {
+    "alpha": 1,
+    "beta": 9,
+    "unaffected_singleton_posterior": 0.09090909090909091,
+    "hundred_unaffected_carriers_one_prior": 0.00909090909090909,
+    "min_U_for_p_le_001": 990,
+    "normalized_identical_posterior_average": 0.09090909090909091
+  }
+}

@@ -1,0 +1,5 @@
+variant_id,unit_id_before,unit_id_after,old_class,new_class,protein_key,ref,alt,net_length_change,source_hgvsc,source_hgvsp,source_transcript,canonical_transcript,gnomad_carriers
+13-32336632-TTTATA-T,BRCA2|lit:L760X,BRCA2|g:13-32336632-TTTATA-T,nonsense,frameshift,L760X,TTTATA,T,-5,c.2279_2283del,p.Leu760Ter,ENST00000380152.8,ENST00000380152.8,1
+13-32355268-AGT-A,BRCA2|lit:C2473X,BRCA2|g:13-32355268-AGT-A,nonsense,frameshift,C2473X,AGT,A,-2,c.7419_7420del,p.Cys2473Ter,ENST00000380152.8,ENST00000380152.8,6
+13-32398608-C-CT,BRCA2|lit:S3366X,BRCA2|g:13-32398608-C-CT,nonsense,frameshift,S3366X,C,CT,1,c.10095_10096insT,p.Ser3366Ter,ENST00000380152.8,ENST00000380152.8,501
+13-32398619-C-CT,BRCA2|lit:R3370X,BRCA2|g:13-32398619-C-CT,nonsense,frameshift,R3370X,C,CT,1,c.10107dup,p.Arg3370Ter,ENST00000380152.8,ENST00000380152.8,3

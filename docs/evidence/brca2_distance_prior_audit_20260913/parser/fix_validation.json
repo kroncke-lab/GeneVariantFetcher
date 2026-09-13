@@ -1,0 +1,83 @@
+{
+  "recorded_utc": "2026-09-13T14:30:24.414953+00:00",
+  "scope": "Future deterministic Markdown parser guard and focused offline regressions. No external LLM calls, source database writes, frozen-count changes or scored extraction arm.",
+  "validation_log_provenance": "Test and lint results transcribed from actual completed exec tool outputs in this task; full stdout was not saved as a separate file. Full suite was not rerun for this receipt.",
+  "commands": [
+    {
+      "command": ".venv/bin/python -m pytest tests/unit/test_catalog_table_safety.py tests/unit/test_extraction_table_parser.py tests/unit/test_extraction_regressions.py tests/unit/test_table_router.py -q",
+      "exit_code": 0,
+      "collected": 237,
+      "passed": 237,
+      "duration_seconds": 21.7,
+      "result_summary": "237 passed in 21.70s",
+      "new_catalog_regression_cases_included": 15
+    },
+    {
+      "command": ".venv/bin/python -m pytest tests/unit -q",
+      "exit_code": 0,
+      "collected": 3064,
+      "passed": 3064,
+      "duration_seconds": 123.99,
+      "result_summary": "3064 passed in 123.99s (0:02:03)"
+    },
+    {
+      "command": ".venv/bin/ruff check pipeline/extraction.py tests/unit/test_catalog_table_safety.py",
+      "exit_code": 0,
+      "result_summary": "All checks passed!"
+    },
+    {
+      "command": ".venv/bin/ruff format --check pipeline/extraction.py tests/unit/test_catalog_table_safety.py",
+      "exit_code": 0,
+      "result_summary": "2 files already formatted"
+    },
+    {
+      "command": "git diff --check -- pipeline/extraction.py tests/unit/test_catalog_table_safety.py docs/PROTOCOL_CHANGELOG.md docs/ARCHITECTURE.md",
+      "exit_code": 0,
+      "result_summary": "No whitespace errors"
+    }
+  ],
+  "new_cases": {
+    "count": 15,
+    "execution": "Included in both successful pytest commands; no separate 15-case-only command is claimed."
+  },
+  "files_sha256_at_receipt": {
+    "pipeline/extraction.py": "5eb59ea322397cc49a80854b6539f07a2dbcb9034f5f6725c7e33eae05426f50",
+    "tests/unit/test_catalog_table_safety.py": "f2f0643576c3a6ef970fdccad6012330ed52f73ad51f86a40de6d7c11e86c248",
+    "docs/ARCHITECTURE.md": "00bcb0a0d44179751000d9555a3b6e8b79b7861f3e703c928daaf34a1df33bc8",
+    "docs/PROTOCOL_CHANGELOG.md": "6224f39102946f6d62ed6aa1e2513106eac547271e4b42a3ed427451998d5fbc"
+  },
+  "exact_source_smoke": {
+    "execution": "LITELLM_LOCAL_MODEL_COST_MAP=True .venv/bin/python, using the exact code below",
+    "code": "from pathlib import Path\nfrom pipeline.extraction import ExpertExtractor\nsource = Path(\"docs/evidence/brca2_distance_prior_audit_20260913/parser/source_excerpt.md\").read_text()\nrecords = ExpertExtractor.__new__(ExpertExtractor)._parse_markdown_table_variants(source, \"BRCA2\")\nassert records == []",
+    "status": "PASS",
+    "post_fix_output": [],
+    "post_fix_false_catalog_rows": 0,
+    "pre_fix_output": [
+      {
+        "protein_notation": "A1043V",
+        "clinical_significance": "pathogenic",
+        "penetrance_data": {
+          "total_carriers_observed": 1,
+          "affected_count": 1,
+          "unaffected_count": null
+        },
+        "count_provenance": {
+          "carriers_column_label": "implicit one carrier per clinical row",
+          "carriers_count_type": "per_variant_carrier",
+          "affected_column_label": null,
+          "affected_count_type": null,
+          "unaffected_column_label": null,
+          "unaffected_count_type": null
+        }
+      }
+    ],
+    "source_excerpt_sha256": "2c77312780cf2c40c694d31c515447a429969e5b6ef1a5d6ce7ccef7f1e20828",
+    "original_source_file": "results/grant_e2e_20260909/shards/BRCA2_0/BRCA2/20260909_115038/pmc_fulltext/40664060_CLEANED.md",
+    "original_source_sha256": "bcb4d941e5438ac133f557f4d4c97e111a6efcdeb640b926910821e95302d1b2",
+    "original_source_hash_reverified": true,
+    "baseline_reproduction_sha256": "7df23211de3ec95eea7b567b75699585e859da5442e9f7f37c32594fbb494b7e",
+    "baseline_reproduction_unchanged_during_receipt": true,
+    "baseline_scope": "Frozen pre-fix reproduction; its script deliberately asserts the old behavior and is not a post-fix regression test."
+  },
+  "remaining_validation": "Source-reviewed archived refresh and a registered scored extraction comparison are needed before claiming recall/MAE effects. That scored arm must generate the canonical and companion figures. Existing prior scored-arm figures and benchmark headlines are unchanged."
+}

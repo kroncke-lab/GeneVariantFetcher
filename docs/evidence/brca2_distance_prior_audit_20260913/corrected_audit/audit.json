@@ -1,0 +1,66 @@
+{
+  "all_population_alleles_preserved_once": 24851,
+  "all_consequence_gnomad_carriers_preserved": 15877471,
+  "clinical_count_deltas_match_source_ledger": true,
+  "zero_clinical_evidence_keys_removed": 3644,
+  "population_alleles_released_to_genomic_units": 782,
+  "population_alleles_captured_by_restored_patient_keys": 2,
+  "released_frameshift_alleles_correctly_excluded_from_nonsense": 4,
+  "reclassified_frameshift_carriers_preserved_in_full_union": 511,
+  "independent_moments_and_orientation": [
+    {
+      "variant_type": "missense",
+      "variants": 4584,
+      "mean": 0.04581810125046837,
+      "alpha_affected": 0.2026121298497684,
+      "beta_unaffected": 4.219485781675913,
+      "strength": 4.4220979115256815,
+      "affected": 2085,
+      "unaffected_literature": 1482,
+      "gnomad_carriers": 1516774
+    },
+    {
+      "variant_type": "nonsense",
+      "variants": 453,
+      "mean": 0.6296909178561282,
+      "alpha_affected": 3.014199618481647,
+      "beta_unaffected": 1.7725926521515645,
+      "strength": 4.786792270633211,
+      "affected": 1174,
+      "unaffected_literature": 108,
+      "gnomad_carriers": 13375
+    }
+  ],
+  "reference_targets": 8,
+  "reference_contexts": 27,
+  "maximum_selected_formula_error": 1.1368683772161603e-13,
+  "absolute_kernel_count_pooling_verified": true,
+  "one_prior_per_supported_context_then_equal_context_mean_verified": true,
+  "corrected_metric_rows_recomputed": 5,
+  "all_residue_table_rows_checked": 3418,
+  "report_numerical_claims": {
+    "supported_targets": 4371,
+    "supported_residues": 2525,
+    "supported_geometry": {
+      "polymer": 3041,
+      "structured": 1330
+    },
+    "no_affected_donor_targets": 33,
+    "no_affected_donor_residues": 22,
+    "no_affected_donor_density_minimum": 0.0019977118795798,
+    "no_affected_donor_density_maximum": 0.0373678478618171,
+    "residues_865_866": {
+      "variants": 6,
+      "affected": 0.0,
+      "unaffected": 20.0,
+      "mean_density": 0.030617267290512496,
+      "before_mean_density": 0.10785818534164915,
+      "mean_raw_variant_fraction_density": 0.0
+    },
+    "zero_affected_singleton_posterior": 0.03736784786181718,
+    "zero_affected_unaffected_count_needed_for_mean_at_most_0p1_percent": 199
+  },
+  "script_sha256": "ef8f06f632eeebd54c4492533c35da81ad36ab2ddbdd0540c493292ebd06032f",
+  "runner_sha256": "d6fccca9ae904a3be2357d637d6924cadfdd7a1601e9f80b661d95e586793ff4",
+  "final_input_hashes_verified": 18
+}

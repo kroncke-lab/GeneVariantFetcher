@@ -1,0 +1,6 @@
+gene,frozen_observations,target_pmid_observations,implicit_carrier_rows,exact_catalog_signature_rows,rows_with_nonempty_source_quotes,rows_with_source_record
+HNF1A,419,0,26,0,355,419
+GCK,616,0,60,0,430,616
+LDLR,1554,0,102,0,1154,1554
+KCNQ1,1909,0,0,0,522,1909
+BRCA2,8182,4071,5471,4070,5584,8182

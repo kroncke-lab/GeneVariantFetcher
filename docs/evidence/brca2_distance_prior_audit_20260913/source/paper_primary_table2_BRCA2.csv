@@ -1,0 +1,16 @@
+sample_id,endpoint,gene,exon,cdna,protein,effect
+Sample 3,BC,BRCA2,11,c.3069_3074del,p.N1023_I1024del,In frame
+Sample 6,BC,BRCA2,4,c.353G>A,p.R118H,Missense
+Sample 10,OCS,BRCA2,11,c.6547del,p.E2183Nfs*8,Frameshift
+Sample 17,BC,BRCA2,23,c.9117G>A,p.P3039P,synonymous
+Sample 27,BC,BRCA2,11,c.6826C>A,p.P2276T,Missense
+Sample 30,BC,BRCA2,17,c.7886_7890delGGAAAinsTTT,p.W2629Ffs*11,Frameshift
+Sample 31,BBT,BRCA2,11,c.4884_4885dup,p.T1629Kfs*8,Frameshift
+Sample 39,BC,BRCA2,11,c.6373dup,p.T2125Nfs*4,Frameshift
+Sample 41,BC,BRCA2,10,c.994del,p.I332Ffs*17,Frameshift
+Sample 49,BC,BRCA2,11,c.5164_5165del,p.S1722Yfs*4,Frameshift
+Sample 57,BC,BRCA2,11,c.4798_4800del,p.N1600del,In frame
+Sample 58,BC,BRCA2,11,c.6226G>A,p.V2076I,Missense
+Sample 59,BC,BRCA2,3,c.83G>A,p.S28N,Missense
+Sample 63,BC,BRCA2,17,c.7857G>C,p.W2619C,Missense
+Sample 81,BC,BRCA2,23,c.9097del,p.T3033Lfs*29,Frameshift
