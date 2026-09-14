@@ -173,6 +173,34 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       source-delta, prior, geometry, exclusion, matrix and plot checks plus
       fresh Agy/Grok/Claude conceptual consultations are recorded in
       [`corrected residue profiles`](docs/evidence/residue_density_refresh_20260914/README.md).
+- [x] **Investigate BRCA2 sex denominators and high-penetrance claims
+      (2026-09-14).** The accepted baseline is committed locally; public push
+      remains blocked pending explicit destination/payload authorization.
+      Reproduce retained observations and verify exact joint XX/XY counts for
+      six alleles. Confirm male cases in the current numerator, identify the
+      highest own posterior as a BRCA1-table misattribution, and record five
+      omitted controls for a separate BRCA2 allele. Current plots remain the
+      frozen all-sex baseline, pending these newly reviewed corrections.
+      [Audit, source patches and execution plan](docs/evidence/brca2_sex_endpoint_audit_20260914/README.md).
+- [ ] **Next: rebuild BRCA2 for female breast cancer.** Apply the reviewed
+      observation patches; curate female germline clinical A/U and exact XX
+      gnomAD AC-minus-homozygotes, maintaining the user's unaffected assumption.
+      Do not retain male clinical cases while only restricting the denominator.
+      Separate ovarian and male cancer endpoints, retain unknowns as unknown,
+      and resolve person/family/cohort ownership. Refit type-specific priors and
+      repeat the fixed structure/polymer/variant-only LOO comparisons. A
+      population-only XY singleton is not a female donor with one unaffected
+      observation. The audit's six-allele denominator sensitivity is not a
+      women-only model or lifetime penetrance estimate.
+- [ ] **Next: compare empirical-prior estimators.** The historical singleton
+      weight and M-normalized weighted variance produce excessive shrinkage
+      in sparse variants. The accepted next design is a proper gene-by-type
+      beta-binomial marginal-likelihood fit, followed by evaluation of a
+      near-zero/higher-risk mixture if supported. Normalizing MSE alone is a
+      diagnostic, not a validated replacement. Compare held-out counts and
+      outcomes with priors/features fitted within validation folds; preserve
+      the descriptive baseline with its full-dataset prior. The numerical
+      diagnostic and rationale are saved in the BRCA2 sex/endpoint audit.
 - [ ] **Next: validate the corrected posterior and count features.**
       Keep the corrected baseline, raw variant fractions and raw-kernel
       pooled-count/one-prior features under the same variant-only LOO;

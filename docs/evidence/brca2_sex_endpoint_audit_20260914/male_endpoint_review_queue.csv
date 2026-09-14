@@ -1,0 +1,38 @@
+key,pmid,observation_variant_id,affected,unaffected,original_row_index,title,source_sex_status,individual_record_count,individual_sex_counts,title_male_or_prostate_signal,db_index,db_variant_id
+D1420Y,11139248,20000016,1.0,4.0,554.0,BRCA2 germline mutations in male breast cancer patients in the Polish population.,no_linked_individual_sex_records,0,{},True,2.0,16.0
+D1420Y,11879560,22,1.0,0.0,555.0,BRCA1 and BRCA2 mutations in a population-based study of male breast cancer,structured_rows_present_not_reconciled_to_aggregate,1,"{""male"": 1}",True,0.0,22.0
+D2723H,20927582,20001234,2.0,0.0,749.0,Mutations in BRCA2 and PALB2 in male breast cancer cases from the United States,no_linked_individual_sex_records,0,{},True,2.0,1234.0
+D2723H,28008555,50000154,1.0,0.0,750.0,Male breast cancer in a multi-gene panel testing cohort: insights and unexpected results.,no_linked_individual_sex_records,0,{},True,5.0,154.0
+E1593D,31320873,40002534,1.0,0.0,1009.0,"Somatic BRCA2 Mutation-Positive Concurrent Accessory Male Breast Cancer (BC) and Non-Small Cell Lung Cancer (NSCLC): Excellent Efficacy of Palbociclib, Fulvestrant and Leuprolide in Platinum-Exposed and Endocrine-Refractory BC Associated with Cyclin D1 and FGFR1 Amplification and of Carboplatin, Paclitaxel and Radiation in NSCLC",structured_rows_present_not_reconciled_to_aggregate,1,"{""male"": 1}",True,4.0,2534.0
+E432F,28008555,50001038,1.0,0.0,1409.0,Male breast cancer in a multi-gene panel testing cohort: insights and unexpected results.,no_linked_individual_sex_records,0,{},True,5.0,1038.0
+F11V,38974244,9990,1.0,0.0,1519.0,BRCA-associated hereditary male cancers: can gender affect the prevalence and spectrum of germline pathogenic variants?,no_linked_individual_sex_records,0,{},True,0.0,9990.0
+H1101R,39335746,40016085,1.0,0.0,2003.0,Internal Overview of Prostatic Cancer Cases and Quality of BRCA1 and BRCA2 NGS Data from the FFPE Tissue.,no_linked_individual_sex_records,0,{},True,4.0,16085.0
+H415R,39335746,40016088,1.0,0.0,2185.0,Internal Overview of Prostatic Cancer Cases and Quality of BRCA1 and BRCA2 NGS Data from the FFPE Tissue.,no_linked_individual_sex_records,0,{},True,4.0,16088.0
+I2490T,21156238,40000162,1.0,1.0,2463.0,"Germline mutations of BRCA1 and BRCA2 genes in Turkish breast, ovarian, and prostate cancer patients.",no_linked_individual_sex_records,0,{},True,4.0,162.0
+I2828V,21156238,40000407,1.0,0.0,2539.0,"Germline mutations of BRCA1 and BRCA2 genes in Turkish breast, ovarian, and prostate cancer patients.",no_linked_individual_sex_records,0,{},True,4.0,407.0
+I2840V,41163992,70008923,1.0,0.0,2544.0,Male Breast Cancer Brain Metastases: Genetic Profiles and Radiosurgery Outcomes,structured_rows_present_not_reconciled_to_aggregate,1,"{""male"": 1}",True,7.0,8923.0
+K3196E,11139248,20000015,1.0,0.0,3176.0,BRCA2 germline mutations in male breast cancer patients in the Polish population.,no_linked_individual_sex_records,0,{},True,2.0,15.0
+L3101P,38974244,4554,1.0,0.0,3713.0,BRCA-associated hereditary male cancers: can gender affect the prevalence and spectrum of germline pathogenic variants?,no_linked_individual_sex_records,0,{},True,0.0,4554.0
+M1890T,38974244,5983,1.0,0.0,3881.0,BRCA-associated hereditary male cancers: can gender affect the prevalence and spectrum of germline pathogenic variants?,no_linked_individual_sex_records,0,{},True,0.0,5983.0
+N289H,19476645,50000177,2.0,1.0,4351.0,No evidence of BRCA2 mutations in chromosome 13q-linked Utah high-risk prostate cancer pedigrees.,no_linked_individual_sex_records,0,{},True,5.0,177.0
+N3124I,11139248,20000014,1.0,0.0,4372.0,BRCA2 germline mutations in male breast cancer patients in the Polish population.,no_linked_individual_sex_records,0,{},True,2.0,14.0
+N3124I,34575694,60004705,1.0,0.0,4375.0,"Cancer Spectrum, Family History of Cancer and Overall Survival in Men with Germline BRCA1 or BRCA2 Mutations",structured_rows_present_not_reconciled_to_aggregate,1,"{""male"": 1}",True,6.0,4705.0
+N372H,19476645,50000178,5.0,1.0,4404.0,No evidence of BRCA2 mutations in chromosome 13q-linked Utah high-risk prostate cancer pedigrees.,no_linked_individual_sex_records,0,{},True,5.0,178.0
+N372H,27148582,50000133,1.0,0.0,4407.0,Molecular analysis of a male breast cancer patient with prolonged stable disease under mTOR/PI3K inhibitors BEZ235/everolimus,structured_rows_present_not_reconciled_to_aggregate,1,"{""male"": 1}",True,5.0,133.0
+N991D,19476645,50000181,2.0,1.0,4506.0,No evidence of BRCA2 mutations in chromosome 13q-linked Utah high-risk prostate cancer pedigrees.,no_linked_individual_sex_records,0,{},True,5.0,181.0
+P3039L,38974244,525,1.0,0.0,4704.0,BRCA-associated hereditary male cancers: can gender affect the prevalence and spectrum of germline pathogenic variants?,no_linked_individual_sex_records,0,{},True,0.0,525.0
+P3300S,38974244,9991,1.0,0.0,4761.0,BRCA-associated hereditary male cancers: can gender affect the prevalence and spectrum of germline pathogenic variants?,no_linked_individual_sex_records,0,{},True,0.0,9991.0
+Q2829R,39889220,425,1.0,0.0,5119.0,Genetic Predisposition to Male Breast Cancer.,no_linked_individual_sex_records,0,{},True,0.0,425.0
+R3385H,41163992,70010346,1.0,0.0,5665.0,Male Breast Cancer Brain Metastases: Genetic Profiles and Radiosurgery Outcomes,structured_rows_present_not_reconciled_to_aggregate,1,"{""male"": 1}",True,7.0,10346.0
+S1179N,11139248,20000013,1.0,0.0,5756.0,BRCA2 germline mutations in male breast cancer patients in the Polish population.,no_linked_individual_sex_records,0,{},True,2.0,13.0
+T1354M,21156238,40000406,1.0,0.0,6631.0,"Germline mutations of BRCA1 and BRCA2 genes in Turkish breast, ovarian, and prostate cancer patients.",no_linked_individual_sex_records,0,{},True,4.0,406.0
+T1915M,11879560,21,2.0,0.0,6718.0,BRCA1 and BRCA2 mutations in a population-based study of male breast cancer,structured_rows_present_not_reconciled_to_aggregate,2,"{""male"": 2}",True,0.0,21.0
+T1915M,21156238,40000157,2.0,1.0,6719.0,"Germline mutations of BRCA1 and BRCA2 genes in Turkish breast, ovarian, and prostate cancer patients.",no_linked_individual_sex_records,0,{},True,4.0,157.0
+T203N,37347260,9946,1.0,0.0,6743.0,A comprehensive study on surveillance outcomes of a male population followed at a hereditary breast cancer high-risk consultation at a Portuguese tertiary hospital,structured_rows_present_not_reconciled_to_aggregate,1,"{""male"": 1}",True,0.0,9946.0
+T2515I,19476645,50000185,1.0,0.0,6821.0,No evidence of BRCA2 mutations in chromosome 13q-linked Utah high-risk prostate cancer pedigrees.,no_linked_individual_sex_records,0,{},True,5.0,185.0
+V159M,28008555,50001050,1.0,0.0,7133.0,Male breast cancer in a multi-gene panel testing cohort: insights and unexpected results.,no_linked_individual_sex_records,0,{},True,5.0,1050.0
+V159M,39889220,2894,1.0,0.0,7135.0,Genetic Predisposition to Male Breast Cancer.,no_linked_individual_sex_records,0,{},True,0.0,2894.0
+V2014F,32365798,60004325,2.0,0.0,7199.0,Male Breast Cancer: Results of the Application of Multigene Panel Testing to an Italian Cohort of Patients,no_linked_individual_sex_records,0,{},True,6.0,4325.0
+V208G,35534218,20001866,2.0,0.0,7220.0,Germline pathogenic variants in unselected Korean men with prostate cancer.,no_linked_individual_sex_records,0,{},True,2.0,1866.0
+V211I,32058061,40004738,1.0,0.0,7231.0,BRCA and PALB2 mutations in a cohort of male breast cancer with one bilateral case.,no_linked_individual_sex_records,0,{},True,4.0,4738.0
+V2466R,27148582,50017572,1.0,0.0,7307.0,Molecular analysis of a male breast cancer patient with prolonged stable disease under mTOR/PI3K inhibitors BEZ235/everolimus,structured_rows_present_not_reconciled_to_aggregate,1,"{""male"": 1}",True,5.0,17572.0

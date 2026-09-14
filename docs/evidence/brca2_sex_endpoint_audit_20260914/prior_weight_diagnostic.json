@@ -1,0 +1,72 @@
+[
+  {
+    "gene": "HNF1A",
+    "units": 781,
+    "singletons": 344,
+    "unaffected_singletons": 312,
+    "singleton_unit_share": 0.44046094750320103,
+    "singleton_fit_weight_share": 0.010106328116387887,
+    "historical_prior_mean": 0.10280112666982759,
+    "historical_strength": 2.225003166090688,
+    "historical_unaffected_singleton_posterior": 0.07092483961661457,
+    "normalized_mse_strength": 0.39162680739158473,
+    "normalized_mse_unaffected_singleton_posterior": 0.028929937839745817,
+    "normalized_mse_is_only_a_diagnostic": true
+  },
+  {
+    "gene": "GCK",
+    "units": 614,
+    "singletons": 327,
+    "unaffected_singletons": 247,
+    "singleton_unit_share": 0.5325732899022801,
+    "singleton_fit_weight_share": 0.015747912798400286,
+    "historical_prior_mean": 0.344229651747303,
+    "historical_strength": 2.982971890149705,
+    "historical_unaffected_singleton_posterior": 0.2578043238160118,
+    "normalized_mse_strength": 0.3336511624127849,
+    "normalized_mse_unaffected_singleton_posterior": 0.08611893925443691,
+    "normalized_mse_is_only_a_diagnostic": true
+  },
+  {
+    "gene": "LDLR",
+    "units": 1361,
+    "singletons": 588,
+    "unaffected_singletons": 511,
+    "singleton_unit_share": 0.432035268185158,
+    "singleton_fit_weight_share": 0.009944783673975492,
+    "historical_prior_mean": 0.14813135094946658,
+    "historical_strength": 2.5109402546679234,
+    "historical_unaffected_singleton_posterior": 0.10593998903366054,
+    "normalized_mse_strength": 0.5101703031131248,
+    "normalized_mse_unaffected_singleton_posterior": 0.05004218137428506,
+    "normalized_mse_is_only_a_diagnostic": true
+  },
+  {
+    "gene": "BRCA2",
+    "units": 4444,
+    "singletons": 2131,
+    "unaffected_singletons": 2012,
+    "singleton_unit_share": 0.4795229522952295,
+    "singleton_fit_weight_share": 0.012147766205816623,
+    "historical_prior_mean": 0.03815940490618653,
+    "historical_strength": 4.286301466012508,
+    "historical_unaffected_singleton_posterior": 0.03094085992695544,
+    "normalized_mse_strength": 1.0660628421790443,
+    "normalized_mse_unaffected_singleton_posterior": 0.019689780397601688,
+    "normalized_mse_is_only_a_diagnostic": true
+  },
+  {
+    "gene": "KCNQ1",
+    "units": 1061,
+    "singletons": 455,
+    "unaffected_singletons": 379,
+    "singleton_unit_share": 0.4288407163053723,
+    "singleton_fit_weight_share": 0.009512218865653099,
+    "historical_prior_mean": 0.2946719125488531,
+    "historical_strength": 2.166196843503521,
+    "historical_unaffected_singleton_posterior": 0.2016038163079425,
+    "normalized_mse_strength": 0.4132881456548114,
+    "normalized_mse_unaffected_singleton_posterior": 0.0861709685235112,
+    "normalized_mse_is_only_a_diagnostic": true
+  }
+]

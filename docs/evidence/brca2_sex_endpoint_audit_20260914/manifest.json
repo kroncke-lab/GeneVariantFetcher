@@ -1,0 +1,23 @@
+{
+  "baseline_commit": "dcad8e7a",
+  "scope": "BRCA2 sex and endpoint audit; frozen model unchanged",
+  "files": {
+    "README.md": "b1b76a26d1ebadbb08bfe10f58b86289e03c5e222ff2d2c3930a7346d635a376",
+    "audit_local.py": "6b2ac5e9f17b09aa79d6c327dcd4859022922621ac4ef25710f8df14efaf56ee",
+    "build_summary.py": "b76858d12663efec0b5e320399bb266dc971578a026c5e20803dee8c0df905e9",
+    "fetch_sex_probe.py": "39dca6e83579b46861a48746502d0810ebf4ff4645f5d6e61aa994b4cb1e2b71",
+    "input_hashes.json": "c05bf4b6eb5910138f4fd17ffcb8cee7f7a0976424dc604914da1712ee2ade84",
+    "local_checks.json": "f8bba8a8b74cd7774d8aa8e8edfc6e43a305fcd374ee7cb951f50512707e7d50",
+    "male_endpoint_review_queue.csv": "d72329eaca53704df8d03591e86964976bc6734b441259c3757cc3801db76e4a",
+    "prior_weight_diagnostic.json": "77814a94a1331e1a008309ec5172577ca5355737d215dd130ecfdad264f48419",
+    "retained_missense_observation_scope.csv.gz": "e84e738891ee9ca7039742ab99d02c33dcbd3ad7ab78989d8de65dc0071994e4",
+    "retained_paper_inventory.csv": "a00452c05fa49e295f71b67e4e8608c999578b2e1caa626ac5adc430d4b40ea4",
+    "reviewed_source_patch.csv": "b76f4579c258c0b3d04202970f242ae69e9770545377d28678fdb9729ad7b853",
+    "selected_variant_counts.csv": "0ae98ae206eed6e13033035c7bd08507a1d7f4a8a367d5560f3d807468e714bc",
+    "selected_variant_sources.csv": "cd625748214286cb4bec636f945528cd8c6999f69f195f143a84a8779d1a63d6",
+    "sex_denominator_sensitivity.csv": "fa7c902885a794d19afb0c18d9901a7720022fff95b7bea6835744f47af1b3fc",
+    "sex_probe.json": "44f7d5b3007003aa48b977ec34b238c9b7034c3100790e1a8abac92658193ada",
+    "summary_input_hashes.json": "b1a0aab69ff187376c35bd39f4ab969347afa5e1ba50aedc139894afab1872dc"
+  },
+  "all_six_cached_api_receipts_reproduced": true
+}

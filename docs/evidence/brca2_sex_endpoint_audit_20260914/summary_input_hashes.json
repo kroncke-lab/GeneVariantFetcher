@@ -1,0 +1,21 @@
+{
+  "docs/evidence/residue_density_refresh_20260914/tables/prior_summary.csv": "182cb836b1a7079726811605fa61c4eb2e61110fb904af2937a395c6fbf00b2f",
+  "docs/evidence/residue_density_refresh_20260914/analysis/BRCA2/missense_posteriors.part001.csv.gz": "7d5f4c3ad5cc330eb1cf4b592ab27332648ad97efb55e16f4c6d29b8ed571ed0",
+  "docs/evidence/residue_density_refresh_20260914/analysis/BRCA2/missense_posteriors.part002.csv.gz": "2ba17255a1739509a93c1bbf955140cf29fe2342a327418af2279fdb70d9d06f",
+  "docs/evidence/residue_density_refresh_20260914/analysis/BRCA2/missense_posteriors.part003.csv.gz": "cd8172218bd4051274d64f0e3ded16a0001b144ef238c417a46fc926d14829e8",
+  "docs/evidence/brca2_sex_endpoint_audit_20260914/sex_probe.json": "44f7d5b3007003aa48b977ec34b238c9b7034c3100790e1a8abac92658193ada",
+  "results/brca2_sex_endpoint_audit_20260914/sex_probe.json.gz": "8962ae72686b91b36baa5852222268f6e0bb676ccbd2a24835f77ba2603640b4",
+  "results/brca2_sex_endpoint_audit_20260914/13-32363369-G-C.json.gz": "35385944d52c63ba627dda8f8e8f0e46032af86cc951565942cea89a540907f8",
+  "results/brca2_sex_endpoint_audit_20260914/13-32380043-C-T.json.gz": "9bc567d403ac6c17be9cf141fc54b5faa0c6e0b6484f0feb56edd7114f1e3c92",
+  "results/brca2_sex_endpoint_audit_20260914/13-32362595-G-C.json.gz": "5bc451ab2ddb67ca86231c2394748ee978ce63c09093f86b0b8be2e99d25a236",
+  "results/brca2_sex_endpoint_audit_20260914/13-32332592-A-C.json.gz": "4efd8936802261802775f4b2e140e4ca2e6e4feef3ea0d62a0efb024f0ffd8fc",
+  "results/brca2_sex_endpoint_audit_20260914/13-32363225-A-G.json.gz": "9f04636008c81a0aef70f655f6f9a41b4e72c597b39854fdac528bb46176d6be",
+  "docs/evidence/residue_density_refresh_20260914/analysis/HNF1A/missense_posteriors.part001.csv.gz": "ebd7ec95a633151d9fb75d8e057c5ed8cc897e889b80d3590652fe4cff63847d",
+  "docs/evidence/residue_density_refresh_20260914/analysis/GCK/missense_posteriors.part001.csv.gz": "fe1fd7dc87823cf123bc4e5b41dc906b3f04e5641224bd13aa5b2700ee877871",
+  "docs/evidence/residue_density_refresh_20260914/analysis/LDLR/missense_posteriors.part001.csv.gz": "8c18df3bc6ea444055abdcd440e83faf52c4d76c16bb2068b03ceb12299e963c",
+  "docs/evidence/residue_density_refresh_20260914/analysis/KCNQ1/missense_posteriors.part001.csv.gz": "be1bd48f9f919e1877f6bef3f3b834062d6370b35cd20995c31a24de1e771391",
+  "results/grant_e2e_20260909/shards/BRCA2_2/BRCA2/20260909_115043/pmc_fulltext/17100994_CLEANED.md": "362d44f17a680d0d7469777e5282d454cae49e1d7cebbe4d7ca93ed4be6dfbc5",
+  "results/grant_e2e_20260909/shards/BRCA2_1/BRCA2/20260909_115040/pmc_fulltext/20927582_CLEANED.md": "ae2c83ba35cf7ac8baa1abd0f5b78cc979984be685ac26ebce3747f855e4174a",
+  "docs/evidence/brca2_sex_endpoint_audit_20260914/retained_missense_observation_scope.csv.gz": "e84e738891ee9ca7039742ab99d02c33dcbd3ad7ab78989d8de65dc0071994e4",
+  "docs/evidence/brca2_sex_endpoint_audit_20260914/build_summary.py": "b76858d12663efec0b5e320399bb266dc971578a026c5e20803dee8c0df905e9"
+}

@@ -1,0 +1,365 @@
+[
+  {
+    "variant_id": "13-32363389-G-T",
+    "assays": {
+      "exome": {
+        "ac": 646,
+        "an": 1461864,
+        "homozygote_count": 6,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 329,
+            "an": 734636,
+            "homozygote_count": 4
+          },
+          {
+            "id": "XY",
+            "ac": 317,
+            "an": 727228,
+            "homozygote_count": 2
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "genome": {
+        "ac": 69,
+        "an": 152274,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 22,
+            "an": 77816,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 47,
+            "an": 74458,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "joint": {
+        "ac": 715,
+        "an": 1614138,
+        "homozygote_count": 6,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 351,
+            "an": 812452,
+            "homozygote_count": 4
+          },
+          {
+            "id": "XY",
+            "ac": 364,
+            "an": 801686,
+            "homozygote_count": 2
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 2
+      }
+    },
+    "source_sha256": "8962ae72686b91b36baa5852222268f6e0bb676ccbd2a24835f77ba2603640b4",
+    "source": "results/brca2_sex_endpoint_audit_20260914/sex_probe.json.gz",
+    "script_sha256": "39dca6e83579b46861a48746502d0810ebf4ff4645f5d6e61aa994b4cb1e2b71",
+    "fetched_at": "2026-09-14T14:16:44.505611+00:00",
+    "interpretation": "XX/XY are inferred sex strata, not observed cancer status."
+  },
+  {
+    "variant_id": "13-32363369-G-C",
+    "assays": {
+      "exome": {
+        "ac": 20,
+        "an": 1461868,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 13,
+            "an": 734638,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 7,
+            "an": 727230,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "genome": {
+        "ac": 1,
+        "an": 152178,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 1,
+            "an": 77850,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 0,
+            "an": 74328,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "joint": {
+        "ac": 21,
+        "an": 1614046,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 14,
+            "an": 812488,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 7,
+            "an": 801558,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 2
+      }
+    },
+    "source_sha256": "35385944d52c63ba627dda8f8e8f0e46032af86cc951565942cea89a540907f8",
+    "source": "results/brca2_sex_endpoint_audit_20260914/13-32363369-G-C.json.gz",
+    "script_sha256": "39dca6e83579b46861a48746502d0810ebf4ff4645f5d6e61aa994b4cb1e2b71",
+    "fetched_at": "2026-09-14T14:18:40.185436+00:00",
+    "interpretation": "XX/XY are inferred sex strata, not observed cancer status."
+  },
+  {
+    "variant_id": "13-32380043-C-T",
+    "assays": {
+      "exome": {
+        "ac": 8,
+        "an": 1461782,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 3,
+            "an": 734590,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 5,
+            "an": 727192,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "genome": null,
+      "joint": {
+        "ac": 8,
+        "an": 1614046,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 3,
+            "an": 812422,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 5,
+            "an": 801624,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 2
+      }
+    },
+    "source_sha256": "9bc567d403ac6c17be9cf141fc54b5faa0c6e0b6484f0feb56edd7114f1e3c92",
+    "source": "results/brca2_sex_endpoint_audit_20260914/13-32380043-C-T.json.gz",
+    "script_sha256": "39dca6e83579b46861a48746502d0810ebf4ff4645f5d6e61aa994b4cb1e2b71",
+    "fetched_at": "2026-09-14T14:18:47.334241+00:00",
+    "interpretation": "XX/XY are inferred sex strata, not observed cancer status."
+  },
+  {
+    "variant_id": "13-32362595-G-C",
+    "assays": {
+      "exome": {
+        "ac": 1,
+        "an": 1461850,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 0,
+            "an": 734624,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 1,
+            "an": 727226,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "genome": null,
+      "joint": {
+        "ac": 1,
+        "an": 1614132,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 0,
+            "an": 812444,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 1,
+            "an": 801688,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 2
+      }
+    },
+    "source_sha256": "5bc451ab2ddb67ca86231c2394748ee978ce63c09093f86b0b8be2e99d25a236",
+    "source": "results/brca2_sex_endpoint_audit_20260914/13-32362595-G-C.json.gz",
+    "script_sha256": "39dca6e83579b46861a48746502d0810ebf4ff4645f5d6e61aa994b4cb1e2b71",
+    "fetched_at": "2026-09-14T14:18:54.524455+00:00",
+    "interpretation": "XX/XY are inferred sex strata, not observed cancer status."
+  },
+  {
+    "variant_id": "13-32332592-A-C",
+    "assays": {
+      "exome": {
+        "ac": 409992,
+        "an": 1461426,
+        "homozygote_count": 58821,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 204196,
+            "an": 734432,
+            "homozygote_count": 29021
+          },
+          {
+            "id": "XY",
+            "ac": 205796,
+            "an": 726994,
+            "homozygote_count": 29800
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "genome": {
+        "ac": 36183,
+        "an": 152084,
+        "homozygote_count": 4773,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 18450,
+            "an": 77762,
+            "homozygote_count": 2386
+          },
+          {
+            "id": "XY",
+            "ac": 17733,
+            "an": 74322,
+            "homozygote_count": 2387
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "joint": {
+        "ac": 446175,
+        "an": 1613510,
+        "homozygote_count": 63594,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 222646,
+            "an": 812194,
+            "homozygote_count": 31407
+          },
+          {
+            "id": "XY",
+            "ac": 223529,
+            "an": 801316,
+            "homozygote_count": 32187
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 2
+      }
+    },
+    "source_sha256": "4efd8936802261802775f4b2e140e4ca2e6e4feef3ea0d62a0efb024f0ffd8fc",
+    "source": "results/brca2_sex_endpoint_audit_20260914/13-32332592-A-C.json.gz",
+    "script_sha256": "39dca6e83579b46861a48746502d0810ebf4ff4645f5d6e61aa994b4cb1e2b71",
+    "fetched_at": "2026-09-14T14:19:02.557859+00:00",
+    "interpretation": "XX/XY are inferred sex strata, not observed cancer status."
+  },
+  {
+    "variant_id": "13-32363225-A-G",
+    "assays": {
+      "exome": {
+        "ac": 1,
+        "an": 1461706,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 0,
+            "an": 734566,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 1,
+            "an": 727140,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 0
+      },
+      "genome": null,
+      "joint": {
+        "ac": 1,
+        "an": 1614050,
+        "homozygote_count": 0,
+        "sex": [
+          {
+            "id": "XX",
+            "ac": 0,
+            "an": 812406,
+            "homozygote_count": 0
+          },
+          {
+            "id": "XY",
+            "ac": 1,
+            "an": 801644,
+            "homozygote_count": 0
+          }
+        ],
+        "identical_duplicate_sex_rows_removed": 2
+      }
+    },
+    "source_sha256": "9f04636008c81a0aef70f655f6f9a41b4e72c597b39854fdac528bb46176d6be",
+    "source": "results/brca2_sex_endpoint_audit_20260914/13-32363225-A-G.json.gz",
+    "script_sha256": "39dca6e83579b46861a48746502d0810ebf4ff4645f5d6e61aa994b4cb1e2b71",
+    "fetched_at": "2026-09-14T14:19:09.728235+00:00",
+    "interpretation": "XX/XY are inferred sex strata, not observed cancer status."
+  }
+]

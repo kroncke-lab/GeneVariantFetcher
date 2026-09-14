@@ -1,0 +1,20 @@
+{
+  "original_observations": 8182,
+  "duplicate_source_key_rows_preserved": 111,
+  "corrected_key_totals_reproduced": true,
+  "final_missense_units": 4444,
+  "missense_literature_observations": 976,
+  "missense_papers": 227,
+  "affected": 1858.0,
+  "literature_unaffected": 1482.0,
+  "gnomad_all_sex_unaffected": 1516774,
+  "observation_rows_with_linked_individual_records": 196,
+  "raw_all_affected_units": 139,
+  "raw_all_affected_singletons": 119,
+  "posterior_at_least_90_percent": 1,
+  "sex_filter_present_in_frozen_count_model": false,
+  "metadata_screen_is_not_a_sex_specific_count_partition": true,
+  "verified_source_database_snapshots": 8,
+  "title_male_or_prostate_signal_observations": 37,
+  "title_male_or_prostate_signal_affected": 48.0
+}
