@@ -1,0 +1,19 @@
+{
+  "raw_weight_shards": {
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_00000_00128.npz": "a44e31cc180f190ed6313174bda6c031dba41bfc934a9f6261104f2d9930a5fd",
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_00128_00256.npz": "a36d3c20b782993b0923a0399d5985c40b0ace20570f316bcbb4c25513b229da",
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_00256_00384.npz": "9470d6994e9dd99c3003556f9cebcca0b70e1d78d6eb9de858366d0a905f58ce",
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_00384_00512.npz": "84d2869fa9d9f919e7f1d75a4a6000876c327e871ee3fb05266017b815495967",
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_00512_00640.npz": "c81086dd51fc62d2e93cc31d775f725f51b643f91a432e6abcd4a8a9a28a497e",
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_00640_00768.npz": "d495bde4b18929bef43a63ca144b012b25d37fc555d386088f69f2a624ca5e07",
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_00768_00896.npz": "7130e2ee1cf57186a4da54922c0a51662f41f4e2ec0311ee50bf502179a42278",
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_00896_01024.npz": "b62d2d3b331a4b01c10d4272187d01a25b7e34ac34657bf6f0364f54b4e1b88a",
+    "results/residue_density_refresh_20260914/KCNQ1_cardiac_events/weights_01024_01061.npz": "1e1c75b8c4292778cfbfcee29ecec2a4bf60f9193c71a7fb1b299922ada7d2c5"
+  },
+  "variant_ids_sha256": "c4e7e512bc7455082a856f0ecf78090c3897c08e906b855eb1eb663276fbc6c0",
+  "own_variant_weights_zero": true,
+  "normalized_weights_sum_to_one": true,
+  "alpha_adds_affected": true,
+  "beta_adds_literature_and_gnomad_unaffected": true,
+  "posterior_decomposition_reproduces": true
+}

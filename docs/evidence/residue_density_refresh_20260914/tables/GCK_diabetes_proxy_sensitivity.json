@@ -1,0 +1,9 @@
+{
+  "endpoint": "diabetes_proxy",
+  "common_variants": 610,
+  "common_supported": 591,
+  "primary_median": 0.3486190922209734,
+  "sensitivity_median": 0.3512063587372396,
+  "mean_abs_delta_common": 0.0019310128808689509,
+  "max_abs_delta_common": 0.02566443791350731
+}

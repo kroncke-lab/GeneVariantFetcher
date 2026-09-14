@@ -1,0 +1,5 @@
+gene,frame_id,chain,idr_segment,variants,affected,unaffected,supported,density_mean
+LDLR,AF_P01130,A,candidate_IDR_186_194,11,0,67,11,0.07189732133122932
+LDLR,AF_P01130,A,candidate_IDR_22_25,7,0,91,7,0.06451782967911655
+LDLR,AF_P01130,A,candidate_IDR_234_234,2,0,2,2,0.1059399890336605
+LDLR,AF_P01130,A,candidate_IDR_274_274,1,0,9,0,

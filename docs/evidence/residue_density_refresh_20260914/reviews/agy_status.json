@@ -1,0 +1,29 @@
+{
+  "cli": "/Users/kronckbm/.local/bin/agy",
+  "requested_model": "gemini-3.1-pro-high",
+  "requested_effort": "high",
+  "started_utc": "2026-09-14T11:31:13.420997+00:00",
+  "prompt": "agy_prompt.txt",
+  "scope": "Generic mathematical consultation with synthetic examples only; no internal empirical data or source-provenance findings transmitted.",
+  "timeout_seconds": 270,
+  "exit_code": 0,
+  "status": "returned",
+  "elapsed_seconds": 45.792,
+  "completed_utc": "2026-09-14T11:31:59.213191+00:00",
+  "response_status": "SUCCESS",
+  "actual_model": "not echoed in CLI response",
+  "usage": {
+    "input_tokens": 7286,
+    "output_tokens": 4062,
+    "thinking_tokens": 2348,
+    "cache_read_tokens": 8101,
+    "total_tokens": 11348
+  },
+  "cost_usd": null,
+  "cost_note": "CLI did not report dollar cost",
+  "provider_duration_seconds": 44.037028,
+  "num_turns": 1,
+  "response_scope": "Generic mathematics and biological-method considerations; not an actual data review.",
+  "raw_output_sha256": "b9c19e5dbd271e69f1902aee52898366ebdfb613ac81ff4f73de4c04d86f220b",
+  "stderr_bytes": 78
+}

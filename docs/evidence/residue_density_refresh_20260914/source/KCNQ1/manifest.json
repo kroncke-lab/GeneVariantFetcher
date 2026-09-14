@@ -1,0 +1,60 @@
+{
+  "files": [
+    {
+      "path": "32893267_case_count_checks.csv",
+      "sha256": "ac78ffb35b8c5d3956ee77fb6cb76a56ce990eebf4624e351ed4419c8ca6ebe2",
+      "bytes": 39308
+    },
+    {
+      "path": "README.md",
+      "sha256": "b51e84391002f7ee4080076a437b41caddec9da8f8b87bc72ce92c2e3e75979f",
+      "bytes": 6694
+    },
+    {
+      "path": "build_source_ledger.py",
+      "sha256": "15bb9433b64ffea2a81351f3501c1a03b946d6cd89c56979e59f76bca8494955",
+      "bytes": 13348
+    },
+    {
+      "path": "clinical_input.csv.gz",
+      "sha256": "dd439d7370cba05eb82b338682670cf5cc30242684940ef0bee2989b8f33926f",
+      "bytes": 24478
+    },
+    {
+      "path": "clinical_input_cardiac_events.csv.gz",
+      "sha256": "0e666a1f3236cce2e1117f7bd52f7a2c731ed8bcdb475be9aabcdbd4853bc333",
+      "bytes": 24650
+    },
+    {
+      "path": "frozen_paper_count_ranking.csv",
+      "sha256": "610873af2c1ff36f7ab976e96d9b3f356a50831403c55b199425b209aca6a975",
+      "bytes": 9018
+    },
+    {
+      "path": "observation_corrections.csv",
+      "sha256": "2c78508dad34be085eadef1b1ca366968cfa3837f3cae7c7935951bcb9711a5f",
+      "bytes": 4636
+    },
+    {
+      "path": "preserved_cardiac_event_observations.csv",
+      "sha256": "157c47e812c4aa067261cfa38f123ca2b7fc44604908e119adf8a4195fa2a8cd",
+      "bytes": 1800
+    },
+    {
+      "path": "selected_source_db_rows.csv.gz",
+      "sha256": "e7b5bd5cb555f237504a262084f125ea017ec888a65e99ad72b62871f68bb2bf",
+      "bytes": 10652
+    },
+    {
+      "path": "source_checks.json",
+      "sha256": "ea3d6b77a06465c977720c02725cf265dd05bb95ed31e49906462528930bb547",
+      "bytes": 2164
+    }
+  ],
+  "checks": {
+    "per_key_delta_equations": true,
+    "sensitivity_delta_A174_U162": true,
+    "LF_csv_payloads": true,
+    "files_under_1200000_bytes": true
+  }
+}

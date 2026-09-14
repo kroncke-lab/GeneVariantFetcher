@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "all_text_LF_including_gzip": true,
+  "all_files_below_1200000_bytes": true,
+  "files": {
+    "BRCA2_clinical_key_deltas.csv.gz": {
+      "sha256": "ff503170a396ca1462a8e304626049553e18880e9e9ba0459a6657dfdd5a1cbb",
+      "bytes": 13893
+    },
+    "BRCA2_literature_identity_corrected.csv.gz": {
+      "sha256": "573c091ac1c88f8c5733f91b27681887fe9f1b856f4395b62eef476d2d8b4929",
+      "bytes": 119566
+    },
+    "BRCA2_observation_decisions.csv.gz": {
+      "sha256": "ea37696fe4d1037105b7494d31622d91e5743a06252a73e9fca312c9034e8b6f",
+      "bytes": 28424
+    },
+    "README.md": {
+      "sha256": "b14ce92afecf28785cba60481cd2f806ab18bf602bd04ee777711f6271ceea2c",
+      "bytes": 8289
+    },
+    "SYSUCC_germline_review.csv": {
+      "sha256": "0ae6d89ef21d1efd6f914db36cc73ac55d4cd1fe0b82aa7b6bd7234b6841528b",
+      "bytes": 2040
+    },
+    "adjudicate.py": {
+      "sha256": "da0ff54da16c79994b48d82b2cc4f3c1a32f4e331fafe5eecb1ad2dedc503d13",
+      "bytes": 17587
+    },
+    "checks.json": {
+      "sha256": "dbe6d4950a263d0fd8cbaa8420da0ae76d63b31749fba3fbb76390a2bcacf8b8",
+      "bytes": 2821
+    },
+    "decision_summary.csv": {
+      "sha256": "6884e9b3df1e94e764cc57ac92058d62af64307bade13ea4e6c8d30c8c4ac53b",
+      "bytes": 208
+    },
+    "preserved_40664060_restorations.csv": {
+      "sha256": "a0cea5f9c35709fb0decfb3b4655890ce3e7e5e9f16853874628793b9c4a4b19",
+      "bytes": 895
+    },
+    "selected_source_records.csv.gz": {
+      "sha256": "6a841d98e514c4089665ad0f25c9075efbc84d477804c15fe3f2a31faa13d768",
+      "bytes": 37048
+    }
+  }
+}

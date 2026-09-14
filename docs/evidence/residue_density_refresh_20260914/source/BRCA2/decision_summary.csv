@@ -1,0 +1,5 @@
+pmid,vclass,observations,A_removed,U_removed,A_restored,canonical_missense_queue
+33054725,missense,205,205,0,0,205
+33054725,nonsense,25,25,0,0,0
+36385461,missense,23,23,0,0,22
+36385461,nonsense,255,255,0,0,0

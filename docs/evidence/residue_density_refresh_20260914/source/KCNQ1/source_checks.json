@@ -1,0 +1,31 @@
+{
+  "scope": "largest_three_frozen_affected_count_papers_only",
+  "paper_ranking": [
+    "32893267",
+    "23856471",
+    "21244686"
+  ],
+  "clinical_keys": 699,
+  "adjudicated_correction_rows": 7,
+  "primary_affected_removed_all_types": 1229.0,
+  "primary_unaffected_removed_all_types": 162.0,
+  "primary_missense_affected": 5848.0,
+  "primary_missense_unaffected_literature": 1595.0,
+  "sensitivity_missense_affected": 6022.0,
+  "sensitivity_missense_unaffected_literature": 1757.0,
+  "gnomad_counts_edited": false,
+  "unknowns_converted_to_unaffected": 0,
+  "clinical_ECG_LQTS_cases_removed_for_no_symptoms": 0,
+  "full_source_or_person_ownership_adjudication": false,
+  "source_databases_edited": false,
+  "source_sha256": {
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/population_inclusive_penetrance_20260912/audit/literature_identity_flags.csv.gz": "240fe0af9cf5d392108c3f1371dffc7f3e5eb3b69554592110fb9648712e721c",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/KCNQ1_protocol/observations.csv": "0fa3a0a92fa3007b1650c821522979c6c35041643866119e88152c1946a7d421",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/canonical_baseline/KCNQ1.db": "9d974e08fd0510192abbe027bb5dee6c298ee28e45d53323c4a5830985ae0398",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/32893267/32893267_supplements/mmc2.xlsx": "0c635afcc48d5d9bfe3a03207377a3cedeabe51108a7296767a596298e8e36fb",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/docs/evidence/residue_density_refresh_20260914/source/KCNQ1/build_source_ledger.py": "15bb9433b64ffea2a81351f3501c1a03b946d6cd89c56979e59f76bca8494955",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/32893267/32893267_CLEANED.md": "21ecf8b576e4289cbfae7018726b879a2e77151511c36dfdfdef89f8925737b6",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/23856471/23856471_CLEANED.md": "2725d8adde684c02e74c088604410a9b3b55897cf723cc4553c4ff205d1a3cbf",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/corpus/KCNQ1/21244686/21244686_CLEANED.md": "32770380599e9ce19a6fed88c3f7b839127be4e8329eee73d207d1821bb20ed8"
+  }
+}

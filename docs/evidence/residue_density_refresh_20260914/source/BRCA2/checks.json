@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "baseline_commit": "c8e34c96",
+  "baseline_clinical_ledger_sha256": "8202b4021bb0466f00c31fbcdc1a50bbd6474c1831eb1f06d4ee80fb13722cf6",
+  "frozen_db_hash_matches": true,
+  "exact_source_row_matches": 508,
+  "queued_canonical_missense_observations_resolved": 227,
+  "all_typed_observations_adjudicated": 508,
+  "clinical_keys": 6110,
+  "retained_clinical_keys": 2138,
+  "preserved_previous_real_clinical_restorations": 5,
+  "all_original_affected_delta": -508.0,
+  "all_original_unaffected_delta": 0.0,
+  "unknown_policy": "Quarantine from hereditary endpoint A/U fit; retain source totals and unresolved endpoints; never assign U from missing germline or endpoint data.",
+  "scope": "Two known BRCA2 source queues; missense and nonsense source observations only. Other paper/type observations remain unchanged; this is not full source validation.",
+  "population_rule": "Root must rebuild the union after dropping zero-clinical-evidence keys; all observed gnomAD alleles retained and rejoined by exact identity.",
+  "hashes": {
+    "docs/evidence/brca2_distance_prior_audit_20260913/source/BRCA2_literature_identity_corrected.csv.gz": "8202b4021bb0466f00c31fbcdc1a50bbd6474c1831eb1f06d4ee80fb13722cf6",
+    "docs/evidence/brca2_distance_prior_audit_20260913/source/original_observations.csv.gz": "8f0fefe2f8943c9a2977c527da1639018ef81bfb77a1b1cded011ed87da1263f",
+    "docs/evidence/brca2_distance_prior_audit_20260913/source/remaining_BRCA2_source_queue.csv.gz": "2bb0c279dd7d5eee538d2198be991a0f3d93aa5574760036c2670912085528ed",
+    "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/BRCA2.db": "f745c9ea72301c9a4aaaa16fce0d3cfc060ca39311686dd2e54bc9962ab4af83",
+    "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/36385461_supplements/PMC10098510_supplements/IJC-152-1159-s011.xlsx": "1a876da4f52bffaf7be4642c00d858e7d4de7d89771ba1cee19a86d2a0ddeee6",
+    "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/33054725_supplements/PMC7556962_supplements/12885_2020_7481_MOESM3_ESM.xlsx": "66d5f8a87fe5d4d7e71f33d4abdbb743aba016a26e26fe6b83813f08899bd8c1",
+    "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/33054725_supplements/PMC7556962_supplements/12885_2020_7481_MOESM4_ESM.xlsx": "d7334c1b6894644fa5c1a0d6889ebbb18f1151dab549318d4658b1a993a722d5",
+    "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/36385461_CLEANED.md": "772dc51b290cb95b6067d90b358f4e9d35bef52cc6f0b1fe6e5484486d30d428",
+    "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/33054725_CLEANED.md": "ba29bfefc93c03af56523b4000769d3f93d8d5a1cb12abce6c196bb0f7f11cc6"
+  },
+  "output_ledger_sha256": "573c091ac1c88f8c5733f91b27681887fe9f1b856f4395b62eef476d2d8b4929"
+}

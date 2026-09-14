@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "all_files_below_1200000_bytes": true,
+  "all_text_LF": true,
+  "files": [
+    {
+      "file": "Greek_Table2_exact_rows.csv",
+      "bytes": 4094,
+      "sha256": "1a6e0e6550b6246767bbe052a714734feba724c92177248dd4a6e3416a266b41",
+      "LF_verified": true
+    },
+    {
+      "file": "README.md",
+      "bytes": 6887,
+      "sha256": "e3b7aaf96036bd7054f5049198295c23c1c9f38748f2a6740862e7a81f57d6f9",
+      "LF_verified": true
+    },
+    {
+      "file": "adjudicate.py",
+      "bytes": 16072,
+      "sha256": "07d41eebf04d84ae6ebe45d7062346018f91d4d8570a6337058eaaee1ba25aca",
+      "LF_verified": true
+    },
+    {
+      "file": "canonical_missense_top3_coverage.csv",
+      "bytes": 220,
+      "sha256": "63e5eda1041d85328c12afcdebde346a6ff6e02d9fd2deb52d9fd00168e6e1ff",
+      "LF_verified": true
+    },
+    {
+      "file": "canonical_missense_top3_original_observations.csv.gz",
+      "bytes": 4767,
+      "sha256": "858c9a1a12a496add2598429d6a7d73ba613b6633c9443df92d9c7fd4d7c3ca0",
+      "LF_verified": true
+    },
+    {
+      "file": "checks.json",
+      "bytes": 2282,
+      "sha256": "99709c87a7cb99926396e4f80c59f75439ae52f6f3a2fe9488b4e32d52d8c15e",
+      "LF_verified": true
+    },
+    {
+      "file": "clinical_input.csv.gz",
+      "bytes": 26166,
+      "sha256": "34807f665c9307f1cf725ddc7f2e77b6d6a799bbc884f10b880a375ec9d3eaa3",
+      "LF_verified": true
+    },
+    {
+      "file": "clinical_key_deltas.csv",
+      "bytes": 19895,
+      "sha256": "96d153162cd816050e9a753ef40ea8ee889834dd633c2c0c256ea67da29cf00f",
+      "LF_verified": true
+    },
+    {
+      "file": "corrected_observations.csv.gz",
+      "bytes": 12707,
+      "sha256": "30720c6fc139cda48cf532b7b1887204bd22290a30fd04b15d71fb9546c69a8d",
+      "LF_verified": true
+    },
+    {
+      "file": "observation_decisions.csv.gz",
+      "bytes": 7388,
+      "sha256": "4607fd81a8dd8a56e6ba99e60b30e2c3181fe0680b5b9d8de2097cafa91f8da1",
+      "LF_verified": true
+    },
+    {
+      "file": "retained_source_review.csv",
+      "bytes": 791,
+      "sha256": "20202fc6440577363607f5897b376c2c95e990247e3d445b529130441aff2f9c",
+      "LF_verified": true
+    }
+  ]
+}

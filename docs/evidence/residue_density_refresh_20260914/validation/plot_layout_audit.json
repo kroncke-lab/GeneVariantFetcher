@@ -1,0 +1,52 @@
+{
+  "individual_figures": [
+    {
+      "gene": "GCK",
+      "visible_text_within_canvas": true,
+      "all_positive_diagnostic_values_inside_log_axis": true,
+      "positive_min": 0.0133450114197311,
+      "log_axis_min": 6.5000000000000004e-06,
+      "primary_line_matches_table_with_gaps": true,
+      "own_posterior_panel_matches_table": true
+    },
+    {
+      "gene": "BRCA2",
+      "visible_text_within_canvas": true,
+      "all_positive_diagnostic_values_inside_log_axis": true,
+      "positive_min": 1.4177504517712804e-05,
+      "log_axis_min": 3.071792645504441e-06,
+      "primary_line_matches_table_with_gaps": true,
+      "own_posterior_panel_matches_table": true
+    },
+    {
+      "gene": "HNF1A",
+      "visible_text_within_canvas": true,
+      "all_positive_diagnostic_values_inside_log_axis": true,
+      "positive_min": 1.5265354335576442e-06,
+      "log_axis_min": 3.3074934393748963e-07,
+      "primary_line_matches_table_with_gaps": true,
+      "own_posterior_panel_matches_table": true
+    },
+    {
+      "gene": "LDLR",
+      "visible_text_within_canvas": true,
+      "all_positive_diagnostic_values_inside_log_axis": true,
+      "positive_min": 1.6023466179941355e-05,
+      "log_axis_min": 3.4717510056539602e-06,
+      "primary_line_matches_table_with_gaps": true,
+      "own_posterior_panel_matches_table": true
+    },
+    {
+      "gene": "KCNQ1",
+      "visible_text_within_canvas": true,
+      "all_positive_diagnostic_values_inside_log_axis": true,
+      "positive_min": 0.0004886390151621,
+      "log_axis_min": 6.5000000000000004e-06,
+      "primary_line_matches_table_with_gaps": true,
+      "own_posterior_panel_matches_table": true
+    }
+  ],
+  "audit_script_sha256": "63936b8f819ed0dab20048c3e63ead5aa131bc8ec7469dc5e404e5c7fca1a60a",
+  "plot_script_sha256": "14fcbf296d9ede45bea24c401b4a3e9f9093098ebab7b12d9531f84aeafcbcd5",
+  "outputs_overwritten": false
+}

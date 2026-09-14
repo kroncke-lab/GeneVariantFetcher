@@ -1,6 +1,6 @@
 # GVF Handoff Tasks
 
-Last reviewed: 2026-09-13.
+Last reviewed: 2026-09-14.
 
 This is the only active GVF checklist. Current measurements and caveats live in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md); completed benchmark history
@@ -156,39 +156,49 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       offline tests pass. Fresh Agy/Grok consultations used synthetic examples
       after detailed-data transmission was blocked; real-data checks were local.
       [`Count, distance and prior audit`](docs/evidence/brca2_distance_prior_audit_20260913/README.md).
-- [ ] **Next BRCA2: compare count evidence separately from prior shrinkage.**
-      First adjudicate 22 retained missense affected observations from the
-      PMID 36385461 variant compilation and 205 from the PMID 33054725
-      pan-tumor study (inventory grain, germline/somatic status and endpoints).
-      These 227 remain in the current 40664060-only correction; do not
-      equate its numerical verification with full source validation.
-      Then keep the corrected posterior-neighborhood baseline and compare raw
-      variant fractions and raw-kernel pooled-count/one-prior features under
-      the same variant-only LOO; retain same-residue alternative alleles and
-      report support. Zero observed cases can yield a zero descriptive fraction,
-      but do not force a ≤0.1% disease probability from sparse observations.
+- [x] **Refresh all five residue plots after source/endpoint corrections
+      (2026-09-14).** Quarantine the remaining 227 reviewed BRCA2 missense
+      affected assignments without germline/endpoint partitions; separate GCK
+      hypoglycemia, neonatal diabetes and diagnosis-only endpoints; correct
+      reviewed HNF1A non-MODY observations, LDLR MI/FH and affected-relative
+      partitions, and KCNQ1 carrier/event totals. Rebuild complete population
+      unions, separate missense/nonsense priors and variant-only LOO density
+      with unchanged biological-unit/local-frame geometry and same-IDR polymer
+      routing. Preserve h=2/3/5 sensitivity, raw-fraction and one-prior pooled
+      diagnostics; display own posteriors and A/U counts alongside residue
+      means. BRCA2's median variant neighborhood is 3.36% and its median
+      weight beyond 20 Å is 0.474%; the remaining floor mainly reflects donor
+      prior shrinkage. GCK's unaffected singleton still has a 25.78% own
+      posterior, not proof of MODY at every residue. Independent union,
+      source-delta, prior, geometry, exclusion, matrix and plot checks plus
+      fresh Agy/Grok/Claude conceptual consultations are recorded in
+      [`corrected residue profiles`](docs/evidence/residue_density_refresh_20260914/README.md).
+- [ ] **Next: validate the corrected posterior and count features.**
+      Keep the corrected baseline, raw variant fractions and raw-kernel
+      pooled-count/one-prior features under the same variant-only LOO;
+      retain same-residue alternatives and report support. Zero observed
+      cases can yield a zero descriptive fraction, but do not force a ≤0.1%
+      disease probability from sparse observations.
       Complete source/endpoint and person/family ownership curation before
       clinical calibration claims. Refresh archived extraction through the
       source-reviewed workflow and run the registered scored comparison with
       canonical/companion figures before claiming extraction recall/MAE gains;
       current source DBs and old scored-arm artifacts were not rewritten.
-- [ ] **Next: curate GCK identity/endpoints and repeat the fixed comparison.**
+- [ ] **Next: finish GCK identity/endpoints and repeat the fixed comparison.**
       Resolve 19 canonical-WT mismatches against source/transcript evidence;
-      adjudicate mixed MODY versus activating/hypoglycemia counts and ambiguous
-      protein-key/genomic-allele identities. Start with the six source rows for
-      W99R/V389L: 14 frozen affected observations reconcile to 13 hypoglycemia
-      observations plus one phenotype-unknown carrier, not MODY cases or a
-      deduplicated person count. Resolve the W99R nucleotide notation conflict
-      and distinguish mild hyperglycemia from diagnosed diabetes. The exact
-      source review is in the sanity audit's `gck/endpoint_review.csv`.
-      Preserve unknowns, source ownership and frozen evidence, then recompute
-      the gene-by-missense empirical prior and variant-only LOO density.
-      Display own count posteriors alongside neighborhood features. The current
-      two-unit exclusion sensitivity is not a fully adjudicated MODY analysis.
+      resolve ambiguous protein-key/genomic-allele identities and the W99R
+      nucleotide notation conflict. Known reviewed W99R/V389L and other
+      activating/hypoglycemia contributions are already excluded in the new
+      primary; retain their original evidence and do not reintroduce unknowns
+      as unaffected. Continue source review beyond the bounded corrected rows,
+      preserving mild hyperglycemia versus diagnosed diabetes and family
+      ownership. The new `residue_density_refresh_20260914/source/GCK/`
+      folder owns these source decisions and remaining queues.
       Other review queues are in the original pilot's `eligibility/` folder
       and the redo's complete clinical join ledger.
-- [ ] **Follow through on the structural comparisons.** Prioritize HNF1A and
-      KCNQ1 disease-specific endpoint/count curation, then repeat the fixed
+- [ ] **Follow through on the structural comparisons.** Extend HNF1A, LDLR and
+      KCNQ1 disease-specific endpoint/count curation beyond the reviewed sources,
+      then repeat the fixed
       variant-only LOO comparisons with AM plus sequence as a required control.
       Test GPN-Star/AVI after source curation; obtain validated full-unit
       geometry for currently incomplete proteins before whole-gene claims.

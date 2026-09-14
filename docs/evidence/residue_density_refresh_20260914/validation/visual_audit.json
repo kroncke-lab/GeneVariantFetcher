@@ -1,0 +1,36 @@
+{
+  "status": "passed_with_declared_method_and_source_limits",
+  "reviewed_pngs": {
+    "plots/ALL_GENES_RESIDUE_DENSITY.png": "189424cab38057b3d676aeccae2949e2877027a0ae32d3bd989a1b4152eda7d5",
+    "plots/BRCA2_RESIDUE_DENSITY.png": "e338feaa6551b265d29022f69c6520acbfe251deb4915990db99ace0ce62ca00",
+    "plots/GCK_RESIDUE_DENSITY.png": "cc98ebecc54d4d816022ebc907d1131e25ce52acb4af3fe8cdd7d7dc1cf4e0ed",
+    "plots/HNF1A_RESIDUE_DENSITY.png": "d546a31bfaf7a6e82eaf955c02c51eb4159e94c8fc312f2dd20a23fca45f744f",
+    "plots/KCNQ1_RESIDUE_DENSITY.png": "a48295d2217cd886ea598b60b5389fb70bdb5c6e2f67c550004a28cd0c19c008",
+    "plots/LDLR_RESIDUE_DENSITY.png": "ceb484990e219418391ca07126b37238fe5bd25994abc593f05695d346018893"
+  },
+  "companion_pdf_hashes": {
+    "plots/ALL_GENES_RESIDUE_DENSITY.pdf": "d36a28e07d637aa92a3e3a40f86f8561c976601b9a60e7b648fe280820381d3b",
+    "plots/BRCA2_RESIDUE_DENSITY.pdf": "e11b5840a05b0f1f282424af532c842abca4a5a570b5dc7f297403f07c54700b",
+    "plots/GCK_RESIDUE_DENSITY.pdf": "41f94330aec7a69df1df3d105acae7d02b2e1a25a348e6a4fa7339cab33178ab",
+    "plots/HNF1A_RESIDUE_DENSITY.pdf": "c852b28cc30ace98c276086cea6eeaa471cc87993cc4cc9ec59c1c49f8d927b1",
+    "plots/KCNQ1_RESIDUE_DENSITY.pdf": "0ab55d847359e74451bfc441efb1c34b92550d5a7605c752d2546f3bea2bc9d0",
+    "plots/LDLR_RESIDUE_DENSITY.pdf": "2b76af6f1a51b31b511209d5c4b429cfbeaf3bc856810800ff908c5a17bbbb7f"
+  },
+  "pdf_review_scope": "Same Matplotlib figure export; PDFs not separately rasterized",
+  "repaired_findings": [
+    "Individual log-panel y-axis labels clipped at left margin",
+    "Six positive HNF1A pooled-count diagnostic values below fixed log lower bound",
+    "Zero-marker explanation overlapped plotted zero markers"
+  ],
+  "final_observations": [
+    "All six PNGs legible with no clipped labels or overlapping legends",
+    "All positive diagnostic values visible within dynamic log bounds",
+    "Exact zeros use distinct below-positive triangle markers and explicit nonzero display-position footnotes",
+    "Missing residues break primary and own-posterior line paths",
+    "Own posteriors separate from target-excluded neighborhood scores",
+    "Between-variant range explicitly not an uncertainty interval",
+    "3D/polymer/mixed/unestimated track and named endpoints present",
+    "Uncalibrated descriptive feature scope explicit"
+  ],
+  "plot_script_sha256": "14fcbf296d9ede45bea24c401b4a3e9f9093098ebab7b12d9531f84aeafcbcd5"
+}

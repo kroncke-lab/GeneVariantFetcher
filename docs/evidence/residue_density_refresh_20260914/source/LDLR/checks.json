@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "original_observations": 1554,
+  "original_A": 4595.0,
+  "original_U": 216.0,
+  "reviewed_decision_rows": 80,
+  "quarantine_MI_rows": 64,
+  "quarantine_MI_A": 83,
+  "greek_rows": 16,
+  "greek_original_A": 67,
+  "greek_original_U": 23,
+  "greek_new_A": 90,
+  "greek_new_U": 0,
+  "greek_already_correct_rows": 5,
+  "primary_A": 4535.0,
+  "primary_U": 193.0,
+  "clinical_keys": 880,
+  "retained_clinical_keys": 835,
+  "canonical_missense_original_rows": 718,
+  "canonical_missense_original_A": 1400.0,
+  "canonical_missense_original_U": 114.0,
+  "canonical_missense_new_A": 1346.0,
+  "canonical_missense_new_U": 95.0,
+  "baseline_hashes": {
+    "docs/evidence/population_inclusive_penetrance_20260912/audit/literature_identity_flags.csv.gz": "240fe0af9cf5d392108c3f1371dffc7f3e5eb3b69554592110fb9648712e721c",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/LDLR_protocol/observations.csv": "07a8afdafc3e9a7d35ce6a43086ebcc3227fc4bb11c2b4f9310bd54c4081e843",
+    "docs/evidence/residue_density_refresh_20260914/source/other_genes/source_metadata_screen.csv.gz": "4c5631512188b3dbe957c2aba99fe75de0e4f4469d03f74091608c17c86f4dfc"
+  },
+  "source_hashes": {
+    "results/grant_e2e_20260909/shards/LDLR_1/LDLR/20260909_104851/pmc_fulltext/29802317_CLEANED.md": "b58fe8e0c2eaa5e817903580af715ae5c851541fcbad7459d5f72e9bdb32df26",
+    "results/grant_e2e_20260909/shards/LDLR_0/LDLR/20260909_104849/pmc_fulltext/25463123_CLEANED.md": "62837c8ed40852827bef07cf241bea73b459958982e31eaffbd41e3dd009d846",
+    "results/grant_e2e_20260909/shards/LDLR_0/LDLR/20260909_104849/pmc_fulltext/31491741_CLEANED.md": "f5172f544af1a77dd39cc9f28c1cc0057b77339e138399df005b438859b7a520"
+  },
+  "output_ledger_sha256": "34807f665c9307f1cf725ddc7f2e77b6d6a799bbc884f10b880a375ec9d3eaa3",
+  "scope": "Three highest affected-count sources among frozen canonical missense keys:71 rows/197A/19U; exact two-paper proofs also applied to selected noncanonical and other-type rows with same table semantics. No exhaustive validation of remaining sources.",
+  "population_rule": "Drop zero-clinical-evidence keys before rejoining complete observed gnomAD population alleles. Quarantine means unknown clinical endpoint, never inferred unaffected."
+}

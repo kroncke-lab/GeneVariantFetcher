@@ -1,0 +1,4 @@
+gene,frame_id,chain,idr_segment,variants,affected,unaffected,supported,density_mean
+HNF1A,8PI8,C,candidate_IDR_631_631,1,0,4,0,
+HNF1A,8PI8,D,candidate_IDR_181_181,3,0,23,3,0.08357258382247167
+HNF1A,8PI8,D,candidate_IDR_631_631,1,0,4,0,

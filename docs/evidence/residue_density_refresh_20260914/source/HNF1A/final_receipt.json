@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "all_files_below_1200000_bytes": true,
+  "all_text_LF": true,
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 6573,
+      "sha256": "8b5c35c33dfe72dc57388b904ddf4071b0a1626bbee790a9993cde57c5aff03b",
+      "LF_verified": true
+    },
+    {
+      "file": "adjudicate.py",
+      "bytes": 12547,
+      "sha256": "1be4243d0beeddc4af8641a502a50bd9ee4e5a3c3904f440b7064e35d6df66b7",
+      "LF_verified": true
+    },
+    {
+      "file": "broader_diabetes_sensitivity_clinical_input.csv.gz",
+      "bytes": 7369,
+      "sha256": "27e750ad6ab04d5b6f4958a45e5025d2a17381e262e967bd9847082683965c19",
+      "LF_verified": true
+    },
+    {
+      "file": "checks.json",
+      "bytes": 2778,
+      "sha256": "33849e37bedd6eba5c620261f99493d19381d2e73a110ca23acafe6b316c2207",
+      "LF_verified": true
+    },
+    {
+      "file": "clinical_input.csv.gz",
+      "bytes": 7625,
+      "sha256": "7bb88e32ab4a71287d6d92a410824600b4ff74f4ca8487f0e8b791d046f1b3e9",
+      "LF_verified": true
+    },
+    {
+      "file": "clinical_key_deltas.csv",
+      "bytes": 3110,
+      "sha256": "aa0e46fa9de594804b07d5669656e13b045f3150647ebea2abf3911af2b975fa",
+      "LF_verified": true
+    },
+    {
+      "file": "corrected_observations.csv.gz",
+      "bytes": 3575,
+      "sha256": "96163d166b8dd7e124f8c106b8905eb5b4b40d7599d9ab83b7df6c671f6a690c",
+      "LF_verified": true
+    },
+    {
+      "file": "observation_decisions.csv",
+      "bytes": 7753,
+      "sha256": "42abb1b9df9154de971b4b9c9291d4095b4ea21a9840d11202b9fef29d85ecc8",
+      "LF_verified": true
+    }
+  ]
+}

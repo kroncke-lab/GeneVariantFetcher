@@ -1,0 +1,110 @@
+{
+  "scope": "Independent synthetic calculations only. No production data or pipeline code executed.",
+  "singleton_fit_weight": 0.00990099009900991,
+  "n2_fit_weight": 0.5024875621890547,
+  "historical_fit_nonnegative_proof": "For n>=1, 0<w<1. With y in [0,1] and its w-weighted mean mu, weighted variance <= mu*(1-mu). Thus v=(sum(w)/M)*weighted_variance < mu*(1-mu) for an interior mean and positive variance; finite kappa is strictly positive. Zero variance and boundary means need explicit handling. A negative result indicates invalid inputs/numerics or a different formula, not legitimate high dispersion under these assumptions.",
+  "kappa_at_half_Bernoulli_variance": 1.0,
+  "same_identical_labels_cannot_detect_self_inclusion": {
+    "two_posterior_labels": [
+      0.4,
+      0.4
+    ],
+    "excluded_target_average": 0.4,
+    "included_target_average": 0.4
+  },
+  "asymmetric_two_donor_exclusion": {
+    "labels": [
+      0.1,
+      0.9
+    ],
+    "W": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "correct_D": [
+      0.9,
+      0.1
+    ],
+    "self_included_equal_weight_D": [
+      0.5,
+      0.5
+    ],
+    "own_vs_D_correlation": -1
+  },
+  "all_identical_affected_fraction": {
+    "mu": 1.0,
+    "v": 0.0,
+    "kappa": null,
+    "alpha": null,
+    "beta": null,
+    "sum_weight_over_M": 0.99000099990001
+  },
+  "duplicating_within_variant_counts": {
+    "n1_per_unit": {
+      "mu": 0.5,
+      "v": 0.0024752475247524774,
+      "kappa": 99.99999999999991,
+      "alpha": 49.99999999999996,
+      "beta": 49.99999999999996,
+      "sum_weight_over_M": 0.00990099009900991
+    },
+    "n2_per_unit": {
+      "mu": 0.5,
+      "v": 0.12562189054726366,
+      "kappa": 0.9900990099009903,
+      "alpha": 0.49504950495049516,
+      "beta": 0.49504950495049516,
+      "sum_weight_over_M": 0.5024875621890547
+    },
+    "conclusion": "Doubling both counts within units leaves mu fixed here but decreases kappa; Claude proposed the wrong required direction."
+  },
+  "orientation_test": {
+    "counts": [
+      [
+        9,
+        1
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        1,
+        9
+      ]
+    ],
+    "fit": {
+      "mu": 0.5666666666666668,
+      "v": 0.10401154401154401,
+      "kappa": 1.3608490566037736,
+      "alpha": 0.7711477987421386,
+      "beta": 0.5897012578616351,
+      "sum_weight_over_M": 0.9000999000999
+    },
+    "swapped_fit": {
+      "mu": 0.43333333333333335,
+      "v": 0.10401154401154404,
+      "kappa": 1.3608490566037728,
+      "alpha": 0.5897012578616349,
+      "beta": 0.7711477987421379,
+      "sum_weight_over_M": 0.9000999000999
+    }
+  },
+  "prior_retention_vs_score_share": {
+    "prior_alpha": 1,
+    "prior_beta": 9,
+    "all_donors_A0_U1": true,
+    "retention": 0.9090909090909091,
+    "prior_component": 0.09090909090909091,
+    "D": 0.09090909090909091,
+    "prior_share_of_D": 1.0
+  },
+  "geometry_only_weight_test": "Changing affected/unaffected counts while fixing geometry and eligible unit IDs must leave W unchanged; the posterior labels and D may change.",
+  "same_residue_weight_test": "d=0 implies raw K=1, not normalized W=1 unless no other positive-weight eligible donor exists."
+}

@@ -1,0 +1,81 @@
+gene,pmid,rows,A,U,top_three,keyword_rows,title
+HNF1A,14598263,2,5.0,2.0,False,2,Familial liver adenomatosis associated with hepatocyte nuclear factor 1α inactivation
+HNF1A,15001650,1,6.0,12.0,False,1,Hepatocyte nuclear factor-1 alpha gene inactivation: cosegregation between liver adenomatosis and diabetes phenotypes in two maturity-onset diabetes of the young (MODY)3 families.
+HNF1A,20172480,1,31.0,0.0,True,0,"Clinical differences between patients with MODY-3, MODY-2 and type 2 diabetes mellitus with I27L polymorphism in the HNF1alpha gene."
+HNF1A,23616187,1,1.0,0.0,False,1,Maturity-onset diabetes of the young and hepatic adenomatosis - characterisation of a new mutation.
+HNF1A,24915262,1,52.0,12.0,True,0,Association of a Low-Frequency Variant in HNF1A With Type 2 Diabetes in a Latino Population
+HNF1A,26631547,1,1.0,0.0,False,1,Leveraging a Multi-Omics Strategy for Prioritizing Personalized Candidate Mutation-Driver Genes: A Proof-of-Concept Study
+HNF1A,28116330,2,39.0,23.0,True,0,Paper 28116330
+HNF1A,29101032,1,1.0,0.0,False,1,Paper 29101032
+HNF1A,30121369,2,2.0,0.0,False,2,Paper 30121369
+HNF1A,31166087,1,7.0,0.0,False,1,"Liver adenomatosis in patients with hepatocyte nuclear factor-1 alpha maturity onset diabetes of the young (HNF1A-MODY): Clinical, radiological and pathological characteristics in a French series"
+HNF1A,31483937,1,5.0,0.0,False,1,Diagnosis of hepatocellular adenoma in men before onset of diabetes in HNF1A-MODY: Watch out for winkers
+HNF1A,36178555,4,8.0,0.0,False,1,Paper 36178555
+HNF1A,37334553,1,1.0,0.0,False,1,Hepatocellular Adenoma: Report of 2 Cases That Highlight the Relevance of Phenotype-Genotype Correlation in the Pediatric Population.
+HNF1A,38133737,1,1.0,0.0,False,1,Paper 38133737
+HNF1A,39408812,1,1.0,0.0,False,1,Genomic and Transcriptomic Profile of HNF1A-Mutated Liver Adenomas Highlights Molecular Signature and Potential Therapeutic Implications
+KCNQ1,10737999,3,3.0,0.0,False,1,Novel KCNQ1 mutations associated with recessive and dominant congenital long QT Syndromes: Evidence for variable hearing phenotype associated with R518X
+KCNQ1,14510661,2,4.0,3.0,False,1,Paper 14510661
+KCNQ1,16109388,1,1.0,0.0,False,1,De novo KCNQ1 mutation responsible for atrial fibrillation and short QT syndrome in utero
+KCNQ1,17276182,1,6.0,0.0,False,1,Stretch-Sensitive KCNQ1 Mutation: A Link Between Genetic and Environmental Factors in the Pathogenesis of Atrial Fibrillation?
+KCNQ1,17980676,1,1.0,0.0,False,1,The phenotype of a KCNQ1 mutation depends on its KCNE partners: Is the cardiac slow delayed rectifier (IKs) channel more than a KCNQ1/KCNE1 complex?
+KCNQ1,18222468,2,3.0,0.0,False,1,Cardiac Potassium Channel Dysfunction in Sudden Infant Death Syndrome
+KCNQ1,18400097,1,4.0,0.0,False,1,Identification of a novel KCNQ1 mutation associated with both Jervell and Lange-Nielsen and Romano-Ward forms of long QT syndrome in a Chinese family
+KCNQ1,18441444,1,1.0,0.0,False,1,A Novel Mutation Associated With Jervell and Lange-Nielsen Syndrome in a Japanese Family
+KCNQ1,18452873,5,5.0,0.0,False,5,Prevalence of early-onset atrial fibrillation in congenital long QT syndrome
+KCNQ1,19027783,1,2.0,4.0,False,1,An intronic mutation leading to incomplete skipping of exon-2 in KCNQ1 rescues hearing in Jervell and Lange-Nielsen syndrome
+KCNQ1,19646991,1,3.0,0.0,False,1,Augmented potassium current is a shared phenotype for two genetic defects associated with familial atrial fibrillation
+KCNQ1,20126594,3,3.0,0.0,False,1,Paper 20126594
+KCNQ1,20138589,1,2.0,2.0,False,1,A new homozygous mutation of the KCNQ1 gene associated with both Romano-Ward and incomplete Jervell Lange-Nielsen syndromes in two sisters
+KCNQ1,21118729,4,6.0,0.0,False,4,Elevated serum gastrin levels in Jervell and Lange-Nielsen syndrome: A marker of severe KCNQ1 dysfunction?
+KCNQ1,21244686,2,493.0,0.0,True,0,KCNE1 D85N polymorphism — a sex-specific modifier in type 1 long QT syndrome?
+KCNQ1,22539601,1,19.0,0.0,False,1,"Prevalence, mutation spectrum, and cardiac phenotype of the Jervell and Lange-Nielsen syndrome in Sweden."
+KCNQ1,23350853,1,11.0,3.0,False,1,Paper 23350853
+KCNQ1,23392653,3,5.0,0.0,False,3,Prevalence and Potential Genetic Determinants of Sensorineural Deafness in KCNQ1 Homozygosity and Compound Heterozygosity
+KCNQ1,23844633,1,45.0,0.0,False,1,Paper 23844633
+KCNQ1,23856471,3,734.0,162.0,True,0,Paper 23856471
+KCNQ1,24096004,1,1.0,1.0,False,1,A novel KCNQ1 missense mutation identified in a patient with juvenile-onset atrial fibrillation causes constitutively open IKs channels
+KCNQ1,24372464,6,7.0,0.0,False,6,Genotype-phenotype analysis of Jervell and Lange-Nielsen syndrome in six families from Saudi Arabia.
+KCNQ1,24380499,1,1.0,0.0,False,1,Paper 24380499
+KCNQ1,24411289,1,16.0,0.0,False,1,In silico investigation of a KCNQ1 mutation associated with familial atrial fibrillation
+KCNQ1,25187895,1,2.0,1.0,False,1,Large Deletion in KCNQ1 Identified in a Family with Jervell and Lange-Nielsen Syndrome
+KCNQ1,25453094,2,2.0,1.0,False,2,Recessive cardiac phenotypes in induced pluripotent stem cell models of Jervell and Lange-Nielsen syndrome: Disease mechanisms and pharmacological rescue
+KCNQ1,25471708,8,21.0,0.0,False,8,Vestibular dysfunction is a clinical feature of the Jervell and Lange-Nielsen Syndrome
+KCNQ1,25974115,3,9.0,1.0,False,3,Genotype-dependent differences in age of manifestation and arrhythmia complications in short QT syndrome
+KCNQ1,26022593,1,2.0,0.0,False,1,Jervell and Lange-Nielsen syndrome with homozygous missense mutation of the KCNQ1 gene.
+KCNQ1,26168993,1,1.0,0.0,False,1,A new KCNQ1 mutation at the S5 segment that impairs its association with KCNE1 is responsible for short QT syndrome.
+KCNQ1,26279191,1,1.0,0.0,False,1,Paper 26279191
+KCNQ1,26346102,1,2.0,0.0,False,1,Characterization of a Chinese KCNQ1 mutation (R259H) that shortens repolarization and causes short QT syndrome 2
+KCNQ1,26481773,1,1.0,0.0,False,1,Human iPS cell models of Jervell and Lange-Nielsen syndrome
+KCNQ1,26734131,1,1.0,0.0,False,1,Syncope and cardiac arrest during strenuous exercise associated with a novel mutation in LQTS1
+KCNQ1,27286732,1,1.0,0.0,False,1,A Partial Duplication and Poly(A) Insertion in KCNQ1 Not Detected by Next-Generation Sequencing in Jervell and Lange-Nielsen Syndrome
+KCNQ1,27871843,2,2.0,0.0,False,1,Paper 27871843
+KCNQ1,28491751,1,1.0,0.0,False,1,Structural interplay of K(V)7.1 and KCNE1 is essential for normal repolarization and is compromised in short QT syndrome 2 (K(V)7.1-A287T).
+KCNQ1,28595573,3,9.0,0.0,False,3,A novel KCNQ1 nonsense variant in the isoform-specific first exon causes both jervell and Lange-Nielsen syndrome 1 and long QT syndrome 1: a case report
+KCNQ1,29037160,4,7.0,9.0,False,4,"Homozygous, and compound heterozygous mutation in 3 Turkish family with Jervell and Lange-Nielsen syndrome: case reports"
+KCNQ1,29270100,1,26.0,0.0,False,1,"Common founder effects of hereditary hemochromatosis, Wilson´s disease, the long QT syndrome and autosomal recessive deafness caused by two novel mutations in the WHRN and TMC1 genes"
+KCNQ1,29372044,1,1.0,2.0,False,1,Paper 29372044
+KCNQ1,29677589,2,2.0,0.0,False,2,Generation of the human induced pluripotent stem cell (hiPSC) line PSMi002-A from a patient affected by the Jervell and Lange-Nielsen syndrome and carrier of two compound heterozygous mutations on the KCNQ1 gene
+KCNQ1,29684900,1,1.0,0.0,False,1,Paper 29684900
+KCNQ1,29922582,1,3.0,1.0,False,1,Fetal heart rate reflects mutation burden and clinical outcome in twin probands with KCNQ1 mutations
+KCNQ1,29951145,1,2.0,4.0,False,1,Detection of a new KCNQ1 frameshift mutation associated with Jervell and Lange‐Nielsen syndrome in 2 Iranian families
+KCNQ1,30354302,1,1.0,1.0,False,1,Paper 30354302
+KCNQ1,31315195,4,6.0,0.0,False,4,Short QT Syndrome: A Comprehensive Genetic Interpretation and Clinical Translation of Rare Variants
+KCNQ1,32164657,1,1.0,0.0,False,1,Paper 32164657
+KCNQ1,32508908,2,2.0,2.0,False,2,Jervell and Lange-Nielsen Syndrome due to a Novel Compound Heterozygous KCNQ1 Mutation in a Chinese Family
+KCNQ1,32830254,2,5.0,0.0,False,2,The combined novel KCNQ1 frameshift I145Sfs*92 and nonsense W392X variants caused Jervell and Lange-Nielsen syndrome in a Chinese infant presenting with sustained foetal bradycardia.
+KCNQ1,32893267,270,804.0,0.0,True,0,Unknown Title
+KCNQ1,33082985,1,2.0,0.0,False,1,Jervell and Lange-Nielsen syndrome with novel KCNQ1 and additional gene mutations
+KCNQ1,34088017,2,2.0,2.0,False,2,Paper 34088017
+KCNQ1,34557911,6,13.0,0.0,False,5,Paper 34557911
+KCNQ1,34712558,2,3.0,0.0,False,2,A novel variant in KCNQ1 associated with short QT syndrome
+KCNQ1,36232963,2,3.0,1.0,False,1,Paper 36232963
+KCNQ1,38341987,1,1.0,0.0,False,1,Paper 38341987
+KCNQ1,38653189,1,1.0,0.0,False,1,Impacts of gene variants on drug effects-the foundation of genotype-guided pharmacologic therapy for long QT syndrome and short QT syndrome
+KCNQ1,40818193,1,1.0,0.0,False,1,Paper 40818193
+KCNQ1,41819279,1,3.0,0.0,False,1,Paper 41819279
+KCNQ1,41940510,1,2.0,2.0,False,1,Late diagnosis of Jervell and Lange-Nielsen syndrome in two sisters with homozygous KCNQ1 mutation
+LDLR,15135251,6,322.0,0.0,True,0,Genetic polymorphisms affecting the phenotypic expression of familial hypercholesterolemia
+LDLR,31491741,5,110.0,0.0,True,0,Impact of LDLR and PCSK9 pathogenic variants in Japanese heterozygous familial hypercholesterolemia patients
+LDLR,31746944,2,302.0,0.0,True,0,Paper 31746944
+LDLR,38740897,3,5.0,1.0,False,3,Actionability and familial uptake following opportunistic genomic screening in a pediatric cancer cohort

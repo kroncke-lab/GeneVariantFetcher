@@ -1,0 +1,41 @@
+{
+  "source_key_delta_arithmetic_verified": true,
+  "clinical_affected_delta": -1229.0,
+  "clinical_unaffected_delta": -162.0,
+  "clinical_identity_keys_excluded": 69,
+  "clinical_identity_exclusion_reasons": {
+    "canonical_protein_identity_invalid": 64,
+    "archived_shared_allele_join_incompatible": 3,
+    "canonical_protein_identity_invalid;archived_shared_allele_join_incompatible": 2
+  },
+  "gene": "KCNQ1",
+  "population_alleles": 113721,
+  "population_carriers": 66821104,
+  "population_reassignments": 0,
+  "missense_donors": 1061,
+  "supported_targets": 975,
+  "unsupported_targets": 86,
+  "supported_residues": 508,
+  "geometry_support": {
+    "structured": 586,
+    "polymer": 389,
+    "missing": 86
+  },
+  "targets_with_same_residue_donors": 764,
+  "no_affected_donor_targets": 27,
+  "no_affected_donor_residues": 16,
+  "raw_fraction_zeros": 27,
+  "primary_zeros": 0,
+  "primary_median": 0.2461138576573026,
+  "no_affected_density_min": 0.1164646172920141,
+  "no_affected_density_max": 0.1842077421818408,
+  "prior_fraction_of_score_median": 0.5643508224959001,
+  "all_weight_shards_checked": 9,
+  "max_weight_reproduction_error": 2.220446049250313e-16,
+  "reference_targets": 5,
+  "reference_contexts": 16,
+  "fixed_prior_target_count_perturbation_invariant": true,
+  "unchanged_gene_max_density_error": null,
+  "verified_input_hashes": 17,
+  "run_sha256": "5c2874cb35e0c09da2943e9b896bac17502617420fff29a3f7ec7d9e6bd2ef3f"
+}

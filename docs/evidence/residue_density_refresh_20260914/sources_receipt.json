@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "residue-profiles",
+      "title": "Corrected residue profiles for five gene–disease pairs",
+      "assumptions": [
+        "All gnomAD carriers are treated as unaffected."
+      ],
+      "queries": [
+        {
+          "id": "residue-tables",
+          "source": {
+            "label": "Corrected missense residue tables",
+            "files": [
+              {
+                "label": "HNF1A_residue_density.csv"
+              },
+              {
+                "label": "GCK_residue_density.csv"
+              },
+              {
+                "label": "LDLR_residue_density.csv"
+              },
+              {
+                "label": "BRCA2_residue_density.csv"
+              },
+              {
+                "label": "KCNQ1_residue_density.csv"
+              }
+            ],
+            "metricDefinitions": [
+              {
+                "label": "Residue density",
+                "definition": "Residue density is the mean of supported variant-only leave-one-out posterior neighborhood scores at each canonical residue."
+              }
+            ],
+            "filters": [
+              "Observed canonical missense variants, including population-only variants.",
+              "Gene-specific missense empirical priors fitted separately from nonsense.",
+              "Positive sigmoid distance kernel with half weight at 3 Å.",
+              "Polymer distances restricted to the same candidate disordered segment and chain."
+            ],
+            "caveats": [
+              "Unsupported residues remain unestimated.",
+              "The plotted band is the between-variant range, not a confidence interval.",
+              "Source corrections are bounded; these features are not calibrated disease probabilities."
+            ],
+            "evidenceFlow": [
+              {
+                "kind": "validation",
+                "title": "Numerical and figure checks",
+                "detail": "Independent checks reproduce 10 priors, 67 primary weight shards and all 6,050 residue rows. All six PNGs were visually reviewed; clipped labels and hidden small positive values were corrected."
+              }
+            ]
+          },
+          "columns": [
+            {
+              "field": "gene",
+              "label": "Gene"
+            },
+            {
+              "field": "supported_residues",
+              "label": "Supported residues"
+            },
+            {
+              "field": "protein_length",
+              "label": "Protein length"
+            },
+            {
+              "field": "median_residue_percent",
+              "label": "Median residue score (%)"
+            }
+          ],
+          "rows": [
+            {
+              "gene": "HNF1A",
+              "supported_residues": 426,
+              "protein_length": 631,
+              "median_residue_percent": 6.336807852611676
+            },
+            {
+              "gene": "GCK",
+              "supported_residues": 339,
+              "protein_length": 465,
+              "median_residue_percent": 34.73667925917231
+            },
+            {
+              "gene": "LDLR",
+              "supported_residues": 637,
+              "protein_length": 860,
+              "median_residue_percent": 15.81386327133293
+            },
+            {
+              "gene": "BRCA2",
+              "supported_residues": 2481,
+              "protein_length": 3418,
+              "median_residue_percent": 3.4743539046120597
+            },
+            {
+              "gene": "KCNQ1",
+              "supported_residues": 508,
+              "protein_length": 676,
+              "median_residue_percent": 23.97889501104148
+            }
+          ],
+          "preview": {
+            "kind": "aggregate",
+            "note": "One summary row per gene; underlying per-residue data are linked in the report.",
+            "totalRows": 6050
+          }
+        }
+      ]
+    },
+    {
+      "id": "prior-contribution",
+      "title": "Why low-case regions retain positive posterior density",
+      "queries": [
+        {
+          "id": "prior-count-distance-checks",
+          "source": {
+            "label": "Prior and distance diagnostics",
+            "files": [
+              {
+                "label": "sanity_summary.csv"
+              },
+              {
+                "label": "bandwidth_sensitivity.csv"
+              },
+              {
+                "label": "prior_summary.csv"
+              }
+            ],
+            "metricDefinitions": [
+              {
+                "label": "Prior contribution",
+                "definition": "The posterior neighborhood averages each donor’s count-updated empirical posterior, so zero affected observations can still contribute a positive prior component."
+              }
+            ],
+            "caveats": [
+              "A raw observed-fraction score and a posterior-neighborhood score have different meanings.",
+              "Sparse zero-case evidence does not establish a disease probability below 0.1%."
+            ]
+          },
+          "summary": "BRCA2’s median weight beyond 20 Å is 0.474%, while 40 supported targets have no affected donor and exactly zero raw-fraction score. GCK’s unaffected-singleton posterior remains 25.78% under its empirical prior.",
+          "methods": [
+            {
+              "language": "calculation",
+              "code": "Own posterior = (alpha_empirical + affected) / (alpha_empirical + beta_empirical + affected + unaffected)\nFor GCK A=0, U=1: 1.0268273749182273 / (2.982971890149705 + 1) = 0.2578043238160118"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

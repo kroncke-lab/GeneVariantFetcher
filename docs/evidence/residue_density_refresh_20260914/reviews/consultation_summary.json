@@ -1,0 +1,162 @@
+{
+  "scope": "Fresh conceptual methods reviews using a generic brief and synthetic examples only; no actual dataset, source audit, fitted empirical parameters or implementation was reviewed by the CLIs.",
+  "execution_approved": true,
+  "all_three_exited_successfully": true,
+  "app_fallback_used": false,
+  "prompts_byte_identical": true,
+  "prompt_sha256": "1a612bd5bdb78a19f40301cefdeb8439ee5bea44f7bfbee3e14d47a44e86dc4b",
+  "disposition": "REVIEW_DISPOSITION.md",
+  "local_synthetic_corrections": "synthetic_review_checks.json",
+  "agy_status": {
+    "cli": "/Users/kronckbm/.local/bin/agy",
+    "requested_model": "gemini-3.1-pro-high",
+    "requested_effort": "high",
+    "started_utc": "2026-09-14T11:31:13.420997+00:00",
+    "prompt": "agy_prompt.txt",
+    "scope": "Generic mathematical consultation with synthetic examples only; no internal empirical data or source-provenance findings transmitted.",
+    "timeout_seconds": 270,
+    "exit_code": 0,
+    "status": "returned",
+    "elapsed_seconds": 45.792,
+    "completed_utc": "2026-09-14T11:31:59.213191+00:00",
+    "response_status": "SUCCESS",
+    "actual_model": "not echoed in CLI response",
+    "usage": {
+      "input_tokens": 7286,
+      "output_tokens": 4062,
+      "thinking_tokens": 2348,
+      "cache_read_tokens": 8101,
+      "total_tokens": 11348
+    },
+    "cost_usd": null,
+    "cost_note": "CLI did not report dollar cost",
+    "provider_duration_seconds": 44.037028,
+    "num_turns": 1,
+    "response_scope": "Generic mathematics and biological-method considerations; not an actual data review.",
+    "raw_output_sha256": "b9c19e5dbd271e69f1902aee52898366ebdfb613ac81ff4f73de4c04d86f220b",
+    "stderr_bytes": 78
+  },
+  "grok_status": {
+    "cli": "/Users/kronckbm/.local/bin/grok",
+    "requested_model": "grok-4.6",
+    "requested_effort": "high",
+    "started_utc": "2026-09-14T11:31:13.420879+00:00",
+    "prompt": "grok_prompt.txt",
+    "scope": "Generic mathematical consultation with synthetic examples only; no internal empirical data or source-provenance findings transmitted.",
+    "timeout_seconds": 270,
+    "exit_code": 0,
+    "status": "returned",
+    "elapsed_seconds": 48.639,
+    "completed_utc": "2026-09-14T11:32:02.060674+00:00",
+    "response_status": "end_turn",
+    "actual_model": [
+      "grok-4.6-build"
+    ],
+    "usage": {
+      "input_tokens": 14035,
+      "cache_read_input_tokens": 128,
+      "cache_creation_input_tokens": 0,
+      "output_tokens": 2642,
+      "reasoning_tokens": 203,
+      "total_tokens": 16805
+    },
+    "cost_usd": 0.01495524,
+    "num_turns": 1,
+    "response_scope": "Generic mathematics and biological-method considerations; not an actual data review.",
+    "raw_output_sha256": "c3507f57c75fb5b80d14d37a1afa2dcddaa3c97ee1c80591175fcf7ec06953bf",
+    "stderr_bytes": 299
+  },
+  "claude_status": {
+    "cli": "/Users/kronckbm/.local/bin/claude",
+    "requested_model": "CLI configured default; no model override",
+    "requested_effort": "CLI default; no effort override",
+    "started_utc": "2026-09-14T11:31:13.421024+00:00",
+    "prompt": "claude_prompt.txt",
+    "scope": "Generic mathematical consultation with synthetic examples only; no internal empirical data or source-provenance findings transmitted.",
+    "timeout_seconds": 270,
+    "exit_code": 0,
+    "status": "returned",
+    "elapsed_seconds": 80.671,
+    "completed_utc": "2026-09-14T11:32:34.093369+00:00",
+    "response_status": "success",
+    "actual_models_reported": [
+      "claude-haiku-4-5-20251001",
+      "claude-opus-5[1m]"
+    ],
+    "model_usage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 2294,
+        "outputTokens": 18,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.002384,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000,
+        "thinkingTokens": 0,
+        "canonicalModel": "claude-haiku-4-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      },
+      "claude-opus-5[1m]": {
+        "inputTokens": 2,
+        "outputTokens": 5358,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 4453,
+        "webSearchRequests": 0,
+        "costUSD": 0.17848999999999998,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 64000,
+        "thinkingTokens": 2295,
+        "canonicalModel": "claude-opus-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 4453,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 5358,
+      "output_tokens_details": {
+        "thinking_tokens": 2295
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4453,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 5358,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 4453,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 4453
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "cost_usd": 0.18087399999999998,
+    "num_turns": 1,
+    "provider_duration_seconds": 80.176,
+    "permission_denials": [],
+    "subagents_spawned": 0,
+    "response_model_note": "The CLI reports Opus 5 with 5,358 output tokens and an auxiliary Haiku call with 18; no model override was passed.",
+    "response_scope": "Generic mathematics and biological-method considerations; not an actual data review.",
+    "raw_output_sha256": "82458c10734ef218b3b3d75038855bba390f6a0cded5e0908a8be2fa194be47f",
+    "stderr_bytes": 0
+  },
+  "reported_cost_usd_excluding_unreported_agy": 0.19582924,
+  "launcher_sha256": "7f42b92b8a2cc3b198d21c0cce5bed446cb4a3852d137143cb436140df0f9442",
+  "review_disposition_sha256": "fa5f15bba701523141813d2a48879db99f613644c986b476ecda565f58183b9c"
+}

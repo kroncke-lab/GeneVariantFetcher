@@ -1,0 +1,21 @@
+{
+  "raw_weight_shards": {
+    "results/residue_density_refresh_20260914/LDLR/weights_00000_00128.npz": "0b47b24ba4dca1b98585b290400757b6b00b1f5958b15d79561a927fc7232a07",
+    "results/residue_density_refresh_20260914/LDLR/weights_00128_00256.npz": "9e6af8e58fa341a5e0f7e38d57421d59b1c7ba45f95f55d7fce4d639ca4c358d",
+    "results/residue_density_refresh_20260914/LDLR/weights_00256_00384.npz": "586bbd4229cfb99db42ac24b5e578e55c5ae7162a6ef574ef6827089b46f80ff",
+    "results/residue_density_refresh_20260914/LDLR/weights_00384_00512.npz": "6e2d9304e1c892f005a32efde9097eef49e0c019ca71ef01fb45a4f9d4960de7",
+    "results/residue_density_refresh_20260914/LDLR/weights_00512_00640.npz": "d813037d9a4683bab1d25621f1027ff2ef7028ff51c0736b01a2ca2468621471",
+    "results/residue_density_refresh_20260914/LDLR/weights_00640_00768.npz": "3ad1727847238bd2b687207185175398fce9ea9ca9d8b8527348788cfbe55df9",
+    "results/residue_density_refresh_20260914/LDLR/weights_00768_00896.npz": "cfc9083c1f778d790d4d7192cdfaef5c3936bbc5eb9993421616cdbe07c751a0",
+    "results/residue_density_refresh_20260914/LDLR/weights_00896_01024.npz": "9a353891b061904c919d6e8a8da5df03d0e55298d9d61178fe48b7c3e8bbdccf",
+    "results/residue_density_refresh_20260914/LDLR/weights_01024_01152.npz": "b3110867a82e32c6afa39b3f97a65985c3620a189f587a2b6effbc8b521bad56",
+    "results/residue_density_refresh_20260914/LDLR/weights_01152_01280.npz": "db0f43f12f63c1d57828c8ba9c7a100912e2c7c176f63162b5e1749eb42f980d",
+    "results/residue_density_refresh_20260914/LDLR/weights_01280_01361.npz": "8bfd6b7cff20c399a7e9f8632a838921a7d5c1b88901b7991a2439da7c4e64b3"
+  },
+  "variant_ids_sha256": "5f4c65e1514d01ad39cc74dc2fdaf21a26c564aa132ab726e9006bff48843e2a",
+  "own_variant_weights_zero": true,
+  "normalized_weights_sum_to_one": true,
+  "alpha_adds_affected": true,
+  "beta_adds_literature_and_gnomad_unaffected": true,
+  "posterior_decomposition_reproduces": true
+}

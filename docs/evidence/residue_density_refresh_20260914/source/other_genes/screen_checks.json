@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "original_DB_hashes_match": true,
+  "hashes": {
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/HNF1A_protocol/observations.csv": "038939f1c52e7ca4c2801e7c07ca8adeb074fd09047ad5d978a241ac45a09d06",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/HNF1A.db": "5f05430152adfba8609612a506c6b60ecd4d06ec581c17e39f029c7372543197",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/HNF1A.refresh_20260909_212303.db": "b80f8a28c5b84f6863f3f0fe4827576fa96bed9aa42639c80825e356f4784032",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_1/HNF1A/20260909_093720/HNF1A.db": "c32a0117a618dadb9cbf9a0d6fdbedf3471308d0fce5a6324035850053ee227e",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_2/HNF1A/20260909_093723/HNF1A.db": "26154cf93e60f173952d8f1b62acc7e36d7877ff966ef8fa77c6fbb8eda983e2",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/HNF1A_2/HNF1A/20260909_093723/HNF1A.refresh_20260909_211437.db": "c9f340d67f2f1c0ed7eb72bb1c541f0652796937b5709dc62a17f1887a81e910",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/LDLR_protocol/observations.csv": "07a8afdafc3e9a7d35ce6a43086ebcc3227fc4bb11c2b4f9310bd54c4081e843",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/LDLR_0/LDLR/20260909_104849/LDLR.db": "184b3913a2b710a1e37ee433351ab92544ddf13858d76a5ff902e23c6aca87e9",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/LDLR_0/LDLR/20260909_104849/LDLR.refresh_20260910_224038.db": "e6e90e6620b885191387ad4a1c553f5f132261230f83261fafa9bc1e1a4da13c",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/LDLR_1/LDLR/20260909_104851/LDLR.db": "e5b1ebe0149c12de2d22b8df979a28fdfcec276f863299f1bccf2d9aa3e982a5",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/LDLR_1/LDLR/20260909_104851/LDLR.refresh_20260910_232510.db": "935247d34a98ac77b0d86a29434cf1f292f5e6dca7a7e2cd1c9d12a0345136c8",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/LDLR_2/LDLR/20260909_104856/LDLR.db": "398e04a312ec33514c665b69d30b47b246a688bea2eb7f7844e730d77bd1515f",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/LDLR_2/LDLR/20260909_104856/LDLR.refresh_20260910_231821.db": "cc54251d48ff921db5be151f3c0c6861eab25ace44addd5a0640dd0b5b18f2a7",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/LDLR_3/LDLR/20260909_104858/LDLR.db": "b42d2b4320395f4d632b833c43d1746958bced3ec0a6ca93f04ce4e9a732c8ea",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/results/grant_e2e_20260909/shards/LDLR_3/LDLR/20260909_104858/LDLR.refresh_20260910_223649.db": "28e29bc58b567d9a5156b592f344386e52aca68c6398e316988f451d0aaf6071",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/KCNQ1_protocol/observations.csv": "0fa3a0a92fa3007b1650c821522979c6c35041643866119e88152c1946a7d421",
+    "/Users/kronckbm/GitRepos/GeneVariantFetcher/validation_runs/canonical_baseline/KCNQ1.db": "9d974e08fd0510192abbe027bb5dee6c298ee28e45d53323c4a5830985ae0398"
+  },
+  "method": "Top three PMIDs by frozen affected count per gene plus explicit source-metadata warning keywords; all variant types and canonical-missense-key coverage shown separately.",
+  "limitation": "Screening metadata and top-source context is not source re-extraction or validation of every count; sparse quotes may miss problems. Keyword matches are warnings, not automatic exclusions. Counts and plot inputs unchanged."
+}

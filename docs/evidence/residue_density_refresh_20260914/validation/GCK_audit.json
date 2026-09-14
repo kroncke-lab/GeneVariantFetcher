@@ -1,0 +1,39 @@
+{
+  "source_key_delta_arithmetic_verified": true,
+  "clinical_affected_delta": -72.0,
+  "clinical_unaffected_delta": -40.0,
+  "clinical_identity_keys_excluded": 26,
+  "clinical_identity_exclusion_reasons": {
+    "canonical_protein_identity_invalid": 24,
+    "canonical_protein_identity_invalid;archived_shared_allele_join_incompatible": 2
+  },
+  "gene": "GCK",
+  "population_alleles": 14294,
+  "population_carriers": 8931920,
+  "population_reassignments": 7,
+  "missense_donors": 614,
+  "supported_targets": 594,
+  "unsupported_targets": 20,
+  "supported_residues": 339,
+  "geometry_support": {
+    "structured": 594,
+    "missing": 20
+  },
+  "targets_with_same_residue_donors": 433,
+  "no_affected_donor_targets": 0,
+  "no_affected_donor_residues": 0,
+  "raw_fraction_zeros": 0,
+  "primary_zeros": 0,
+  "primary_median": 0.3486190922209734,
+  "no_affected_density_min": null,
+  "no_affected_density_max": null,
+  "prior_fraction_of_score_median": 0.6167362968216645,
+  "all_weight_shards_checked": 5,
+  "max_weight_reproduction_error": 2.220446049250313e-16,
+  "reference_targets": 9,
+  "reference_contexts": 8,
+  "fixed_prior_target_count_perturbation_invariant": true,
+  "unchanged_gene_max_density_error": null,
+  "verified_input_hashes": 14,
+  "run_sha256": "5c2874cb35e0c09da2943e9b896bac17502617420fff29a3f7ec7d9e6bd2ef3f"
+}

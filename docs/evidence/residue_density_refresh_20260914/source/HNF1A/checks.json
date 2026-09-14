@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "original_observations": 419,
+  "original_A": 762.0,
+  "original_U": 115.0,
+  "adjudicated_observations": 10,
+  "old_adjudicated_A": 133.0,
+  "old_adjudicated_U": 36.0,
+  "primary_A": 633.0,
+  "primary_U": 83.0,
+  "restored_source_A": 4,
+  "restored_source_U": 4,
+  "clinical_keys": 234,
+  "retained_clinical_keys": 229,
+  "baseline_hashes": {
+    "docs/evidence/population_inclusive_penetrance_20260912/audit/literature_identity_flags.csv.gz": "240fe0af9cf5d392108c3f1371dffc7f3e5eb3b69554592110fb9648712e721c",
+    "/Users/kronckbm/GitRepos/BayesianPenetranceEstimator/iterations/grant_e2e_20260909/results/HNF1A_protocol/observations.csv": "038939f1c52e7ca4c2801e7c07ca8adeb074fd09047ad5d978a241ac45a09d06"
+  },
+  "source_hashes": {
+    "results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/pmc_fulltext/24915262_CLEANED.md": "290200812b20b3d8e4ca195df235097c129b5941b6225be50b0956100642b987",
+    "results/grant_e2e_20260909/shards/HNF1A_1/HNF1A/20260909_093720/pmc_fulltext/28116330_CLEANED.md": "bc3f3fc1a17b9968db4395074a9a5f6fcc58df6892ab01e29a00c18c2a58bc41",
+    "results/grant_e2e_20260909/shards/HNF1A_2/HNF1A/20260909_093723/pmc_fulltext/20172480_CLEANED.md": "eae262716cc7983724775fd6907f5d7bc4226a6e785596d964bdaab73a0f1c59",
+    "results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/pmc_fulltext/30121369_CLEANED.md": "34114c6f19879faca832a860fd7f2d90969ccfe12d64a791a55d70cd45dc3984",
+    "results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/pmc_fulltext/29101032_CLEANED.md": "46317f9e9bb2d4123d5e59387ca56c7ad328e5f815b258b2288bf1e9dcb0fab2",
+    "results/grant_e2e_20260909/shards/HNF1A_2/HNF1A/20260909_093723/pmc_fulltext/38133737_CLEANED.md": "f707fdc398250f90458e7908ed23ad197c0a7d2d76db736cd60556980afbf5e3",
+    "results/grant_e2e_20260909/shards/HNF1A_2/HNF1A/20260909_093723/pmc_fulltext/26631547_CLEANED.md": "886e4d519215a58beb2d1e6a6ab13e248231076635f470d993a7eae329afd08c",
+    "results/grant_e2e_20260909/shards/HNF1A_1/HNF1A/20260909_093720/pmc_fulltext/31483937_CLEANED.md": "41866eb8a0cd82f9f10437021e7675d7ebeaf79385c4af3b545d01c876c2c705",
+    "results/grant_e2e_20260909/shards/HNF1A_0/HNF1A/20260909_093717/pmc_fulltext/14598263_CLEANED.md": "a7b60ef6ddf9605a498b55ab2c5fb03147272d8f87b98e7883a393fad376f076"
+  },
+  "output_ledger_sha256": "7bb88e32ab4a71287d6d92a410824600b4ff74f4ca8487f0e8b791d046f1b3e9",
+  "scope": "Top three original affected sources plus already-flagged somatic and adenoma endpoint examples; no claim all remaining sources are MODY-specific. Frameshift/splice flags outside requested missense/nonsense fits remain unchanged.",
+  "population_rule": "Drop zero-clinical-evidence keys and rebuild/rejoin population union; retain all observed gnomAD alleles."
+}

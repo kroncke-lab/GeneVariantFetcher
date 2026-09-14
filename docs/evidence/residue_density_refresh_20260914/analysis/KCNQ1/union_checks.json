@@ -1,0 +1,11 @@
+{
+  "gene": "KCNQ1",
+  "population_alleles": 113721,
+  "population_alleles_preserved_once": true,
+  "population_alleles_reassigned": 0,
+  "gnomad_carriers_all_consequences": 66821104,
+  "zero_clinical_evidence_keys_excluded": 1,
+  "old_retained_clinical_keys": 699,
+  "new_retained_clinical_keys": 698,
+  "no_zero_observation_donors": true
+}

@@ -1,0 +1,11 @@
+gene,variant_type,source_literal_canonical_class_A,source_literal_canonical_class_U,union_fitted_clinical_A,union_fitted_clinical_U,net_A_scope_change,net_U_scope_change
+GCK,missense,603.0,32.0,603.0,32.0,0.0,0.0
+GCK,nonsense,61.0,0.0,61.0,0.0,0.0,0.0
+BRCA2,missense,1858.0,1489.0,1858.0,1482.0,0.0,-7.0
+BRCA2,nonsense,906.0,110.0,896.0,108.0,-10.0,-2.0
+HNF1A,missense,400.0,42.0,400.0,42.0,0.0,0.0
+HNF1A,nonsense,38.0,4.0,38.0,4.0,0.0,0.0
+LDLR,missense,1433.0,96.0,1346.0,95.0,-87.0,-1.0
+LDLR,nonsense,351.0,16.0,358.0,16.0,7.0,0.0
+KCNQ1,missense,5848.0,1595.0,5845.0,1594.0,-3.0,-1.0
+KCNQ1,nonsense,454.0,218.0,454.0,218.0,0.0,0.0

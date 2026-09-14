@@ -1,0 +1,26 @@
+{
+  "agy": {
+    "path": "/Users/kronckbm/.local/bin/agy",
+    "sha256": "cabadc15a61944372bede1fdff186701c17467dd9d718e97dc79283055d3c101",
+    "bytes": 180089984,
+    "headless_usage_verified_from": "CLI --help and docs/evidence/model_ceiling_assessment_20260906/review_adjudication.md",
+    "version": "Not exposed by inspected --help; executable SHA256 recorded",
+    "invocation_basis": "Existing successful headless review routing in structural_sanity_20260913/reviews/run_cli_reviews.py; executable hash unchanged."
+  },
+  "grok": {
+    "path": "/Users/kronckbm/.local/bin/grok",
+    "sha256": "8669e0fdadceec25b8c159c355f427ffbd82583525d774b6ab1522197ea83b80",
+    "bytes": 133486016,
+    "headless_usage_verified_from": "CLI --help and docs/evidence/model_ceiling_assessment_20260906/review_adjudication.md",
+    "version": "grok 1.0.13 (5e9a58528b76) [stable]",
+    "invocation_basis": "Existing successful headless review routing in structural_sanity_20260913/reviews/run_cli_reviews.py; executable hash unchanged."
+  },
+  "claude": {
+    "path": "/Users/kronckbm/.local/bin/claude",
+    "version": "2.1.259 (Claude Code)",
+    "headless_usage_verified_from": "Current claude --help output: --print, --safe-mode, --tools empty string, --strict-mcp-config, --permission-mode plan, --permission-prompts none, --no-session-persistence, --output-format json, --system-prompt.",
+    "invocation_basis": "New generic review using configured default model; safe mode disables customizations and CLAUDE.md discovery; no tools available.",
+    "sha256": "884baa38fe1a624be25c4a91568bf5a08b5cf4e7d7acf29b7760e3525d964898",
+    "bytes": 200225968
+  }
+}

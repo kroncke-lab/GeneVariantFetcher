@@ -1,0 +1,27 @@
+source_line,source_row,source_cdna,source_preprotein,source_mature_protein,source_index_cases,source_relatives
+145,"| Exon 11 | c.1646 G > A | p.(Gly549Asp) | p.(Gly528Asp) | 43 (16.4%) | 38 | FH-Genoa Palermo-1 | [6] (IT, GB, GR, NL, ES) |",c.1646G>A,p.(Gly549Asp),p.(Gly528Asp),43,38
+146,"| Exon 6 | c.858 C > A | p.(Ser286Arg) | p.(Ser265Arg) | 25 (9.5%) | 27 | FH-Greece-2 | [7] (GR, GB, NL, DE, BG) |",c.858C>A,p.(Ser286Arg),p.(Ser265Arg),25,27
+147,"| Exon 2 | c.81 C > G | p.(Cys27Trp) | p.(Cys6Trp) | 18 (6.9%) | 19 | FH-San Francisco | [7] (US, GB, CA, GR, NL) |",c.81C>G,p.(Cys27Trp),p.(Cys6Trp),18,19
+148,"| Exon 9 | c.1285 G > A | p.(Val429Met) | p.(Val408Met) | 17 (6.5%) | 17 | FH-Αfrikaner-2 | [8] (ZA, NL, GR) |",c.1285G>A,p.(Val429Met),p.(Val408Met),17,17
+149,| Exon 4 | c.517 T > C | p.(Cys173Arg) | p.(Cys152Arg) | 5 (1.9%) | 6 | FH-Greece-1 | [7] (GR) |,c.517T>C,p.(Cys173Arg),p.(Cys152Arg),5,6
+150,"| Intron 11 | c.1706-10G > A |  |  | 5 (1.9%) | 4 |  | [9] (ES, NL, DK, GR, NZ) |",c.1706-10G>A,,,5,4
+151,"| Exon 5 | c.761 A > C | p.(Gln254Pro) | p.(Gln233Pro) | 3 (1.1%) | 3 | FH-Reggio Emilia-2 | [10] (IT, CZ, DK, GR, DE) |",c.761A>C,p.(Gln254Pro),p.(Gln233Pro),3,3
+152,"| Exon 12 | c.1775 G > A | p.(Gly592Glu) | p.(Gly571Glu) | 3 (1.1%) | 3 | FH-Sicily | [7] (IT, PL, RU, DE, ES) |",c.1775G>A,p.(Gly592Glu),p.(Gly571Glu),3,3
+153,"| Exon 2 | c.166 T > C | p.(Ser56Pro) | p.(Ser35Pro) | 2 (0.8%) | 1 |  | [11] (NO, DK, DB, GR) |",c.166T>C,p.(Ser56Pro),p.(Ser35Pro),2,1
+154,| Exon 5 | c.718 G > A | p.(Glu240Lys) | p.(Glu219Lys) | 2 (0.8%) | 2 | FH-Charlotte | [12] (NL) |,c.718G>A,p.(Glu240Lys),p.(Glu219Lys),2,2
+155,"| Exon 8 | c.1150 C > T | p.(Gln384*) | p.(Gln363*) | 2 (0.8%) | 1 | FH-Cyprus | [13] (CY, GR, GB) |",c.1150C>T,p.(Gln384*),p.(Gln363*),2,1
+156,| Exon 10 | c.1381 G > T | p.(Gly461Cys) | p.(Gly440Cys) | 2 (0.8%) | 2 |  | [21] (BR) |,c.1381G>T,p.(Gly461Cys),p.(Gly440Cys),2,2
+157,"| Exon 14 | c.2043C > A | p.(Cys681*) | p.(Cys660*) | 2 (0.8%) | 2 | FH-Lebanese | [14] (LB, IL, BR, GB, US) |",c.2043C>A,p.(Cys681*),p.(Cys660*),2,2
+158,| Exon 5 | c.709 C > T | p.(Arg237Cys) | p.(Arg216Cys) | 1 (0.4%) | 0 |  | [15] (GB) |,c.709C>T,p.(Arg237Cys),p.(Arg216Cys),1,0
+159,| Exon 4 | c.661_673dup | p.(Lys225Argfs*7) | p.(Lys204Argfs*7) | 1 (0.4%) | 1 | FH-Thrace | [5] (Novel) |,c.661_673dup,p.(Lys225Argfs*7),p.(Lys204Argfs*7),1,1
+160,| Exon 4 | c.628_643dup{636del} | p.(Trp214_Arg215insHisProLeuSerTrp) | p.(Trp193_Arg194insHisProLeuSerTrp) | - (0.4%) | 1 | FH-Kastoria | [5] (Novel) |,c.628_643dup{636del},p.(Trp214_Arg215insHisProLeuSerTrp),p.(Trp193_Arg194insHisProLeuSerTrp),0,1
+161,"| Exon 6 | c.902 A > G | p.(Asp301Gly) | p.(Asp280Gly) | 1 (0.4%) | 1 | FH-Greece-3 | [16] (GR, ES, NL) |",c.902A>G,p.(Asp301Gly),p.(Asp280Gly),1,1
+162,"| Exon 6 | c.829 G > A | p.(Glu277Lys) | p.(Glu256Lys) | 1 (0.4%) | 2 |  | [17] (CU, SE, ES, IN, TR) |",c.829G>A,p.(Glu277Lys),p.(Glu256Lys),1,2
+163,| Exon 7 | c.977 C > G | p.(Ser326Cys) | p.(Ser305Cys) | 1 (0.4%) | 3 |  | [20] (IT) |,c.977C>G,p.(Ser326Cys),p.(Ser305Cys),1,3
+164,| Exon 8 | c.1124 A > C | p.(Tyr375Ser) | p.(Tyr354Ser) | 1 (0.4%) | 1 | FH-Corfu | [5] (Novel) |,c.1124A>C,p.(Tyr375Ser),p.(Tyr354Ser),1,1
+165,"| Exon 8 | c.1151 A > C | p.(Gln384Pro) | p.(Gln363Pro) | 1 (0.4%) | 0 | FH-Dutch | [18] (NL, CA, GR) |",c.1151A>C,p.(Gln384Pro),p.(Gln363Pro),1,0
+166,"| Exon 9 | c.1291 G > A | p.(Ala431Thr) | p.(Ala410Thr) | 1 (0.4%) | 2 | FH-Algerian-2 | [6] (DZ, JP, NL, CN, GR) |",c.1291G>A,p.(Ala431Thr),p.(Ala410Thr),1,2
+167,| Exon 9 | c.1322 T > A | p.(Ile441Asn) | p.(Ile420Asn) | 1 (0.4%) | 2 | FH-Russia-1 | [7] (RU) |,c.1322T>A,p.(Ile441Asn),p.(Ile420Asn),1,2
+168,"| Exon 10 | c.1567 G > A | p.(Val523Met) | p.(Val502Met) | 1 (0.4%) | 1 | FH-Kuwait/Bari-2 | [6] (KW, NL, IT, FR, ES) |",c.1567G>A,p.(Val523Met),p.(Val502Met),1,1
+169,| Intron 13 | c.1987 + 1_+33del |  |  | 1 (0.4%) | 1 | FH-Heraklio | [5] (Novel) |,c.1987+1_+33del,,,1,1
+170,| Intron 10 | c.1586+5G > A |  |  | - (0.4%) | 1 |  | [19] (SE) |,c.1586+5G>A,,,0,1

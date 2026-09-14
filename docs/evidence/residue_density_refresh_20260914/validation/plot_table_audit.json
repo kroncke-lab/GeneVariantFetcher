@@ -1,0 +1,58 @@
+{
+  "genes": [
+    {
+      "gene": "GCK",
+      "residue_rows": 465,
+      "supported_residues": 339,
+      "observed_without_density": 14,
+      "no_observed_variant": 112,
+      "variant_multiplicity_preserved": true,
+      "all_numeric_fields_match": true,
+      "zero_missing_and_unobserved_distinguished": true
+    },
+    {
+      "gene": "BRCA2",
+      "residue_rows": 3418,
+      "supported_residues": 2481,
+      "observed_without_density": 125,
+      "no_observed_variant": 812,
+      "variant_multiplicity_preserved": true,
+      "all_numeric_fields_match": true,
+      "zero_missing_and_unobserved_distinguished": true
+    },
+    {
+      "gene": "HNF1A",
+      "residue_rows": 631,
+      "supported_residues": 426,
+      "observed_without_density": 35,
+      "no_observed_variant": 170,
+      "variant_multiplicity_preserved": true,
+      "all_numeric_fields_match": true,
+      "zero_missing_and_unobserved_distinguished": true
+    },
+    {
+      "gene": "LDLR",
+      "residue_rows": 860,
+      "supported_residues": 637,
+      "observed_without_density": 93,
+      "no_observed_variant": 130,
+      "variant_multiplicity_preserved": true,
+      "all_numeric_fields_match": true,
+      "zero_missing_and_unobserved_distinguished": true
+    },
+    {
+      "gene": "KCNQ1",
+      "residue_rows": 676,
+      "supported_residues": 508,
+      "observed_without_density": 50,
+      "no_observed_variant": 118,
+      "variant_multiplicity_preserved": true,
+      "all_numeric_fields_match": true,
+      "zero_missing_and_unobserved_distinguished": true
+    }
+  ],
+  "plot_input_hashes_checked": 27,
+  "gck_and_kcnq1_sensitivity_comparisons_verified": true,
+  "audit_script_sha256": "74850b7874a9a16a33ad782978adfe4991d230f77415d0f1530be76d67601d09",
+  "plot_script_sha256": "14fcbf296d9ede45bea24c401b4a3e9f9093098ebab7b12d9531f84aeafcbcd5"
+}

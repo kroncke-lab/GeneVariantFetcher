@@ -1,0 +1,11 @@
+{
+  "gene": "LDLR",
+  "population_alleles": 14385,
+  "population_alleles_preserved_once": true,
+  "population_alleles_reassigned": 21,
+  "gnomad_carriers_all_consequences": 16363132,
+  "zero_clinical_evidence_keys_excluded": 45,
+  "old_retained_clinical_keys": 880,
+  "new_retained_clinical_keys": 835,
+  "no_zero_observation_donors": true
+}

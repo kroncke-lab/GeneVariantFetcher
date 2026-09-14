@@ -1,0 +1,42 @@
+{
+  "source_key_delta_arithmetic_verified": true,
+  "clinical_affected_delta": -60.0,
+  "clinical_unaffected_delta": -23.0,
+  "clinical_identity_keys_excluded": 216,
+  "clinical_identity_exclusion_reasons": {
+    "canonical_protein_identity_invalid": 160,
+    "canonical_protein_identity_invalid;archived_shared_allele_join_incompatible": 45,
+    "canonical_cdna_and_protein_conflict": 9,
+    "multiple_literature_keys_match_same_population_allele": 2
+  },
+  "gene": "LDLR",
+  "population_alleles": 14385,
+  "population_carriers": 16363132,
+  "population_reassignments": 21,
+  "missense_donors": 1361,
+  "supported_targets": 1192,
+  "unsupported_targets": 169,
+  "supported_residues": 637,
+  "geometry_support": {
+    "structured": 1014,
+    "polymer": 178,
+    "missing": 169
+  },
+  "targets_with_same_residue_donors": 924,
+  "no_affected_donor_targets": 20,
+  "no_affected_donor_residues": 14,
+  "raw_fraction_zeros": 20,
+  "primary_zeros": 0,
+  "primary_median": 0.1548549279890201,
+  "no_affected_density_min": 0.050128403209396,
+  "no_affected_density_max": 0.1059399890336605,
+  "prior_fraction_of_score_median": 0.48290227990439577,
+  "all_weight_shards_checked": 11,
+  "max_weight_reproduction_error": 1.6653345369377348e-16,
+  "reference_targets": 9,
+  "reference_contexts": 8,
+  "fixed_prior_target_count_perturbation_invariant": true,
+  "unchanged_gene_max_density_error": null,
+  "verified_input_hashes": 12,
+  "run_sha256": "5c2874cb35e0c09da2943e9b896bac17502617420fff29a3f7ec7d9e6bd2ef3f"
+}

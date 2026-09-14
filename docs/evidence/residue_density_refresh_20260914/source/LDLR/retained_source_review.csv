@@ -1,0 +1,4 @@
+gene,key,pmid,variant_id,original_affected,original_unaffected,decision,source_lines,reason,primary_url
+LDLR,C338S,31491741,912,23,0,retain_source_consistent_FH_count,59;77,Explicit per-variant count among unrelated clinically diagnosed HeFH patients; no symptomatic-CAD partition inferred.,https://pubmed.ncbi.nlm.nih.gov/31491741/
+LDLR,D433H,31491741,913,20,0,retain_source_consistent_FH_count,59;77,Explicit per-variant count among unrelated clinically diagnosed HeFH patients; no symptomatic-CAD partition inferred.,https://pubmed.ncbi.nlm.nih.gov/31491741/
+LDLR,L568V,31491741,914,19,0,retain_source_consistent_FH_count,59;77,Explicit per-variant count among unrelated clinically diagnosed HeFH patients; no symptomatic-CAD partition inferred.,https://pubmed.ncbi.nlm.nih.gov/31491741/

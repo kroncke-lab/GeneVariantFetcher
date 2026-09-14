@@ -1,0 +1,9 @@
+{
+  "endpoint": "cardiac_events",
+  "common_variants": 1061,
+  "common_supported": 975,
+  "primary_median": 0.2461138576573026,
+  "sensitivity_median": 0.2460623880339951,
+  "mean_abs_delta_common": 5.883292403045546e-05,
+  "max_abs_delta_common": 0.0016725859654169728
+}

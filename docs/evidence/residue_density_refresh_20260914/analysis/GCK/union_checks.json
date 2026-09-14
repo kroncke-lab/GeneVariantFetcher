@@ -1,0 +1,11 @@
+{
+  "gene": "GCK",
+  "population_alleles": 14294,
+  "population_alleles_preserved_once": true,
+  "population_alleles_reassigned": 7,
+  "gnomad_carriers_all_consequences": 8931920,
+  "zero_clinical_evidence_keys_excluded": 28,
+  "old_retained_clinical_keys": 398,
+  "new_retained_clinical_keys": 370,
+  "no_zero_observation_donors": true
+}

@@ -1,0 +1,13 @@
+gene,frame_id,chain,idr_segment,variants,affected,unaffected,supported,density_mean
+BRCA2,BRCA2_canonical_polymer,A,polymer_1129_1131,3,0,3,3,0.0309408599269554
+BRCA2,BRCA2_canonical_polymer,A,polymer_1330_1333,5,0,12,5,0.02748312502280296
+BRCA2,BRCA2_canonical_polymer,A,polymer_1393_1394,2,0,14,2,0.020201422116806148
+BRCA2,BRCA2_canonical_polymer,A,polymer_1870_1870,1,0,3,0,
+BRCA2,BRCA2_canonical_polymer,A,polymer_2283_2283,4,0,16,4,0.020495310037787623
+BRCA2,BRCA2_canonical_polymer,A,polymer_2401_2408,5,0,8,5,0.027899871642891337
+BRCA2,BRCA2_canonical_polymer,A,polymer_2884_2884,2,0,2,2,0.0309408599269554
+BRCA2,BRCA2_canonical_polymer,A,polymer_2960_2960,1,0,2,0,
+BRCA2,BRCA2_canonical_polymer,A,polymer_3188_3189,2,0,4,2,0.0266944174662253
+BRCA2,BRCA2_canonical_polymer,A,polymer_3283_3288,5,0,14,5,0.026102345788798737
+BRCA2,BRCA2_canonical_polymer,A,polymer_3348_3349,2,0,99,2,0.0138168827013836
+BRCA2,BRCA2_canonical_polymer,A,polymer_865_866,6,0,20,6,0.025275339308270212

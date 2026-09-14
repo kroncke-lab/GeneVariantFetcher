@@ -1,0 +1,15 @@
+{
+  "raw_weight_shards": {
+    "results/residue_density_refresh_20260914/GCK/weights_00000_00128.npz": "23fc04d4eacb751e52d353d2f488b9cfb37d79bb2a2c0768690544486e4c05d5",
+    "results/residue_density_refresh_20260914/GCK/weights_00128_00256.npz": "c1e790d7ca1186e1083cdc10d2e004c5eb647282b3c1f51438644be7c1a47c35",
+    "results/residue_density_refresh_20260914/GCK/weights_00256_00384.npz": "42f505d4b2a725cf9ebdc1c9644a88fae9456197571b26a671067b149500847a",
+    "results/residue_density_refresh_20260914/GCK/weights_00384_00512.npz": "cfc091c1fe2b5c53167db1a559f865d31a83d89237bdc53b241f44f4297e9656",
+    "results/residue_density_refresh_20260914/GCK/weights_00512_00614.npz": "17b881a86f866683a1c0ae079b6fd7fa2f6b192fc740476c9f06880d5812193f"
+  },
+  "variant_ids_sha256": "5024be1f1ffd328a6588227c8cbffa3681396ccef49fc38d45a1f2beb407f607",
+  "own_variant_weights_zero": true,
+  "normalized_weights_sum_to_one": true,
+  "alpha_adds_affected": true,
+  "beta_adds_literature_and_gnomad_unaffected": true,
+  "posterior_decomposition_reproduces": true
+}

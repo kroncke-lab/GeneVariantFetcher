@@ -1,0 +1,15 @@
+{
+  "raw_weight_shards": {
+    "results/residue_density_refresh_20260914/GCK_diabetes_proxy/weights_00000_00128.npz": "6bc94df8d7c82276947a18d60f88395182f06a13ca013ee5390bf697e220acc7",
+    "results/residue_density_refresh_20260914/GCK_diabetes_proxy/weights_00128_00256.npz": "7b362b1c5921a982546787f0f4badfa1f1e4791a8769b84967df27505613eeff",
+    "results/residue_density_refresh_20260914/GCK_diabetes_proxy/weights_00256_00384.npz": "09f86f0df8db704026d666894a16d144e8219a8cbc62a72345dd0839f25c67ab",
+    "results/residue_density_refresh_20260914/GCK_diabetes_proxy/weights_00384_00512.npz": "a1c170f042c42718ca654c53aa1c8898231dc69112a63f4134e4539124ae3bef",
+    "results/residue_density_refresh_20260914/GCK_diabetes_proxy/weights_00512_00614.npz": "5062e8179a8cab149e26fcca2717c1aba4d4a7c9bb00d1d62b4e8f865564130b"
+  },
+  "variant_ids_sha256": "5c3b2b48f69ddd18ba16ff14813babae4f4f5b8c06f9f1fc6a94ef47f2fe3fa5",
+  "own_variant_weights_zero": true,
+  "normalized_weights_sum_to_one": true,
+  "alpha_adds_affected": true,
+  "beta_adds_literature_and_gnomad_unaffected": true,
+  "posterior_decomposition_reproduces": true
+}

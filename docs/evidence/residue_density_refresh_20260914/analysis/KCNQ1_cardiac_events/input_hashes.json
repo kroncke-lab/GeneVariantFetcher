@@ -1,0 +1,17 @@
+{
+  "population_inclusive_penetrance_20260912/audit/literature_identity_flags.csv.gz": "240fe0af9cf5d392108c3f1371dffc7f3e5eb3b69554592110fb9648712e721c",
+  "residue_density_refresh_20260914/source/KCNQ1/clinical_input_cardiac_events.csv.gz": "0e666a1f3236cce2e1117f7bd52f7a2c731ed8bcdb475be9aabcdbd4853bc333",
+  "population_inclusive_penetrance_20260912/population/population_variants.csv.gz": "6915110c42954f04da4155d00053883de38e7f518aee3f95c34f125843e5f5cf",
+  "population_inclusive_penetrance_20260912/population/full_locus/KCNQ1_provenance.json": "e0a851029fbda48479eb662eb8f60917da27723eb76b1f2c40a572a66fed377d",
+  "population_inclusive_penetrance_20260912/population/full_locus/KCNQ1_population_variants.part001.csv.gz": "c1c65de5a7a2cb26e832ac64f4320fa941f3d9ab89d0b0d582382ac41fb37473",
+  "population_inclusive_penetrance_20260912/population/full_locus/KCNQ1_population_variants.part002.csv.gz": "b704830519ee94c02626d8a4ae8740e9469dfd6ad42f36d5943144539b38c6bb",
+  "population_inclusive_penetrance_20260912/population/full_locus/KCNQ1_population_variants.part003.csv.gz": "163508c52a5bac9e08b2338418ab162d4eb515c5fba80ffbe2a79e1b0ebb3aa8",
+  "population_inclusive_penetrance_20260912/population/full_locus/KCNQ1_population_variants.part004.csv.gz": "35e3170d381fd44b56ca444d908c1aa2529c0f50a27482dee0129898cee2ac57",
+  "missense_structural_extension_20260912/geometry/KCNQ1/9U7F_canonical_geometry.csv": "b49218fcaf0cfe5494f809abece632b38d6bed4156cf22f5b919dd99f54f041f",
+  "residue_density_refresh_20260914/run_refresh.py": "5c2874cb35e0c09da2943e9b896bac17502617420fff29a3f7ec7d9e6bd2ef3f",
+  "brca2_distance_prior_audit_20260913/recompute_brca2.py": "d6fccca9ae904a3be2357d637d6924cadfdd7a1601e9f80b661d95e586793ff4",
+  "population_inclusive_penetrance_20260912/rebuild_union.py": "8daf950f772ce40110b93b4909808994a15ae7edd5835febffc4ba4531ab83c8",
+  "class_matched_penetrance_20260912/fit_class_priors.py": "37799f60f99f5f48cede4a648ab1434b1a3b4b298d4775f71163d59de66280ac",
+  "../../../ProteinProximityAnalysis/src/alphafold_rin/empirical_density.py": "48d3e655bd925d31e68bb7319c100f713e94a3039ba85edf4d7cb85349445589",
+  "../../../ProteinProximityAnalysis/src/alphafold_rin/empirical_context.py": "99086331d36d276e8fd71d629d5210933228165b3ba9017e9d5f402c7eb7c111"
+}

@@ -1,0 +1,60 @@
+{
+  "files": [
+    {
+      "path": "GCK_canonical_identity_queue.csv",
+      "sha256": "cdec79a83f80c2e220a05546d68b03984eaa975ef8e8fae92e37db4f6c06c334",
+      "bytes": 7793
+    },
+    {
+      "path": "GCK_changed_clinical_keys.csv",
+      "sha256": "c8ee5695f02bed6612ee56bf515470a727dcb3935d671e57952a0b1c466e1ca7",
+      "bytes": 9119
+    },
+    {
+      "path": "GCK_diabetes_endpoint_pending.csv",
+      "sha256": "fb3c5f9ca9202075b47d8de11c5796bb6462a53c07deee61f20cdfc3c18dbe90",
+      "bytes": 7834
+    },
+    {
+      "path": "GCK_observation_corrections.csv",
+      "sha256": "967b20f7f74800f66676010d00ee33420a757fcc817ff53c72c9f12bb3740574",
+      "bytes": 20731
+    },
+    {
+      "path": "README.md",
+      "sha256": "fff30ae61283d3dff9121d94f4e8b190fe7cf36db2d8cf5d2e91d20e5d7d6f79",
+      "bytes": 8746
+    },
+    {
+      "path": "build_source_ledger.py",
+      "sha256": "963a2e461a24fc842ccf8151e9d4a4001a42b06f95f4ca31c0b83de33e535501",
+      "bytes": 17892
+    },
+    {
+      "path": "clinical_input.csv.gz",
+      "sha256": "5412d05d750ee1399ccb8bba89920e0e3fcc30cb2a5266b7f2c609fef89537cd",
+      "bytes": 12892
+    },
+    {
+      "path": "clinical_input_diabetes_proxy.csv.gz",
+      "sha256": "9de7ad78987013b145bffd64365e5f8eceebd5266a5ca2100c3c02a8e50c8a34",
+      "bytes": 12854
+    },
+    {
+      "path": "missense_source_inventory.csv",
+      "sha256": "20d9d0b322a5a1c5497f720ca1ff2b6b4b4f31855c9ab1f81f8ce5ea435d3ef2",
+      "bytes": 21302
+    },
+    {
+      "path": "source_checks.json",
+      "sha256": "27d4714802eb44f9a87f1f1dbbb4e448a006eb14d6f3138af530ea49b6da6dab",
+      "bytes": 8280
+    }
+  ],
+  "checks": {
+    "per_key_delta_equations": true,
+    "diabetes_sensitivity_delta_A19_U34": true,
+    "LF_csv_payloads": true,
+    "files_under_1200000_bytes": true
+  }
+}

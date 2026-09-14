@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "all_files_below_1200000_bytes": true,
+  "all_text_LF": true,
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 3716,
+      "sha256": "1380ea1a9bb24f95b47d1216a66a6639e16352a4ea79e9a5a449113fc91cca9a",
+      "LF_verified": true
+    },
+    {
+      "file": "coverage.csv",
+      "bytes": 1573,
+      "sha256": "5795d4368825585f12f0ca476e1cbabc87bd70be54715f8e446313dd358d5419",
+      "LF_verified": true
+    },
+    {
+      "file": "keyword_flagged_rows.csv.gz",
+      "bytes": 19032,
+      "sha256": "497a0441c14c95ad5db47ddd45d66d231e2441a48830c4d3f25135302d84808b",
+      "LF_verified": true
+    },
+    {
+      "file": "papers_in_scope.csv",
+      "bytes": 9549,
+      "sha256": "9a913e1b244465abd444d1c15b63ec197c997e974cb43489fa66a4feda128f51",
+      "LF_verified": true
+    },
+    {
+      "file": "reviewed_source_scope.csv.gz",
+      "bytes": 31254,
+      "sha256": "32f18389800ff9567ecc4f137d69e41aba1679325ae4d440f9849107dc0748a8",
+      "LF_verified": true
+    },
+    {
+      "file": "scan_source.py",
+      "bytes": 7801,
+      "sha256": "fa505b71c2940cab490951778fc54f030faeefd1e14ae2fab1acafd0cc6ab0fc",
+      "LF_verified": true
+    },
+    {
+      "file": "screen_checks.json",
+      "bytes": 3874,
+      "sha256": "fcbfef65bfffc5a0ebd0e1a8b88de3e9d646183edbb70bd016297967546fe90f",
+      "LF_verified": true
+    },
+    {
+      "file": "source_metadata_screen.csv.gz",
+      "bytes": 306466,
+      "sha256": "4c5631512188b3dbe957c2aba99fe75de0e4f4469d03f74091608c17c86f4dfc",
+      "LF_verified": true
+    }
+  ]
+}

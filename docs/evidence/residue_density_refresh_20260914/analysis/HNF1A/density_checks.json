@@ -1,0 +1,17 @@
+{
+  "raw_weight_shards": {
+    "results/residue_density_refresh_20260914/HNF1A/weights_00000_00128.npz": "849e61ea0d349bdf3683ce0273156e8a6f82bacc27b7542415fa34e2ee3820b4",
+    "results/residue_density_refresh_20260914/HNF1A/weights_00128_00256.npz": "ab904fc499f0fec6a2692625fc42a9a23165d182720c00504a4fbca1117379fe",
+    "results/residue_density_refresh_20260914/HNF1A/weights_00256_00384.npz": "2f33816cd7c85454abe71c305bf838f28da8da3fcd011942b1f667d0d812a3e5",
+    "results/residue_density_refresh_20260914/HNF1A/weights_00384_00512.npz": "f504a104ec983b449da7b1d2e87b5cdc5063056f9b6d5f4d353d3c43fcc1f045",
+    "results/residue_density_refresh_20260914/HNF1A/weights_00512_00640.npz": "6a7306d92f02066534a3259eb91199ec2acc22fbeaafeb9f93b77c8b91297cb1",
+    "results/residue_density_refresh_20260914/HNF1A/weights_00640_00768.npz": "834291e803c44365c48e3f6c086d465a283382bae0386fe40d7ba7b018a99acb",
+    "results/residue_density_refresh_20260914/HNF1A/weights_00768_00781.npz": "3f4815bd881a3818d4c9ca30b4bb6a1d321399cee34e87c2148f481819411c97"
+  },
+  "variant_ids_sha256": "c7b73ffa7398929ee3f10bfd5dda5d47abad4c455bef7ec5995d116b2dd50597",
+  "own_variant_weights_zero": true,
+  "normalized_weights_sum_to_one": true,
+  "alpha_adds_affected": true,
+  "beta_adds_literature_and_gnomad_unaffected": true,
+  "posterior_decomposition_reproduces": true
+}

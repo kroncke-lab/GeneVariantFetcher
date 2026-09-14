@@ -1,0 +1,10 @@
+{
+  "scope": "Generic mathematics and synthetic examples only. No actual internal fitted priors, gene-level measurements, patient records, source findings, paths or identifiers are in the as-sent brief.",
+  "reviewers": [
+    "agy",
+    "grok",
+    "claude"
+  ],
+  "prior_approval_limit_honored": "Do not send the previously rejected detailed internal audit payload. This newly authored brief is conceptual only.",
+  "fallback_policy": "App fallback only for a technical CLI failure; no fallback around an approval rejection."
+}
