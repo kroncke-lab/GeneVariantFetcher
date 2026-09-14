@@ -174,24 +174,38 @@ zero-imputation semantics, provenance, and visual QA requirements are defined in
       fresh Agy/Grok/Claude conceptual consultations are recorded in
       [`corrected residue profiles`](docs/evidence/residue_density_refresh_20260914/README.md).
 - [x] **Investigate BRCA2 sex denominators and high-penetrance claims
-      (2026-09-14).** The accepted baseline is committed locally; public push
-      remains blocked pending explicit destination/payload authorization.
+      (2026-09-14).** The accepted baseline is committed; Brett subsequently
+      authorized publishing the reviewed source/count evidence to the public
+      `kroncke-lab/GeneVariantFetcher` main branch.
       Reproduce retained observations and verify exact joint XX/XY counts for
       six alleles. Confirm male cases in the current numerator, identify the
       highest own posterior as a BRCA1-table misattribution, and record five
-      omitted controls for a separate BRCA2 allele. Current plots remain the
-      frozen all-sex baseline, pending these newly reviewed corrections.
+      omitted controls for a separate BRCA2 allele. Its all-sex plots and
+      six-allele sensitivity are frozen historical evidence; the matched
+      female analysis below now owns the female breast-cancer endpoint.
       [Audit, source patches and execution plan](docs/evidence/brca2_sex_endpoint_audit_20260914/README.md).
-- [ ] **Next: rebuild BRCA2 for female breast cancer.** Apply the reviewed
-      observation patches; curate female germline clinical A/U and exact XX
-      gnomAD AC-minus-homozygotes, maintaining the user's unaffected assumption.
-      Do not retain male clinical cases while only restricting the denominator.
-      Separate ovarian and male cancer endpoints, retain unknowns as unknown,
-      and resolve person/family/cohort ownership. Refit type-specific priors and
-      repeat the fixed structure/polymer/variant-only LOO comparisons. A
-      population-only XY singleton is not a female donor with one unaffected
-      observation. The audit's six-allele denominator sensitivity is not a
-      women-only model or lifetime penetrance estimate.
+- [x] **Rebuild a verified BRCA2 female breast-cancer subset (2026-09-14).**
+      Correct the BRCA1/P27 misassignments, restore explicit controls, rebuild
+      the Japanese women's supplement and match exact XX counts for all 4,419
+      eligible population DNA alleles. Separate missense/nonsense joins and
+      exclude indel/point-label conflicts, including a source-confirmed
+      frameshift masquerading as nonsense. Nine verified clinical studies
+      produce 3,033 missense units (722 A, 708 clinical U, 760,268 population U)
+      and 138 nonsense units. Refit the existing type-specific priors and repeat
+      fixed structure/polymer/variant-only LOO with h=2/3/5 Å. Raw-gold median
+      residue score is 0.487%; blue median is 1.823% and still reflects the
+      historical prior. Complete count/weight/hash checks passed; Agy, Grok and
+      Claude CLI method reviews are documented.
+      [Current female endpoint evidence and plots](docs/evidence/brca2_female_breast_20260914/README.md).
+- [ ] **Next: extend BRCA2 female source coverage.** The nine-study result is
+      a restricted descriptive subset, not a complete clinical curation or
+      lifetime-risk model. Resolve unknown sex/endpoint/germline evidence,
+      participant overlap, 22 Japanese SD1 identity/count ambiguities and
+      canonical identity exclusions. Do not guess missing sex or treat another
+      cancer endpoint as U. Refresh archived extraction through the reviewed
+      workflow; keep the dated raw databases immutable. Audit the other genes'
+      type joins before applying this newly identified indel/point-label fix
+      to their empirical priors.
 - [ ] **Next: compare empirical-prior estimators.** The historical singleton
       weight and M-normalized weighted variance produce excessive shrinkage
       in sparse variants. The accepted next design is a proper gene-by-type

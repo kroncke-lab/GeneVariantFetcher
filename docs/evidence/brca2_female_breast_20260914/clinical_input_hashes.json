@@ -1,0 +1,19 @@
+{
+  "docs/evidence/residue_density_refresh_20260914/source/BRCA2/BRCA2_literature_identity_corrected.csv.gz": "573c091ac1c88f8c5733f91b27681887fe9f1b856f4395b62eef476d2d8b4929",
+  "docs/evidence/brca2_distance_prior_audit_20260913/source/original_observations.csv.gz": "8f0fefe2f8943c9a2977c527da1639018ef81bfb77a1b1cded011ed87da1263f",
+  "docs/evidence/brca2_distance_prior_audit_20260913/source/BRCA2_catalog_quarantine_observations.csv": "54215703f4fe142b0fd5bd6eee8affa322ba2b6f28400bc7e2c862ecbdd07c81",
+  "docs/evidence/residue_density_refresh_20260914/source/BRCA2/BRCA2_observation_decisions.csv.gz": "ea37696fe4d1037105b7494d31622d91e5743a06252a73e9fca312c9034e8b6f",
+  "docs/evidence/brca2_distance_prior_audit_20260913/source/BRCA2_clinical_restoration_observations.csv": "a0cea5f9c35709fb0decfb3b4655890ce3e7e5e9f16853874628793b9c4a4b19",
+  "results/grant_e2e_20260909/shards/BRCA2_2/BRCA2/20260909_115043/pmc_fulltext/17100994_CLEANED.md": "362d44f17a680d0d7469777e5282d454cae49e1d7cebbe4d7ca93ed4be6dfbc5",
+  "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/16672066_CLEANED.md": "eeeb15a7abf13a46ccb7daf964f739b0cb26883c9d39eeb4c7927a003def66b2",
+  "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/28283652_CLEANED.md": "b744643e6cfcdc8c0f134190d4c1b779c89e87b3a1da3af7d4554124b5108a78",
+  "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/28222693_CLEANED.md": "1fff10eacf6e14d482072da86a545afc9213f8abe9029bb69b0cb3959aaa6ce2",
+  "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/29755871_CLEANED.md": "4d2dd3e345cc53ccb186eaf237d1edaaf89a70df52220a3fc9cfc40d57ebb93a",
+  "results/grant_e2e_20260909/shards/BRCA2_0/BRCA2/20260909_115038/pmc_fulltext/38863777_CLEANED.md": "15db236973659483c53faacf5c65682730f3db0e59792f053d02a8712df061ab",
+  "results/grant_e2e_20260909/shards/BRCA2_4/BRCA2/20260909_115049/pmc_fulltext/33278427_CLEANED.md": "ee2cf4b4324b81e52cd3517082b5efebfddbb27e8455123e93ef0beec769f7d5",
+  "results/grant_e2e_20260909/shards/BRCA2_2/BRCA2/20260909_115043/pmc_fulltext/37719058_CLEANED.md": "7f9a6b34f50cb61d24542633ed14006d9d139738866aa034d09537bd49e616a2",
+  "results/grant_e2e_20260909/shards/BRCA2_4/BRCA2/20260909_115049/pmc_fulltext/37816281_CLEANED.md": "d968e90db9862b1e5487822c18dcb01dcc552c1438fc48e3c676af2890995b3f",
+  "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/30287823_CLEANED.md": "9be10de1079f7fa57dfd079f174d58e6c382653de19799f89917c6dcf54f3c96",
+  "results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/30287823_supplements/PMC6172276_supplements/41467_2018_6581_MOESM4_ESM.xlsx": "715ffaa770f28c851d21a9119ecbebf91f27077da95dd48c3f8c279013f893ee",
+  "docs/evidence/brca2_female_breast_20260914/curate_clinical.py": "bb43a791d6a1450c304ef03b633bcf15922341dbd9d5e55150b683b548395a80"
+}

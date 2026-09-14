@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "previous_six_sex_probes_reproduced": true,
+  "input_hashes_checked": 260,
+  "types": [
+    {
+      "variant_type": "missense",
+      "variants": 3033,
+      "affected": 722,
+      "clinical_unaffected": 708,
+      "XX_unaffected": 760268,
+      "clinical_units": 252,
+      "clinical_only_A_positive_U_zero": 33,
+      "posterior_max": 0.6289920246936537
+    },
+    {
+      "variant_type": "nonsense",
+      "variants": 138,
+      "affected": 55,
+      "clinical_unaffected": 9,
+      "XX_unaffected": 6597,
+      "clinical_units": 26,
+      "clinical_only_A_positive_U_zero": 13,
+      "posterior_max": 0.5213508370505444
+    }
+  ],
+  "supported_variants": 2899,
+  "supported_residues": 2003,
+  "missing_residues": 1415,
+  "same_residue_nonself_weight_pairs": 2188,
+  "median_residue_blue": 0.018228859538642,
+  "median_residue_gold": 0.004870381774371,
+  "gold_zero_residues": 107,
+  "gold_at_or_below_0p1_percent_residues": 536,
+  "largest_gold_residue_main_donor": {
+    "residue": 1244,
+    "donor": "D1243E",
+    "affected": 1,
+    "unaffected": 0,
+    "normalized_weight": 0.4998850603997818,
+    "gold_contribution": 0.4998850603997818
+  },
+  "max_residue_blue": 0.1021965936670719,
+  "max_residue_gold": 0.5005352656856432,
+  "median_weight_share_beyond_20": 0.0053903154776505
+}

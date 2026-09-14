@@ -1,0 +1,4 @@
+key,pmid,variant_id,A_removed,U_removed,U_restored,reason,source_lines,source_path
+E1581D,17100994,40000141,48,0,0,"BRCA1 table, not BRCA2",65-107; row 85,results/grant_e2e_20260909/shards/BRCA2_2/BRCA2/20260909_115043/pmc_fulltext/17100994_CLEANED.md
+I3412V,17100994,40000163,0,0,5,Recover explicit normal-control column; BIC entries are not people,47; 112-145,results/grant_e2e_20260909/shards/BRCA2_2/BRCA2/20260909_115043/pmc_fulltext/17100994_CLEANED.md
+V109G,16672066,50017508,142,137,0,"P27 genotype block, not BRCA2; GG+GT = 17+125 cases and 15+122 controls",152; 272-274,results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/16672066_CLEANED.md

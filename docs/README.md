@@ -1,6 +1,6 @@
 # GVF Documentation Map
 
-Last reviewed: 2026-09-06.
+Last reviewed: 2026-09-14.
 
 Use this page to distinguish current operating instructions from dated evidence.
 When two documents disagree, use the authority order below rather than choosing
@@ -11,6 +11,7 @@ the newest-looking filename.
 | Question | Authority |
 | --- | --- |
 | What should be done next? | [`../TASKS.md`](../TASKS.md) |
+| Which residue-density analysis is current? | [Five-gene source refresh](evidence/residue_density_refresh_20260914/README.md) for HNF1A, GCK, LDLR and KCNQ1; [BRCA2 female breast-cancer subset](evidence/brca2_female_breast_20260914/README.md) for BRCA2. These are descriptive features; earlier BRCA2 all-sex plots remain historical. |
 | How to raise gold-120 identity precision and cut cost? | [`PRECISION_COST_LEVERS.md`](PRECISION_COST_LEVERS.md) (ranking); paper-level evidence in `benchmarks/codex_paper_eval/runs/20260813_gold120_verticalfix/diagnostics/current_gold_matcher_20260815/` |
 | How to raise affected/unaffected *value* precision? | [`AFFECTED_UNAFFECTED_PRECISION.md`](AFFECTED_UNAFFECTED_PRECISION.md) (exact-match of emitted integers; not Gate 2) |
 | What are the current measured metrics and caveats? | [`RECALL_STATUS.md`](RECALL_STATUS.md) |

@@ -1,0 +1,10 @@
+pmid,source_path,source_lines,decision
+28283652,results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/28283652_CLEANED.md,31; 7; 19,female_BCAC_germline_case_control
+28222693,results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/28222693_CLEANED.md,21-35; 45-47; 78,female_MyBrCa_blood_case_control
+29755871,results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/29755871_CLEANED.md,31; 37-41; 71,female_Kazakhstan_blood_case_control
+38863777,results/grant_e2e_20260909/shards/BRCA2_0/BRCA2/20260909_115038/pmc_fulltext/38863777_CLEANED.md,7; 25-29; 70-74; 117-131,female_Kurdish_blood_breast_cases
+33278427,results/grant_e2e_20260909/shards/BRCA2_4/BRCA2/20260909_115049/pmc_fulltext/33278427_CLEANED.md,25-31; 152-156,female_Egypt_blood_breast_cases
+37719058,results/grant_e2e_20260909/shards/BRCA2_2/BRCA2/20260909_115043/pmc_fulltext/37719058_CLEANED.md,7; 17-25; 111,female_Kenya_saliva_breast_cases
+37816281,results/grant_e2e_20260909/shards/BRCA2_4/BRCA2/20260909_115049/pmc_fulltext/37816281_CLEANED.md,17; 23,female_breast_patient_PBMC_not_cell_count
+17100994,results/grant_e2e_20260909/shards/BRCA2_2/BRCA2/20260909_115043/pmc_fulltext/17100994_CLEANED.md,47; 145,retain_5_female_controls_only
+30287823,results/grant_e2e_20260909/shards/BRCA2_3/BRCA2/20260909_115046/pmc_fulltext/30287823_supplements/PMC6172276_supplements/41467_2018_6581_MOESM4_ESM.xlsx,"SD1; Methods lines 120,128",female_source_table_rebuilt_unique_integer_counts
