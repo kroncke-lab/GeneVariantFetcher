@@ -225,7 +225,7 @@ is in [`TASKS.md`](../../../TASKS.md); the proposed acceptance sequence is:
 - Controlling analysis code is preserved on BPE main, grant iteration
   `scripts/{build_observations,join_features,fit_protocol,compare_kcnq1_reference}.py`.
   Its merger/preservation record is
-  [`REPOSITORY_SYNC_20260912.md`](../../../../BayesianPenetranceEstimator/docs/REPOSITORY_SYNC_20260912.md).
+  [`REPOSITORY_SYNC_20260912.md`](https://github.com/kroncke-lab/BayesianPenetranceEstimator/blob/e048e64d4cfd42800f7878cb1c56fd664e926a60/docs/REPOSITORY_SYNC_20260912.md).
 - Grok's review is [`reviews/grok_review.md`](reviews/grok_review.md), with exact
   prompt and run status alongside. It critiques only the user-provided aggregate
   narrative and generic statistical examples; it did not inspect internal rows.
