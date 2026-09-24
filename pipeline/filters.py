@@ -85,12 +85,22 @@ _ORTHOLOG_SPECIES = (
 
 
 def names_nonhuman_ortholog(text: Optional[str], gene: Optional[str] = None) -> bool:
-    """True when the text studies a non-human ortholog of the gene."""
+    """True when the text explicitly names a non-human ortholog of the gene.
+
+    This narrow relation check does not classify the entire study population.
+    A model-focused title alone may accompany human-variant experiments or
+    human participants and is not sufficient to reject the whole paper.
+    """
     if not text:
         return False
     symbol = re.escape(gene.strip()) if gene else r"[A-Z][A-Z0-9-]{1,9}"
+    # An arbitrary optional word also matches "mice and APOE", which does not
+    # say that APOE is an animal ortholog. Keep only direct/qualified relations.
     if re.search(
-        rf"\b{_ORTHOLOG_SPECIES}\s+(?:\w+\s+)?{symbol}\b", text, re.IGNORECASE
+        rf"\b{_ORTHOLOG_SPECIES}\s+"
+        rf"(?:(?:orthologous|homologous|ortholog|homolog|gene|protein)\s+)?{symbol}\b",
+        text,
+        re.IGNORECASE,
     ):
         return True
 
@@ -98,10 +108,13 @@ def names_nonhuman_ortholog(text: Optional[str], gene: Optional[str] = None) -> 
     # dogs").  Do not reject a paper that names the *human* gene in a model
     # organism: "human BRCA1 variants assayed in mice" is legitimate evidence.
     reverse = re.compile(
-        rf"\b{symbol}\b.{{0,40}}\b(?:in|of|from)\s+(?:the\s+)?"
+        rf"\b{symbol}\b[^.\n]{{0,40}}[^\S\r\n](?:in|of|from)\s+(?:the\s+)?"
         rf"{_ORTHOLOG_SPECIES}\b",
         re.IGNORECASE,
     )
+    # "GENE-targeted knock-in mice" names a model, not an exclusive paper
+    # population. Defer that ambiguous title instead of interpreting "-in" as
+    # a preposition; it may accompany human participants or human-variant assays.
     for match in reverse.finditer(text):
         context = text[max(0, match.start() - 24) : match.end()]
         if not re.search(rf"\bhuman\s+{symbol}\b", context, re.IGNORECASE):

@@ -2,6 +2,8 @@ import json
 import sqlite3
 from pathlib import Path
 
+import pytest
+
 from cli.automated_workflow import _apply_paper_scope_gate
 from harvesting.migrate_to_sqlite import (
     create_database_schema,
@@ -133,6 +135,64 @@ def test_nonhuman_ortholog_gate_preserves_explicit_human_model_system():
     assert not names_nonhuman_ortholog(
         "Functional Interaction Between BRCA1 and DNA Repair in Yeast", "BRCA1"
     )
+
+
+@pytest.mark.parametrize(
+    ("text", "gene"),
+    [
+        ("We studied transgenic mice and APOE knockout mice", "APOE"),
+        ("We studied mice expressing human APOE", "APOE"),
+        ("Cardiac function in Mybpc3-targeted knock-in mice", "MYBPC3"),
+        ("BRCA2 variants were sequenced. In dogs, tissue was sampled.", "BRCA2"),
+        ("BRCA2 variants were sequenced\nIn dogs, tissue was sampled.", "BRCA2"),
+    ],
+)
+def test_nonhuman_ortholog_gate_requires_a_direct_species_gene_relation(text, gene):
+    assert not names_nonhuman_ortholog(text, gene)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Sequence variation in canine BRCA2",
+        "Sequence variation in canine gene BRCA2",
+        "Sequence variation in mouse ortholog BRCA2",
+        "Sequence variation in murine protein BRCA2",
+        "Sequence variation in canine homolog BRCA2",
+        "Sequence variation in canine orthologous BRCA2",
+        "Sequence variation in canine homologous BRCA2",
+        "BRCA2 variants from the dogs",
+        "Sequence variation in canine BRCA2. BRCA2 mutations cause cancer in women.",
+        "Human BRCA2 and canine BRCA2 were compared",
+    ],
+)
+def test_nonhuman_ortholog_gate_preserves_explicit_animal_relations(text):
+    assert names_nonhuman_ortholog(text, "BRCA2")
+
+
+def test_explicit_manifest_scope_gate_defers_model_focused_title(tmp_path: Path):
+    abstract = tmp_path / "1.json"
+    abstract.write_text(
+        json.dumps(
+            {
+                "metadata": {
+                    "title": "Cardiac function in Mybpc3-targeted knock-in mice"
+                },
+                "abstract": "We evaluated human patient samples and a mouse model.",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    kept, dropped = _apply_paper_scope_gate(
+        pmids=["1"],
+        abstract_records={"1": str(abstract)},
+        gene_symbol="MYBPC3",
+        output_path=tmp_path,
+    )
+
+    assert kept == ["1"]
+    assert dropped == []
 
 
 def test_figure_ingest_honors_persisted_paper_scope_exclusion(tmp_path: Path):
